@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const imageUrl = "/1.jpg";
+const imageUrl = "/1.png";
 const buttonText = "My Loot";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -20,7 +20,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         </head>
         <body>
              <h1> My Loot </h1>
-             <Image src="${ imageUrl }" alt=""/>
+             <div style={} >
+             <Image src="${ imageUrl }" alt="" height={200} width={200*1.91} scale={20%}/>
+             </div>
         </body>
       </html>
     `);

@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eb6ba4f2-057a-4775-885e-00258dc59ab8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env.dev" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.env.prod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/public/1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/api/image.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/image.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,7 +68,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1706593427638</updated>
-      <workItem from="1706593429124" duration="9063000" />
+      <workItem from="1706593429124" duration="11378000" />
     </task>
     <servers />
   </component>
