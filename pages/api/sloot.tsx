@@ -4,7 +4,6 @@ import sharp from 'sharp';
 import satori from "satori";
 import { readFileSync } from "fs";
 import { util } from "protobufjs";
-import Buffer = util.Buffer;
 
 const HUB_URL = process.env['HUB_URL'] || "";
 const client = getSSLHubRpcClient(HUB_URL);
