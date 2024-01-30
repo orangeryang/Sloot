@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const imageUrl = "../../assets/1.jpg";
+const imageUrl = "/1.jpg";
 const buttonText = "My Loot";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -18,7 +18,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta name="fc:frame:post_url" content="">
           <meta name="fc:frame:button:1" content="${ buttonText }">¬
         </head>
-        <body> My Loot </body>
+        <body>
+             <h1> My Loot </h1>
+             <Image src="${ imageUrl }" alt=""/>
+        </body>
       </html>
     `);
     
