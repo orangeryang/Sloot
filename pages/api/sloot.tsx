@@ -2,6 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
 import sharp from 'sharp';
 import satori from "satori";
+import { readFileSync } from "fs";
+import { util } from "protobufjs";
+import Buffer = util.Buffer;
 
 const HUB_URL = process.env['HUB_URL'] || "";
 const client = getSSLHubRpcClient(HUB_URL);
@@ -44,6 +47,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.error(error);
             res.status(500).send('Error generating image');
         }
+    } else if (req.method === 'GET') {
+        
+        res.setHeader('Content-Type', 'image/png');
+        res.setHeader('Cache-Control', 'max-age=10');
+        res.send(readFileSync("/1.png"));
+        
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['POST']);
