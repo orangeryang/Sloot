@@ -1,4 +1,4 @@
-const {default:mergeImages} = require("merge-images")
+const mergeImages = require("merge-images")
 const deploymentMap = require("../../public/map.json")
 
 const mapping = require("../../public/item_layer_mapping.json")
@@ -109,10 +109,8 @@ async function getImageForLoot(loot) {
         console.log(file)
         return file
     })
-    
-    const b64img = await mergeImages(files, {crossOrigin: "anonymous"})
-    
-    return b64img
+
+    return mergeImages(files, {crossOrigin: "anonymous"});
 }
 
 //https://github.com/bpierre/loot-rarity/blob/main/src/image.ts#L24
