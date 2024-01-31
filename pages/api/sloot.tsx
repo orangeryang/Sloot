@@ -2,11 +2,15 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
 import sharp from 'sharp';
 import satori from "satori";
-import pic from "../../public/2.png";
+import { ethers, JsonRpcProvider } from "ethers";
+import SyntheticLootArtifact from "../../public/SyntheticLoot.json";
+import map from "../../public/map.json";
+import { itemsFromSvg, getImageForLoot } from "@/app/sloot/loot-utils";
 
 const HUB_URL = "https://nemes.farcaster.xyz:2281/v1/";
 const client = getSSLHubRpcClient(HUB_URL);
-console.log(client);
+const IMG_DIR = `ipfs://${ map.ipfs.character_imgs }`
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
@@ -26,13 +30,38 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
             const fid = validatedMessage?.data?.fid || 0;
             
-            if (buttonId == 1) {
-                //
+            if (buttonId != 1) {
+                res.status(500).send("Invalid button");
             }
             
-            const svg = await satori(<div></div>, {width: 600, height: 400, fonts: []});
+            const address = validatedMessage?.signer;
+            if (!address) {
+                res.status(500).send("No address");
+            }
+            const sloot = new ethers.Contract("0x869ad3dfb0f9acb9094ba85228008981be6dbdde", SyntheticLootArtifact, new JsonRpcProvider("https://rpc.mevblocker.io"));
             
-            const pngBuffer = await sharp(Buffer.from(svg))
+            const tokenURIB64 = await sloot.tokenURI(address)
+            const tokenURI = JSON.parse(Buffer.from(tokenURIB64.split(",")[1], 'base64').toString("utf8"))
+            const b64svg = tokenURI.image
+            const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
+            
+            const items = itemsFromSvg(svg)
+            console.log(items)
+            const img = await getImageForLoot(items)
+            console.log(img)
+            
+            const satoriSvg = await satori(<div className="card"
+                                                style={ {backgroundColor: "white", marginTop: "15px"} }>
+                <img alt="character" style={ {borderRadius: "5px", width: "100%"} }
+                     src={ img }/>
+                <ul style={ {marginLeft: "-20px"} }>
+                    { items.map(item => {
+                        return <li key={ item }>{ item }</li>
+                    }) }
+                </ul>
+            </div>, {width: 600, height: 400, fonts: []});
+            
+            const pngBuffer = await sharp(Buffer.from(satoriSvg))
                 .toFormat('png')
                 .toBuffer();
             
@@ -52,3 +81,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(405).end(`Method ${ req.method } Not Allowed`);
     }
 }
+
