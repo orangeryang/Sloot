@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
 import sharp from 'sharp';
 import satori from "satori";
-import { ethers, JsonRpcProvider } from "ethers";
+import { ethers, JsonRpcProvider, Contract } from "ethers";
 import SyntheticLootArtifact from "../../public/SyntheticLoot.json";
 import map from "../../public/map.json";
 import { itemsFromSvg, getImageForLoot } from "@/app/sloot/loot-utils";
@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (!address) {
                 res.status(500).send("No address");
             }
-            const sloot = new ethers.Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
+            const sloot = new Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
             console.log(sloot);
             const tokenURIB64 = await sloot.tokenURI(address)
             console.log(tokenURIB64);
