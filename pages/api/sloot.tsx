@@ -7,7 +7,7 @@ import SyntheticLootArtifact from "../../public/SyntheticLoot.json";
 import map from "../../public/map.json";
 import { itemsFromSvg, getImageForLoot } from "@/app/sloot/loot-utils";
 
-const HUB_URL = "https://nemes.farcaster.xyz:2281/v1/";
+const HUB_URL = "nemes.farcaster.xyz:2283";
 const client = getSSLHubRpcClient(HUB_URL);
 const IMG_DIR = `ipfs://${ map.ipfs.character_imgs }`
 
@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log("tokenUTIB64", tokenURIB64);
             const tokenURI = JSON.parse(Buffer.from(tokenURIB64.split(",")[1], 'base64').toString("utf8"))
             console.log("tokenURI:", tokenURI);
-            const b64svg = tokenURI.image
+            const b64svg = tokenURI.image;
             console.log("b64svg:", b64svg);
             const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
             console.log("svg:", svg);
