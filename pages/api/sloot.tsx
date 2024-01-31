@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
             const fid = validatedMessage?.data?.fid || 0;
-            console.log("validatedMessage:" + validatedMessage);
+            console.log("validatedMessage:" + validatedMessage?.data);
             if (buttonId != 1) {
                 res.status(500).send("Invalid button");
             }
