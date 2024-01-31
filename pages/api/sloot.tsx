@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
             const fid = validatedMessage?.data?.fid || 0;
-            
+            console.log(validatedMessage);
             if (buttonId != 1) {
                 res.status(500).send("Invalid button");
             }
@@ -39,11 +39,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(500).send("No address");
             }
             const sloot = new ethers.Contract("0x869ad3dfb0f9acb9094ba85228008981be6dbdde", SyntheticLootArtifact, new JsonRpcProvider("https://rpc.mevblocker.io"));
-            
+            console.log(sloot);
             const tokenURIB64 = await sloot.tokenURI(address)
+            console.log(tokenURIB64);
             const tokenURI = JSON.parse(Buffer.from(tokenURIB64.split(",")[1], 'base64').toString("utf8"))
+            console.log(tokenURI);
             const b64svg = tokenURI.image
+            console.log(b64svg);
             const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
+            console.log(svg);
             
             const items = itemsFromSvg(svg)
             console.log(items)
