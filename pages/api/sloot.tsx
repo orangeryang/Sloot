@@ -9,15 +9,19 @@ import { itemsFromSvg, getImageForLoot } from "@/app/sloot/loot-utils";
 
 const HUB_URL = "nemes.farcaster.xyz:2283";
 const client = getSSLHubRpcClient(HUB_URL);
-const IMG_DIR = `ipfs://${ map.ipfs.character_imgs }`
+const IMG_DIR = `ipfs://${ map.ipfs.character_imgs }`;
+import { init, useQuery } from "@airstack/airstack-react";
+import key from "../../key.json";
 
+
+init("117baaa0c425643f699cd5324983903fa");
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         
         try {
             let validatedMessage: Message | undefined = undefined;
-            console.log("req:", req);
+            // console.log("req:", req);
             try {
                 const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
                 const result = await client.validateMessage(frameMessage);
@@ -34,6 +38,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (buttonId != 1) {
                 res.status(500).send("Invalid button");
             }
+            
+            useQuery("query MyQuery($_eq: SocialDappName, $_eq1: Identity, $blockchain: Blockchain!) {\n" +
+                "  Socials(\n" +
+                "    input: {filter: {dappName: {_eq: $_eq}, identity: {_eq: $_eq1}}, blockchain: $blockchain}\n" +
+                "  ) {\n" +
+                "    Social {\n" +
+                "      id\n" +
+                "      chainId\n" +
+                "      blockchain\n" +
+                "      dappName\n" +
+                "      dappSlug\n" +
+                "      dappVersion\n" +
+                "      userId\n" +
+                "      userAddress\n" +
+                "      userCreatedAtBlockTimestamp\n" +
+                "      userCreatedAtBlockNumber\n" +
+                "      userLastUpdatedAtBlockTimestamp\n" +
+                "      userLastUpdatedAtBlockNumber\n" +
+                "      userHomeURL\n" +
+                "      userRecoveryAddress\n" +
+                "      userAssociatedAddresses\n" +
+                "      profileName\n" +
+                "      profileTokenId\n" +
+                "      profileTokenAddress\n" +
+                "      profileCreatedAtBlockTimestamp\n" +
+                "      profileCreatedAtBlockNumber\n" +
+                "      profileLastUpdatedAtBlockTimestamp\n" +
+                "      profileLastUpdatedAtBlockNumber\n" +
+                "      profileTokenUri\n" +
+                "      isDefault\n" +
+                "      identity\n" +
+                "    }\n" +
+                "  }\n" +
+                "}", {fid: fid}, {cache: false});
             
             const address = validatedMessage?.signer;
             console.log("address:", address);

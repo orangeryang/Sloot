@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@airstack/airstack-react": "^0.6.2",
     "@farcaster/hub-nodejs": "^0.10.21",
     "@types/node": "20.11.0",
     "@types/react": "18.2.47",
