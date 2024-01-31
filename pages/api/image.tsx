@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const buttonText = "My Loot";
-const imageUrl = `https://sloot-five.vercel.app/1.png`;
+const imageUrl = `http://sloot-five.vercel.app/1.png`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
