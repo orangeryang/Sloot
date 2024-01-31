@@ -38,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (!address) {
                 res.status(500).send("No address");
             }
-            const sloot = new ethers.Contract("0x869ad3dfb0f9acb9094ba85228008981be6dbdde", SyntheticLootArtifact, new JsonRpcProvider("https://rpc.mevblocker.io"));
+            const sloot = new ethers.Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
             console.log(sloot);
             const tokenURIB64 = await sloot.tokenURI(address)
             console.log(tokenURIB64);
