@@ -41,18 +41,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(500).send("No address");
             }
             const sloot = new Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
-            console.log("sloot:", sloot);
+            // console.log("sloot:", sloot);
             const tokenURIB64 = await sloot.tokenURI(address);
-            console.log("tokenUTIB64", tokenURIB64);
+            // console.log("tokenUTIB64", tokenURIB64);
             const tokenURI = JSON.parse(Buffer.from(tokenURIB64.split(",")[1], 'base64').toString("utf8"))
-            console.log("tokenURI:", tokenURI);
+            // console.log("tokenURI:", tokenURI);
             const b64svg = tokenURI.image;
-            console.log("b64svg:", b64svg);
+            // console.log("b64svg:", b64svg);
             const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
-            console.log("svg:", svg);
+            // console.log("svg:", svg);
             
             const items = itemsFromSvg(svg)
-            console.log("items:", items)
+            // console.log("items:", items)
             const img = await getImageForLoot(items)
             console.log("img:", img)
             
