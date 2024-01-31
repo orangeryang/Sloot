@@ -34,7 +34,7 @@ export default function Page() {
                 <h1 className="text-lg sm:text-2xl font-bold mb-2">
                     Test
                 </h1>
-                <img src="/1.png" alt=""/>
+                <img src="/2.png" alt=""/>
             </main>
         </div>
     );

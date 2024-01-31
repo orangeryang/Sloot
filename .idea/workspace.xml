@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eb6ba4f2-057a-4775-885e-00258dc59ab8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.dev" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.prod" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/api/image.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/image.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/api/sloot.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/sloot.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/1.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +66,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1706593427638</updated>
-      <workItem from="1706593429124" duration="21657000" />
+      <workItem from="1706593429124" duration="22639000" />
     </task>
     <servers />
   </component>
