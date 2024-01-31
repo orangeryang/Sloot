@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const buttonText = "My Loot";
-const imageUrl = `${ process.env['HOST'] }/api/sloot`;
+const imageUrl = `https://sloot-five.vercel.app/1.png`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta property="og:image" content="${ imageUrl }">
           <meta name="fc:frame" content="vNext">
           <meta name="fc:frame:image" content="${ imageUrl }">
-          <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/sloot">
+          <meta name="fc:frame:post_url" content="/sloot">
           <meta name="fc:frame:button:1" content="${ buttonText }">
         </head>
         <body>
