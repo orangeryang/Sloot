@@ -80,14 +80,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             const Social = data.Socials.Social;
             console.log("Social:", Social);
-            let addArrToRemove = [];
+            let addArrToRemove: string[] = [];
             if (Social.length >= 1) {
                 for (let i = 1; i <= Social.length; i++) {
                     console.log(Social.userAddress);
                     addArrToRemove.push(Social.userAddress);
                 }
             }
-            const address = Social[0].userAssociatedAddresses.filter((add)=> !addArrToRemove.includes(add));
+            const address = Social[0].userAssociatedAddresses.filter((add) => !addArrToRemove.includes(add));
             if (!address) {
                 res.status(500).send("No address");
             }
