@@ -79,14 +79,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(500).send("Invalid Fid");
             }
             const Social = data.Socials.Social;
-            console.log("Social:",Social);
+            console.log("Social:", Social);
             let addArrToRemove = [];
-            if (Social.length >=1){
-                for (let i = 1; i<= Social.length;i++){
+            if (Social.length >= 1) {
+                for (let i = 1; i <= Social.length; i++) {
                     addArrToRemove.push(Social.userAddress);
                 }
             }
-            const address = Social[0].userAssociatedAddresses.filter((add)->{!addArrToRemove.includes(add)})
+            const address = Social[0].userAssociatedAddresses.filter((add)-> {
+                !addArrToRemove.includes(add)
+            })
             if (!address) {
                 res.status(500).send("No address");
             }
@@ -107,16 +109,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const img = await getImageForLoot(items)
             console.log("img:", img)
             
-            const satoriSvg = await satori(<div className="card"
-                                                style={ {backgroundColor: "white", marginTop: "15px"} }>
-                <img alt="character" style={ {borderRadius: "5px", width: "100%"} }
-                     src={ img }/>
-                <ul style={ {marginLeft: "-20px"} }>
-                    { items.map(item => {
+            const satoriSvg = await satori(
+                <div className="card" style={ {backgroundColor: "white", marginTop: "15px"} }>
+                    <img alt="character" style={ {borderRadius: "5px", width: "100%"} } src={ img }/>
+                    <ul style={ {marginLeft: "-20px"} }>{ items.map(item => {
                         return <li key={ item }>{ item }</li>
                     }) }
-                </ul>
-            </div>, {width: 600, height: 400, fonts: []});
+                    </ul>
+                </div>, {width: 600, height: 400, fonts: []});
             
             const pngBuffer = await sharp(Buffer.from(satoriSvg))
                 .toFormat('png')
