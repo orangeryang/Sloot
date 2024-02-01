@@ -87,7 +87,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     addArrToRemove.push(Social.userAddress);
                 }
             }
-            const address = Social[0].userAssociatedAddresses.filter((add)-> !addArrToRemove.includes(add));
+            const address = Social[0].userAssociatedAddresses.filter((add)-> {
+                return !addArrToRemove.includes(add);
+            });
             if (!address) {
                 res.status(500).send("No address");
             }
