@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (buttonId != 1) {
                 res.status(500).send("Invalid button");
             }
-            
+            console.log("fid:", fid);
             const {data, error} = await fetchQuery("query MyQuery {\n" +
                 "  Socials(\n" +
                 "    input: {filter: {dappName: {_eq: farcaster}, identity: {_eq: \"fc_fid:" +
