@@ -5,7 +5,7 @@ const deploymentMap = require("../../public/map.json")
 
 const mapping = require("../../public/item_layer_mapping.json")
 const layersOrder = require("../../public/item_layer_order.json")
-const {createCanvas, Image} = require("canvas");
+// const {createCanvas, Image} = require("canvas");
 
 const IMG_DIR = `ipfs://${deploymentMap.ipfs.character_imgs}`
 
