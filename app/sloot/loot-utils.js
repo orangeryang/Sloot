@@ -1,6 +1,6 @@
 // https://github.com/stephancill/synthetic-loot-viewer
 
-// const mergeImages = require("merge-images")
+const mergeImages = require("merge-images")
 const deploymentMap = require("../../public/map.json")
 
 const mapping = require("../../public/item_layer_mapping.json")
