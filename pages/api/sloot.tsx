@@ -82,8 +82,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("Social:", Social);
             let addArrToRemove: string[] = [];
             for (let i = 0; i <= Social.length; i++) {
-                console.log(Social.userAddress);
-                addArrToRemove.push(Social.userAddress);
+                console.log(Social[i].userAddress);
+                addArrToRemove.push(Social[i].userAddress);
             }
             const address: string[] = Social[0].userAssociatedAddresses.filter((add: string) => !addArrToRemove.includes(add));
             if (!address) {
