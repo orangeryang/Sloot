@@ -140,6 +140,15 @@ function itemsFromSvg(svg) {
     return items;
 }
 
+var defaultOptions = {
+    format: 'image/png',
+    quality: 0.92,
+    width: undefined,
+    height: undefined,
+    Canvas: undefined,
+    crossOrigin: undefined
+};
+
 var mergeImages = function (sources, options) {
     if (sources === void 0) sources = [];
     if (options === void 0) options = {};
