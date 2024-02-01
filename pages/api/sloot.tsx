@@ -77,7 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 "  Socials(\n" +
                 "    input: {filter: {dappName: {_eq: farcaster}, identity: {_eq: \"fc_fid:" +
                 fid.toString(10) +
-                "}}, blockchain: ethereum}\n" +
+                "\"}}, blockchain: ethereum}\n" +
                 "  ) {\n" +
                 "    Social {\n" +
                 "      id\n" +
