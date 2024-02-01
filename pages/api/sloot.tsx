@@ -10,7 +10,7 @@ import { itemsFromSvg, getImageForLoot } from "@/app/sloot/loot-utils";
 const HUB_URL = "nemes.farcaster.xyz:2283";
 const client = getSSLHubRpcClient(HUB_URL);
 const IMG_DIR = `ipfs://${ map.ipfs.character_imgs }`;
-import { init, useQuery } from "@airstack/airstack-react";
+import { init, fetchQuery } from "@airstack/airstack-react";
 import { useState } from "react";
 
 
@@ -38,9 +38,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(500).send("Invalid button");
             }
             
-            useQuery("query MyQuery($_eq: SocialDappName, $_eq1: Identity, $blockchain: Blockchain!) {\n" +
+            fetchQuery("query MyQuery {\n" +
                 "  Socials(\n" +
-                "    input: {filter: {dappName: {_eq: $_eq}, identity: {_eq: $_eq1}}, blockchain: $blockchain}\n" +
+                "    input: {filter: {dappName: {_eq: farcaster}, identity: {_eq: \"fc_fid:" +
+                fid.toString(10) +
+                "}}, blockchain: ethereum}\n" +
                 "  ) {\n" +
                 "    Social {\n" +
                 "      id\n" +
