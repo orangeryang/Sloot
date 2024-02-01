@@ -76,7 +76,7 @@ function getLayers(LOOT) {
         LOOT = map
     }
     
-    console.log(LOOT)
+    // console.log(LOOT)
     
     const LAYERS = {
         "fg": `${IMG_DIR}/fg.png`, "bg": `${IMG_DIR}/bg.png`,   // Foreground & Background are at the root
@@ -108,7 +108,7 @@ async function getImageForLoot(loot) {
         if (file.indexOf("ipfs://") > -1) {
             file = `https://ipfs.io/ipfs/${file.split("ipfs://")[1]}`
         }
-        console.log(file)
+        // console.log(file)
         return file
     })
 
