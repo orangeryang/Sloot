@@ -74,12 +74,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 "  }\n" +
                 "}");
             
-            console.log("fetch data:", data, error);
+            // console.log("fetch data:", data, error);
             if (!data) {
                 res.status(500).send("Invalid Fid");
             }
             const Social = data.Socials.Social;
-            console.log("Social:", Social);
+            // console.log("Social:", Social);
             let addArrToRemove: string[] = [];
             if (Social.length >= 1) {
                 for (let i = 1; i <= Social.length; i++) {
