@@ -72,10 +72,44 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 "      identity\n" +
                 "    }\n" +
                 "  }\n" +
-                "}", {fid: fid}, {cache: false});
-            
+                "}");
+            console.log("graphql: ", "query MyQuery {\n" +
+                "  Socials(\n" +
+                "    input: {filter: {dappName: {_eq: farcaster}, identity: {_eq: \"fc_fid:" +
+                fid.toString(10) +
+                "}}, blockchain: ethereum}\n" +
+                "  ) {\n" +
+                "    Social {\n" +
+                "      id\n" +
+                "      chainId\n" +
+                "      blockchain\n" +
+                "      dappName\n" +
+                "      dappSlug\n" +
+                "      dappVersion\n" +
+                "      userId\n" +
+                "      userAddress\n" +
+                "      userCreatedAtBlockTimestamp\n" +
+                "      userCreatedAtBlockNumber\n" +
+                "      userLastUpdatedAtBlockTimestamp\n" +
+                "      userLastUpdatedAtBlockNumber\n" +
+                "      userHomeURL\n" +
+                "      userRecoveryAddress\n" +
+                "      userAssociatedAddresses\n" +
+                "      profileName\n" +
+                "      profileTokenId\n" +
+                "      profileTokenAddress\n" +
+                "      profileCreatedAtBlockTimestamp\n" +
+                "      profileCreatedAtBlockNumber\n" +
+                "      profileLastUpdatedAtBlockTimestamp\n" +
+                "      profileLastUpdatedAtBlockNumber\n" +
+                "      profileTokenUri\n" +
+                "      isDefault\n" +
+                "      identity\n" +
+                "    }\n" +
+                "  }\n" +
+                "}")
             console.log("fetch data:", data, error);
-            if (!data){
+            if (!data) {
                 res.status(500).send("Invalid Fid");
             }
             const address = data.Socials.Social.userAssociatedAddresses;
