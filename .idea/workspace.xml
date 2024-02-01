@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eb6ba4f2-057a-4775-885e-00258dc59ab8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/pages/api/sloot.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/sloot.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="eb6ba4f2-057a-4775-885e-00258dc59ab8" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,7 +33,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/xolo/WebstormProjects/sloot",
+    "last_opened_file_path": "/Users/xolo/WebstormProjects/sloot/public",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -47,6 +45,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/pages/api" />
     </key>
@@ -66,7 +65,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1706593427638</updated>
-      <workItem from="1706593429124" duration="25498000" />
+      <workItem from="1706593429124" duration="64924000" />
     </task>
     <servers />
   </component>
@@ -74,7 +73,9 @@
     <option name="version" value="3" />
     <option name="includedJSSourcePackages">
       <set>
+        <option value="@airstack/airstack-react" />
         <option value="@farcaster/hub-nodejs" />
+        <option value="canvas" />
         <option value="next" />
       </set>
     </option>

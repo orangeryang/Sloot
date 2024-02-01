@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         <head>
           <title> My SLoot </title>
           <meta name="fc:frame" content="vNext">
-          <meta name="fc:frame:image" content="https://sloot-five.vercel.app/api/sloot">
+          <meta name="fc:frame:image" content="https://sloot-five.vercel.app/1.png">
           <meta name="fc:frame:button:1" content="Loot Foundation">
           <meta name="fc:frame:button:1:action" content="redirect">
           <meta name="fc:frame:button:1:url" content="https://loot.foundation/" />
