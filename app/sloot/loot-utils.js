@@ -5,7 +5,7 @@ const deploymentMap = require("../../public/map.json")
 
 const mapping = require("../../public/item_layer_mapping.json")
 const layersOrder = require("../../public/item_layer_order.json")
-const {createCanvas} = require("canvas");
+const {createCanvas, Image} = require("canvas");
 
 const IMG_DIR = `ipfs://${deploymentMap.ipfs.character_imgs}`
 
@@ -158,8 +158,6 @@ const defaultOptions = {
 const mergeImages = (sources = [], options = {}) => new Promise(resolve => {
     options = Object.assign({}, defaultOptions, options);
     
-    const Image = options.Image || window.Image;
-    
     // Load sources
     const images = sources.map(source => new Promise((resolve, reject) => {
         // Convert sources to objects
@@ -177,7 +175,7 @@ const mergeImages = (sources = [], options = {}) => new Promise(resolve => {
     
     const m = Math.max(...images.map(image => image.img[dim]));
     // Setup browser/Node.js specific variables
-    const canvas = options.Canvas ? new options.Canvas() : createCanvas(m, m);
+    const canvas = createCanvas(m, m);
     
     // Get canvas context
     const ctx = canvas.getContext('2d');
@@ -186,9 +184,8 @@ const mergeImages = (sources = [], options = {}) => new Promise(resolve => {
     resolve(Promise.all(images)
         .then(images => {
             // Set canvas dimensions
-            const getSize = dim => options[dim] || Math.max(...images.map(image => image.img[dim]));
-            canvas.width = getSize('width');
-            canvas.height = getSize('height');
+            canvas.width = m;
+            canvas.height = m;
             
             // Draw images to canvas
             images.forEach(image => {

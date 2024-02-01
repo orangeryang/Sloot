@@ -34,9 +34,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
             const fid = validatedMessage?.data?.fid || 0;
             // console.log("validatedMessage:" + validatedMessage?.data);
-            if (buttonId != 1) {
-                res.status(500).send("Invalid button");
-            }
+            // if (buttonId != 1) {
+            //     res.status(500).send("Invalid button");
+            // }
             console.log("fid:", fid);
             const {data, error} = await fetchQuery("query MyQuery {\n" +
                 "  Socials(\n" +
@@ -75,24 +75,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 "}");
             
             // console.log("fetch data:", data, error);
-            if (!data) {
-                res.status(500).send("Invalid Fid");
-            }
-            const Social = data.Socials.Social;
-            // console.log("Social:", Social);
-            let addArrToRemove: string[] = [];
-            for (let i = 0; i < Social.length; i++) {
-                console.log(Social[i].userAddress);
-                addArrToRemove.push(Social[i].userAddress);
-            }
-            const address: string[] = Social[0].userAssociatedAddresses.filter((add: string) => !addArrToRemove.includes(add));
-            if (address.length === 0) {
-                res.status(500).send("No address");
-            }
-            console.log("address:", address);
+            // if (!data) {
+            //     res.status(500).send("Invalid Fid");
+            // }
+            // const Social = data.Socials.Social;
+            // // console.log("Social:", Social);
+            // let addArrToRemove: string[] = [];
+            // for (let i = 0; i < Social.length; i++) {
+            //     console.log(Social[i].userAddress);
+            //     addArrToRemove.push(Social[i].userAddress);
+            // }
+            // const address: string[] = Social[0].userAssociatedAddresses.filter((add: string) => !addArrToRemove.includes(add));
+            // if (address.length === 0) {
+            //     res.status(500).send("No address");
+            // }
+            // console.log("address:", address);
             const sloot = new Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
             // console.log("sloot:", sloot);
-            const tokenURIB64 = await sloot.tokenURI(address[0]);
+            const tokenURIB64 = await sloot.tokenURI(/*address[0]*/"0x8e675b3B721af441E908aB2597C1BC283A0D1C4d");
             // console.log("tokenUTIB64", tokenURIB64);
             const tokenURI = JSON.parse(Buffer.from(tokenURIB64.split(",")[1], 'base64').toString("utf8"))
             // console.log("tokenURI:", tokenURI);
