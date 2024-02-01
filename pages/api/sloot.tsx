@@ -78,14 +78,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (!data) {
                 res.status(500).send("Invalid Fid");
             }
-            const address = data.Socials.Social.userAssociatedAddresses;
+            const Social = data.Socials.Social;
+            console.log("Social:",Social);
+            let addArrToRemove = [];
+            if (Social.length >=1){
+                for (let i = 1; i<= Social.length;i++){
+                    addArrToRemove.push(Social.userAddress);
+                }
+            }
+            const address = Social[0].userAssociatedAddresses.filter((add)->{!addArrToRemove.includes(add)})
             if (!address) {
                 res.status(500).send("No address");
             }
             console.log("address:", address);
             const sloot = new Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
             // console.log("sloot:", sloot);
-            const tokenURIB64 = await sloot.tokenURI(address);
+            const tokenURIB64 = await sloot.tokenURI(address[0]);
             // console.log("tokenUTIB64", tokenURIB64);
             const tokenURI = JSON.parse(Buffer.from(tokenURIB64.split(",")[1], 'base64').toString("utf8"))
             // console.log("tokenURI:", tokenURI);
