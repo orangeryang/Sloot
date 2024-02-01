@@ -81,11 +81,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const Social = data.Socials.Social;
             // console.log("Social:", Social);
             let addArrToRemove: string[] = [];
-            if (Social.length >= 1) {
-                for (let i = 1; i <= Social.length; i++) {
-                    console.log(Social.userAddress);
-                    addArrToRemove.push(Social.userAddress);
-                }
+            for (let i = 0; i <= Social.length; i++) {
+                console.log(Social.userAddress);
+                addArrToRemove.push(Social.userAddress);
             }
             const address: string[] = Social[0].userAssociatedAddresses.filter((add: string) => !addArrToRemove.includes(add));
             if (!address) {
@@ -106,7 +104,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const items = itemsFromSvg(svg)
             // console.log("items:", items)
             const img = await getImageForLoot(items)
-            console.log("img:", img)
+            // console.log("img:", img)
             
             const satoriSvg = await satori(
                 <div className="card" style={ {backgroundColor: "white", marginTop: "15px"} }>
