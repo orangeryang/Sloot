@@ -33,12 +33,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
             const fid = validatedMessage?.data?.fid || 0;
-            console.log("validatedMessage:" + validatedMessage?.data);
+            // console.log("validatedMessage:" + validatedMessage?.data);
             if (buttonId != 1) {
                 res.status(500).send("Invalid button");
             }
             
-            fetchQuery("query MyQuery {\n" +
+            const {data, error} = await fetchQuery("query MyQuery {\n" +
                 "  Socials(\n" +
                 "    input: {filter: {dappName: {_eq: farcaster}, identity: {_eq: \"fc_fid:" +
                 fid.toString(10) +
@@ -74,6 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 "  }\n" +
                 "}", {fid: fid}, {cache: false});
             
+            console.log("fetch data:", data, error);
             const address = validatedMessage?.signer;
             console.log("address:", address);
             if (!address) {
