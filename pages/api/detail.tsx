@@ -23,8 +23,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       <html>
         <head>
           <title> My SLoot </title>
-          <meta property="og:title" content="Synthetic Loot">
-          <meta property="og:image" content="${ imageUrl }">
           <meta name="fc:frame" content="vNext">
           <meta name="fc:frame:image" content="https://sloot-five.vercel.app/api/sloot">
           <meta name="fc:frame:button:1" content="Loot Foundation">
