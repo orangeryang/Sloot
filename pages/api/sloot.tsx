@@ -11,6 +11,7 @@ const HUB_URL = "nemes.farcaster.xyz:2283";
 const client = getSSLHubRpcClient(HUB_URL);
 const IMG_DIR = `ipfs://${ map.ipfs.character_imgs }`;
 import { init, useQuery } from "@airstack/airstack-react";
+import { useState } from "react";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
