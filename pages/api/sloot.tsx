@@ -81,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const Social = data.Socials.Social;
             // console.log("Social:", Social);
             let addArrToRemove: string[] = [];
-            for (let i = 0; i <= Social.length; i++) {
+            for (let i = 0; i < Social.length; i++) {
                 console.log(Social[i].userAddress);
                 addArrToRemove.push(Social[i].userAddress);
             }
