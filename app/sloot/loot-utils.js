@@ -118,7 +118,7 @@ async function getImageForLoot(loot) {
     const dom = new JSDOM(`<canvas></canvas>`);
     console.log(dom.window.document.querySelector("canvas").textContent);
     
-    return mergeImages(files, {crossOrigin: "anonymous"}, {Canvas: dom.window.document.querySelector("canvas")});
+    return mergeImages(files, {crossOrigin: "anonymous", Canvas: dom.window.document.querySelector("canvas")});
 }
 
 //https://github.com/bpierre/loot-rarity/blob/main/src/image.ts#L24
