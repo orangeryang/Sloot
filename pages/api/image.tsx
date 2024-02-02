@@ -18,8 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta name="fc:frame:image" content="${ imageUrl }">
           <meta name="fc:frame:post_url" content="https://sloot-five.vercel.app/api/detail">
           <meta name="fc:frame:button:1" content="${ buttonText }">
-          <meta name="fc:frame:button:1:action" content="post_redirect">
-          <meta name="fc:frame:button:1:url" content="https://loot.foundation/" />
         </head>
         <body>
              <h1> My Loot </h1>
