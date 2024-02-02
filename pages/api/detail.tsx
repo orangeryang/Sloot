@@ -32,13 +32,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta name="fc:frame:button:1:action" content="post_redirect">
 <!--          <meta name="fc:frame:button:1:url" content="https://loot.foundation/" />-->
           <meta name="fc:frame:button:2" content="Loot Discord">
-          <meta name="fc:frame:button:2:action" content="post_redirect">>
+          <meta name="fc:frame:button:2:action" content="post_redirect">
 <!--          <meta name="fc:frame:button:2:url" content="https://loot.foundation/" />-->
           <meta name="fc:frame:button:3" content="Buy Loot">
-          <meta name="fc:frame:button:3:action" content="post_redirect">>
+          <meta name="fc:frame:button:3:action" content="post_redirect">
 <!--          <meta name="fc:frame:button:3:url" content="https://loot.foundation/" />-->
           <meta name="fc:frame:button:4" content="Play Loot Survivor">
-          <meta name="fc:frame:button:4:action" content="post_redirect">>
+          <meta name="fc:frame:button:4:action" content="post_redirect">
 <!--          <meta name="fc:frame:button:4:url" content="https://loot.foundation/" />-->
         </head>
       </html>
