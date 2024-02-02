@@ -1,6 +1,6 @@
 // https://github.com/stephancill/synthetic-loot-viewer
 
-const mergeImages = require("merge-images")
+// const mergeImages = require("merge-images")
 const deploymentMap = require("../../public/map.json")
 
 const mapping = require("../../public/item_layer_mapping.json")
@@ -114,11 +114,16 @@ async function getImageForLoot(loot) {
         // console.log(file)
         return file
     })
+    console.log("files:", files);
     
-    const dom = new JSDOM(`<canvas></canvas>`);
-    console.log(dom.window.document.querySelector("canvas").textContent);
+    const dom = new JSDOM(`<html></html>`);
     
-    return mergeImages(files, {crossOrigin: "anonymous", Canvas: dom.window.document.querySelector("canvas")});
+    
+    return mergeImages(files, {
+        crossOrigin: "anonymous",
+        Canvas: dom.window.document.createElement("canvas"),
+        Image: dom.window.Image
+    });
 }
 
 //https://github.com/bpierre/loot-rarity/blob/main/src/image.ts#L24
@@ -149,74 +154,89 @@ function itemsFromSvg(svg) {
 }
 
 
-// // Defaults
-// const defaultOptions = {
-//     format: 'image/png',
-//     quality: 0.92,
-//     width: undefined,
-//     height: undefined,
-//     Canvas: undefined,
-//     crossOrigin: undefined
-// };
-//
-// // Return Promise
-// const mergeImages = (sources = [], options = {}) => new Promise(resolve => {
-//     options = Object.assign({}, defaultOptions, options);
-//
-//     // Load sources
-//     const images = sources.map(source => new Promise((resolve, reject) => {
-//         // Convert sources to objects
-//         if (source.constructor.name !== 'Object') {
-//             source = {src: source};
-//         }
-//
-//         // Resolve source and img when loaded
-//         const img = new Image();
-//         img.crossOrigin = options.crossOrigin;
-//         img.onerror = () => reject(new Error('Couldn\'t load image'));
-//         img.onload = () => resolve(Object.assign({}, source, {img}));
-//         img.src = source.src;
-//
-//     }));
-//
-//     // Setup browser/Node.js specific variables
-//     const width = Math.max(...images.map(image => image.img["width"]));
-//     const height = Math.max(...images.map(image => image.img["height"]))
-//     const canvas = createCanvas(width, height);
-//
-//     // Get canvas context
-//     const ctx = canvas.getContext('2d');
-//
-//     // When sources have loaded
-//     resolve(Promise.all(images)
-//         .then(images => {
-//
-//             // Draw images to canvas
-//             images.forEach(image => {
-//                 ctx.globalAlpha = image.opacity ? image.opacity : 1;
-//                 return ctx.drawImage(image.img, image.x || 0, image.y || 0);
-//             });
-//
-//             if (options.Canvas && options.format === 'image/jpeg') {
-//                 // Resolve data URI for node-canvas jpeg async
-//                 return new Promise((resolve, reject) => {
-//                     canvas.toDataURL(options.format, {
-//                         quality: options.quality,
-//                         progressive: false
-//                     }, (err, jpeg) => {
-//                         if (err) {
-//                             reject(err);
-//                             return;
-//                         }
-//                         resolve(jpeg);
-//                     });
-//                 });
-//             }
-//
-//             // Resolve all other data URIs sync
-//             return canvas.toDataURL(options.format, options.quality);
-//         }));
-// });
+// Defaults
+const defaultOptions = {
+    format: 'image/png',
+    quality: 0.92,
+    width: undefined,
+    height: undefined,
+    Canvas: undefined,
+    crossOrigin: undefined
+};
+
+// Return Promise
+const mergeImages = (sources = [], options = {}) => {
+    options = Object.assign({}, defaultOptions, options);
+    
+    // Setup browser/Node.js specific variables
+    const canvas = options.Canvas;
+    const Image = options.Image || window.Image;
+    
+    // Load sources
+    const images = sources.map(source => {
+        // Convert sources to objects
+        if (source.constructor.name !== 'Object') {
+            source = {src: source};
+        }
+        
+        // Resolve source and img when loaded
+        // const img = new Image();
+        const dom = new JSDOM(`<html></html>`);
+        dom.window.document.createElement("img");
+        
+        const img = dom.window.document.querySelector('img');
+        img.src = source.src;
+        img.crossOrigin = options.crossOrigin;
+        img.onerror = () => new Error('Couldn\'t load image');
+        img.onload = () => (Object.assign({}, source, {img}));
+        // img.src = source.src;
+        
+        return Object.assign({}, source, {img});
+    });
+    
+    // console.log("images:", images);
+    // Get canvas context
+    const ctx = canvas.getContext('2d');
+    // console.log("canvas:", canvas);
+    // When sources have loaded
+    // resolve(Promise.all(images)
+    //     .then(images => {
+    // Set canvas dimensions
+    const getSize = dim => options[dim] || Math.max(...images.map(image => image.img[dim]));
+    canvas.width = 1000;
+    canvas.height = 1000;
+    
+    // console.log("imagesssss:", images);
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    sleep(10000).then();
+    // Draw images to canvas
+    console.log('foreach', images);
+    images.forEach(image => {
+        console.log('img', image.img)
+        ctx.globalAlpha = 1;
+        return ctx.drawImage(image.img, 0, 0);
+    });
+    console.log('loading');
+    if (options.Canvas && options.format === 'image/jpeg') {
+        // Resolve data URI for node-canvas jpeg async
+        return new Promise((resolve, reject) => {
+            canvas.toDataURL(options.format, {
+                quality: options.quality,
+                progressive: false
+            }, (err, jpeg) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(jpeg);
+            });
+        });
+    }
+    
+    // Resolve all other data URIs sync
+    return canvas.toDataURL(options.format, options.quality);
+}
+
 
 module.exports = {getImageForLoot, itemsFromSvg}
 

@@ -11,10 +11,6 @@ const HUB_URL = "nemes.farcaster.xyz:2283";
 const client = getSSLHubRpcClient(HUB_URL);
 const IMG_DIR = `ipfs://${ map.ipfs.character_imgs }`;
 import { init, fetchQuery } from "@airstack/airstack-react";
-import { useState } from "react";
-
-
-
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
@@ -40,42 +36,42 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             //     res.status(500).send("Invalid button");
             // }
             console.log("fid:", fid);
-            const {data, error} = await fetchQuery("query MyQuery {\n" +
-                "  Socials(\n" +
-                "    input: {filter: {dappName: {_eq: farcaster}, identity: {_eq: \"fc_fid:" +
-                fid.toString(10) +
-                "\"}}, blockchain: ethereum}\n" +
-                "  ) {\n" +
-                "    Social {\n" +
-                "      id\n" +
-                "      chainId\n" +
-                "      blockchain\n" +
-                "      dappName\n" +
-                "      dappSlug\n" +
-                "      dappVersion\n" +
-                "      userId\n" +
-                "      userAddress\n" +
-                "      userCreatedAtBlockTimestamp\n" +
-                "      userCreatedAtBlockNumber\n" +
-                "      userLastUpdatedAtBlockTimestamp\n" +
-                "      userLastUpdatedAtBlockNumber\n" +
-                "      userHomeURL\n" +
-                "      userRecoveryAddress\n" +
-                "      userAssociatedAddresses\n" +
-                "      profileName\n" +
-                "      profileTokenId\n" +
-                "      profileTokenAddress\n" +
-                "      profileCreatedAtBlockTimestamp\n" +
-                "      profileCreatedAtBlockNumber\n" +
-                "      profileLastUpdatedAtBlockTimestamp\n" +
-                "      profileLastUpdatedAtBlockNumber\n" +
-                "      profileTokenUri\n" +
-                "      isDefault\n" +
-                "      identity\n" +
-                "    }\n" +
-                "  }\n" +
-                "}");
-            
+            // const {data, error} = await fetchQuery("query MyQuery {\n" +
+            //     "  Socials(\n" +
+            //     "    input: {filter: {dappName: {_eq: farcaster}, identity: {_eq: \"fc_fid:" +
+            //     fid.toString(10) +
+            //     "\"}}, blockchain: ethereum}\n" +
+            //     "  ) {\n" +
+            //     "    Social {\n" +
+            //     "      id\n" +
+            //     "      chainId\n" +
+            //     "      blockchain\n" +
+            //     "      dappName\n" +
+            //     "      dappSlug\n" +
+            //     "      dappVersion\n" +
+            //     "      userId\n" +
+            //     "      userAddress\n" +
+            //     "      userCreatedAtBlockTimestamp\n" +
+            //     "      userCreatedAtBlockNumber\n" +
+            //     "      userLastUpdatedAtBlockTimestamp\n" +
+            //     "      userLastUpdatedAtBlockNumber\n" +
+            //     "      userHomeURL\n" +
+            //     "      userRecoveryAddress\n" +
+            //     "      userAssociatedAddresses\n" +
+            //     "      profileName\n" +
+            //     "      profileTokenId\n" +
+            //     "      profileTokenAddress\n" +
+            //     "      profileCreatedAtBlockTimestamp\n" +
+            //     "      profileCreatedAtBlockNumber\n" +
+            //     "      profileLastUpdatedAtBlockTimestamp\n" +
+            //     "      profileLastUpdatedAtBlockNumber\n" +
+            //     "      profileTokenUri\n" +
+            //     "      isDefault\n" +
+            //     "      identity\n" +
+            //     "    }\n" +
+            //     "  }\n" +
+            //     "}");
+            //
             // console.log("fetch data:", data, error);
             // if (!data) {
             //     res.status(500).send("Invalid Fid");
@@ -104,9 +100,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("svg:", svg);
             
             const items = itemsFromSvg(svg)
-            // console.log("items:", items)
+            console.log("items:", items)
             const img = await getImageForLoot(items)
-            // console.log("img:", img)
+            console.log("img:", img)
             
             const satoriSvg = await satori(
                 <div className="card" style={ {backgroundColor: "white", marginTop: "15px"} }>

@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eb6ba4f2-057a-4775-885e-00258dc59ab8" name="Changes" comment="" />
+    <list default="true" id="eb6ba4f2-057a-4775-885e-00258dc59ab8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/app/sloot/loot-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/sloot/loot-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/api/sloot.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/sloot.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,9 +19,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2bf5jRoNssWGVQK6hx3IZVbjbUe" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -33,7 +36,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/xolo/WebstormProjects/sloot/public",
+    "last_opened_file_path": "/Users/xolo/WebstormProjects/sloot/pages/api",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -45,9 +48,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pages/api" />
       <recent name="$PROJECT_DIR$/public" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/pages/api" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public" />
@@ -66,6 +69,7 @@
       <option name="presentableId" value="Default" />
       <updated>1706593427638</updated>
       <workItem from="1706593429124" duration="64924000" />
+      <workItem from="1706782678455" duration="30735000" />
     </task>
     <servers />
   </component>
