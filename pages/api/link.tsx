@@ -31,6 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log("buttonId:", buttonId);
         
         if (buttonId === 1) {
+            console.log("Redirecting to loot foundation");
             return res.status(302).setHeader('Location', `https://loot.foundation/`).send('Redirecting to loot foundation');
         } else if (buttonId === 2) {
             return res.status(302).setHeader('Location', `https://loot.foundation/`).send('Redirecting to loot foundation');
