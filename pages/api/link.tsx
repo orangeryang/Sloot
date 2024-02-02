@@ -9,7 +9,7 @@ const client = getSSLHubRpcClient(HUB_URL);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         
-        let validatedMessage : Message | undefined = undefined;
+        let validatedMessage: Message | undefined = undefined;
         try {
             const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
             const result = await client?.validateMessage(frameMessage);
@@ -23,8 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // if (validatedMessage && !urlString.startsWith(process.env['HOST'] || '')) {
             //     return res.status(400).send(`Invalid frame url: ${urlBuffer}`);
             // }
-        } catch (e)  {
-            return res.status(400).send(`Failed to validate message: ${e}`);
+        } catch (e) {
+            return res.status(400).send(`Failed to validate message: ${ e }`);
         }
         
         let buttonId = 0, fid = 0;
@@ -40,16 +40,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         if (buttonId === 1) {
             console.log("Redirecting to loot foundation");
-            return  NextResponse.redirect('https://loot.foundation/', {status: 302});
+            // return NextResponse.redirect('https://loot.foundation/', {status: 302});
+            return NextResponse.redirect('https://sloot-five.vercel.app', {status: 302});
         } else if (buttonId === 2) {
             console.log("Redirecting to discord");
-            return res.status(302).setHeader('Location', "https://discord.gg/njVSBtvBsc").send('Redirecting to discord');
+            // return res.status(302).setHeader('Location', "https://discord.gg/njVSBtvBsc").send('Redirecting to discord');
+            return res.status(302).setHeader('Location', "https://sloot-five.vercel.app").send('Redirecting to discord');
         } else if (buttonId === 3) {
             console.log("Redirecting to open sea");
             return res.status(302).setHeader('Location', 'https://opensea.io/collection/lootproject').send('Redirecting to open sea');
         } else if (buttonId === 4) {
             console.log("Redirecting to play it");
-            return res.status(302).setHeader('location', `https://beta-survivor.realms.world`).send('Redirecting to play it');
+            return res.status(302).setHeader('Location', `https://beta-survivor.realms.world`).send('Redirecting to play it');
         }
         
     } else {
