@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { useRouter } from "next/navigation";
 
 const buttonText = "My Loot";
 const imageUrl = `https://sloot-five.vercel.app/1.png`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    
     
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(`
