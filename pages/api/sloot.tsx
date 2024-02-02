@@ -14,6 +14,8 @@ import { init, fetchQuery } from "@airstack/airstack-react";
 import { useState } from "react";
 
 
+
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
         init("117baaa0c425643f699cd5324983903fa");

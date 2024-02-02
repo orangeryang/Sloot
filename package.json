@@ -17,6 +17,7 @@
     "clsx": "^2.1.0",
     "ethers": "^6.10.0",
     "geist": "^1.2.1",
+    "jsdom": "^24.0.0",
     "merge-images": "^2.0.0",
     "next": "latest",
     "postcss": "^8.4.33",

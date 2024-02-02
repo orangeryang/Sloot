@@ -5,6 +5,8 @@ const deploymentMap = require("../../public/map.json")
 
 const mapping = require("../../public/item_layer_mapping.json")
 const layersOrder = require("../../public/item_layer_order.json")
+const {JSDOM} = require("jsdom");
+const {Canvas} = require("jsdom/lib/jsdom/utils");
 // const {createCanvas, Image} = require("canvas");
 
 const IMG_DIR = `ipfs://${deploymentMap.ipfs.character_imgs}`
@@ -113,7 +115,10 @@ async function getImageForLoot(loot) {
         return file
     })
     
-    return mergeImages(files, {crossOrigin: "anonymous"});
+    const dom = new JSDOM(`<canvas></canvas>`);
+    console.log(dom.window.document.querySelector("canvas").textContent);
+    
+    return mergeImages(files, {crossOrigin: "anonymous"}, {Canvas: dom.window.document.querySelector("canvas")});
 }
 
 //https://github.com/bpierre/loot-rarity/blob/main/src/image.ts#L24
