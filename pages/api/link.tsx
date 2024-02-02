@@ -28,6 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         let buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
         // let fid = validatedMessage?.data?.fid || 0;
+        console.log("buttonId:", buttonId);
         
         if (buttonId === 1) {
             return res.status(302).setHeader('Location', `https://loot.foundation/`).send('Redirecting to loot foundation');
