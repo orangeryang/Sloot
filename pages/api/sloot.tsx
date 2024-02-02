@@ -15,7 +15,7 @@ import { useState } from "react";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'POST') {
+    if (req.method === 'GET') {
         init("117baaa0c425643f699cd5324983903fa");
         
         try {
