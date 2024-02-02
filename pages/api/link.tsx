@@ -8,7 +8,7 @@ const client = getSSLHubRpcClient(HUB_URL);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         
-        let validatedMessage: Message | undefined = undefined;
+        let validatedMessage : Message | undefined = undefined;
         try {
             const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
             const result = await client?.validateMessage(frameMessage);
@@ -19,15 +19,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Also validate the frame url matches the expected url
             // let urlBuffer = validatedMessage?.data?.frameActionBody?.url || [];
             // const urlString = Buffer.from(urlBuffer).toString('utf-8');
-            // if (validatedMessage && !urlString.startsWith("https://sloot-five.vercel.app" || '')) {
-            //     return res.status(400).send(`Invalid frame url: ${ urlBuffer }`);
+            // if (validatedMessage && !urlString.startsWith(process.env['HOST'] || '')) {
+            //     return res.status(400).send(`Invalid frame url: ${urlBuffer}`);
             // }
-        } catch (e) {
-            return res.status(400).send(`Failed to validate message: ${ e }`);
+        } catch (e)  {
+            return res.status(400).send(`Failed to validate message: ${e}`);
         }
         
-        let buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
-        // let fid = validatedMessage?.data?.fid || 0;
+        let buttonId = 0, fid = 0;
+        // If HUB_URL is not provided, don't validate and fall back to untrusted data
+        if (client) {
+            buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
+            fid = validatedMessage?.data?.fid || 0;
+        } else {
+            buttonId = req.body?.untrustedData?.buttonIndex || 0;
+            fid = req.body?.untrustedData?.fid || 0;
+        }
         console.log("buttonId:", buttonId);
         
         if (buttonId === 1) {
