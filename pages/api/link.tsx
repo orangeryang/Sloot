@@ -32,13 +32,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         if (buttonId === 1) {
             console.log("Redirecting to loot foundation");
-            return res.status(302).setHeader('Location', `https://loot.foundation/`).send('Redirecting to loot foundation');
+            return res.status(302).setHeader('Location', `https://loot.foundation`).send('Redirecting to loot foundation');
         } else if (buttonId === 2) {
-            return res.status(302).setHeader('Location', `https://loot.foundation/`).send('Redirecting to loot foundation');
+            console.log("Redirecting to discord");
+            return res.status(302).setHeader('Location', `https://discord.gg/njVSBtvBsc`).send('Redirecting to discord');
         } else if (buttonId === 3) {
-            return res.status(302).setHeader('Location', `https://loot.foundation/`).send('Redirecting to loot foundation');
+            console.log("Redirecting to open sea");
+            return res.status(302).setHeader('Location', `https://opensea.io/collection/lootproject`).send('Redirecting to open sea');
         } else if (buttonId === 4) {
-            return res.status(302).setHeader('Location', `https://loot.foundation/`).send('Redirecting to loot foundation');
+            console.log("Redirecting to play it");
+            return res.status(302).setHeader('Location', `https://beta-survivor.realms.world`).send('Redirecting to play it');
         }
         
     } else {
