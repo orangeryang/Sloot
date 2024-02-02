@@ -17,17 +17,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             
             // Also validate the frame url matches the expected url
-            let urlBuffer = validatedMessage?.data?.frameActionBody?.url || [];
-            const urlString = Buffer.from(urlBuffer).toString('utf-8');
-            if (validatedMessage && !urlString.startsWith("https://sloot-five.vercel.app" || '')) {
-                return res.status(400).send(`Invalid frame url: ${ urlBuffer }`);
-            }
+            // let urlBuffer = validatedMessage?.data?.frameActionBody?.url || [];
+            // const urlString = Buffer.from(urlBuffer).toString('utf-8');
+            // if (validatedMessage && !urlString.startsWith("https://sloot-five.vercel.app" || '')) {
+            //     return res.status(400).send(`Invalid frame url: ${ urlBuffer }`);
+            // }
         } catch (e) {
             return res.status(400).send(`Failed to validate message: ${ e }`);
         }
         
         let buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
-        let fid = validatedMessage?.data?.fid || 0;
+        // let fid = validatedMessage?.data?.fid || 0;
         
         if (buttonId === 1) {
             return res.status(302).setHeader('Location', `https://loot.foundation/`).send('Redirecting to loot foundation');
