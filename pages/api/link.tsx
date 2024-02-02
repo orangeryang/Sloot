@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
+import { NextResponse } from "next/server";
 
 const HUB_URL = "nemes.farcaster.xyz:2283";
 const client = getSSLHubRpcClient(HUB_URL);
@@ -39,13 +40,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         if (buttonId === 1) {
             console.log("Redirecting to loot foundation");
-            return res.status(302).setHeader('Location', `https://loot.foundation`).send('Redirecting to loot foundation');
+            return  NextResponse.redirect('https://loot.foundation/', {status: 302});
         } else if (buttonId === 2) {
             console.log("Redirecting to discord");
-            return res.status(302).setHeader('Location', `https://discord.gg/njVSBtvBsc`).send('Redirecting to discord');
+            return res.status(302).setHeader('Location', "https://discord.gg/njVSBtvBsc").send('Redirecting to discord');
         } else if (buttonId === 3) {
             console.log("Redirecting to open sea");
-            return res.status(302).setHeader('Location', `https://opensea.io/collection/lootproject`).send('Redirecting to open sea');
+            return res.status(302).setHeader('Location', 'https://opensea.io/collection/lootproject').send('Redirecting to open sea');
         } else if (buttonId === 4) {
             console.log("Redirecting to play it");
             return res.status(302).setHeader('Location', `https://beta-survivor.realms.world`).send('Redirecting to play it');
