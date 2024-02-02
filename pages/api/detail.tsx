@@ -1,18 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
-import sharp from 'sharp';
-import satori from "satori";
-import { ethers, JsonRpcProvider, Contract } from "ethers";
-import SyntheticLootArtifact from "../../public/SyntheticLoot.json";
-import map from "../../public/map.json";
-import { itemsFromSvg, getImageForLoot } from "@/app/sloot/loot-utils";
-
-const HUB_URL = "nemes.farcaster.xyz:2283";
-const client = getSSLHubRpcClient(HUB_URL);
-const IMG_DIR = `ipfs://${ map.ipfs.character_imgs }`;
-import { init, fetchQuery } from "@airstack/airstack-react";
-import { useState } from "react";
-
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
