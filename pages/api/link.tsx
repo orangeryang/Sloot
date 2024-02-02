@@ -49,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(302).setHeader('Location', 'https://opensea.io/collection/lootproject').send('Redirecting to open sea');
         } else if (buttonId === 4) {
             console.log("Redirecting to play it");
-            return res.status(302).setHeader('Location', `https://beta-survivor.realms.world`).send('Redirecting to play it');
+            return res.status(302).setHeader('location', `https://beta-survivor.realms.world`).send('Redirecting to play it');
         }
         
     } else {
