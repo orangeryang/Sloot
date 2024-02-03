@@ -12,6 +12,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 
 import puppeteer from "puppeteer";
+import chromium from 'chrome-aws-lambda';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
@@ -20,14 +21,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const add = req.query["address"];
 
-            const browser = await puppeteer.launch(/*{headless: false}*/{args: ['--window-size=1910,1000']});
+            const browser = await chromium.puppeteer.launch({
+                args: [...chromium.args, "--hide-scrollbars", "--disable-web-security", '--window-size=1910,1000'],
+                defaultViewport: chromium.defaultViewport,
+                executablePath: await chromium.executablePath,
+                headless: true,
+                ignoreHTTPSErrors: true,
+            })
+
+            // const browser = await puppeteer.launch(/*{headless: false}*/{args: ['--window-size=1910,1000']});
             const page = await browser.newPage();
             await page.goto("https://loot.stephancill.co.za/#/address/" + add, {waitUntil: "load"});
             await page.waitForSelector("#root > div > div:nth-child(4) > div.TokenCard_tokenCard__2xW3d > div > div:nth-child(2) > div > div > div.Token_token__2gp1y > img", {timeout: 50000});
             // #root > div > div:nth-child(4) > div.TokenCard_tokenCard__2xW3d > div > div:nth-child(2) > div > div > div.Token_token__2gp1y > img
             const img = await page.$eval("#root > div > div:nth-child(4) > div.TokenCard_tokenCard__2xW3d > div > div:nth-child(2) > div > div > div.Token_token__2gp1y > img", el => {
                 console.log(el);
-                return el.src;
+                return el.getAttribute("src");
             })
             // console.log(img);
 
@@ -37,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // );
 
             await page.setViewport({width: 1910, height: 1000});
-            await page.goto(img, {waitUntil: "load"});
+            await page.goto(img||"about:blank", {waitUntil: "load"});
 
             const snap = await page.screenshot();
 
