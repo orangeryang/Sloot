@@ -75,14 +75,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("Social:", Social);
             let addArrToRemove: string[] = [];
             for (let i = 0; i < Social.length; i++) {
-                console.log(Social[i].userAddress);
+                // console.log(Social[i].userAddress);
                 addArrToRemove.push(Social[i].userAddress);
             }
             address = Social[0].userAssociatedAddresses.filter((add: string) => !addArrToRemove.includes(add));
             if (address.length === 0) {
                 res.status(500).send("No address");
             }
-            // console.log("address:", address);
+            console.log("address:", address);
         } catch (e) {
             return res.status(400).send(`Failed to validate message: ${e}`);
         }
