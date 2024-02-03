@@ -8,7 +8,7 @@ const client = getSSLHubRpcClient(HUB_URL);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-        
+
         let validatedMessage: Message | undefined = undefined;
         try {
             const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (result && result.isOk() && result.value.valid) {
                 validatedMessage = result.value.message;
             }
-            
+
             // Also validate the frame url matches the expected url
             // let urlBuffer = validatedMessage?.data?.frameActionBody?.url || [];
             // const urlString = Buffer.from(urlBuffer).toString('utf-8');
@@ -24,9 +24,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             //     return res.status(400).send(`Invalid frame url: ${urlBuffer}`);
             // }
         } catch (e) {
-            return res.status(400).send(`Failed to validate message: ${ e }`);
+            return res.status(400).send(`Failed to validate message: ${e}`);
         }
-        
+
         let buttonId = 0, fid = 0;
         // If HUB_URL is not provided, don't validate and fall back to untrusted data
         if (client) {
@@ -37,11 +37,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             fid = req.body?.untrustedData?.fid || 0;
         }
         console.log("buttonId:", buttonId);
-        
+
         if (buttonId === 1) {
             console.log("Redirecting to loot foundation");
-            return NextResponse.redirect('https://sloot-five.vercel.app/api/lf', {status: 302});
-            return res.status(302).setHeader('Location', "https://sloot-five.vercel.app/api/lf").send('Redirecting to discord');
+            return NextResponse.redirect('https://loot.foundation/', {status: 302});
+            // return res.status(302).setHeader('Location', "https://sloot-five.vercel.app/api/lf").send('Redirecting to discord');
         } else if (buttonId === 2) {
             console.log("Redirecting to discord");
             // return res.status(302).setHeader('Location', "https://discord.gg/njVSBtvBsc").send('Redirecting to discord');
@@ -53,11 +53,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log("Redirecting to play it");
             return res.status(302).setHeader('Location', `https://beta-survivor.realms.world`).send('Redirecting to play it');
         }
-        
+
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Method ${ req.method } Not Allowed`);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 }
 
