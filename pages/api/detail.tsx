@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta property="og:image" content="https://sloot-five.vercel.app/1.png">
           <meta name="fc:frame" content="vNext">
 <!--          <meta name="fc:frame:image" content="https://sloot-five.vercel.app/api/sloot">-->
-          <meta name="fc:frame:image" content="https://sloot-five.vercel.app/2.png">
+          <meta name="fc:frame:image" content="https://sloot-five.vercel.app/api/sloot">
           <meta name="fc:frame:post_url" content="https://sloot-five.vercel.app/api/link">
           <meta name="fc:frame:button:1" content="Loot Foundation">
           <meta name="fc:frame:button:1:action" content="post_redirect">
