@@ -40,12 +40,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (buttonId === 1) {
             console.log("Redirecting to loot foundation");
-            // return NextResponse.redirect('https://loot.foundation/', {status: 302});
             return res.status(302).setHeader('Location', "https://loot.foundation").send('Redirecting to discord');
         } else if (buttonId === 2) {
             console.log("Redirecting to discord");
-            // return res.status(302).setHeader('Location', "https://discord.gg/njVSBtvBsc").send('Redirecting to discord');
-            return res.status(302).setHeader('Location', "https://sloot-five.vercel.app/api/dc").send('Redirecting to discord');
+            return res.status(302).setHeader('Location', "https://discord.gg/njVSBtvBsc").send('Redirecting to discord');
         } else if (buttonId === 3) {
             console.log("Redirecting to open sea");
             return res.status(302).setHeader('Location', 'https://opensea.io/collection/lootproject').send('Redirecting to open sea');
