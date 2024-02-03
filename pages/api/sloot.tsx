@@ -11,7 +11,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // const IMG_DIR = `ipfs://${map.ipfs.character_imgs}`;
 
 
-import puppeteer from "puppeteer";
+// import puppeteer from "puppeteer";
 import chromium from 'chrome-aws-lambda';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
