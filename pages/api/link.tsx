@@ -40,8 +40,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (buttonId === 1) {
             console.log("Redirecting to loot foundation");
-            return NextResponse.redirect('https://loot.foundation/', {status: 302});
-            // return res.status(302).setHeader('Location', "https://sloot-five.vercel.app/api/lf").send('Redirecting to discord');
+            // return NextResponse.redirect('https://loot.foundation/', {status: 302});
+            return res.status(302).setHeader('Location', "https://loot.foundation").send('Redirecting to discord');
         } else if (buttonId === 2) {
             console.log("Redirecting to discord");
             // return res.status(302).setHeader('Location', "https://discord.gg/njVSBtvBsc").send('Redirecting to discord');
@@ -61,4 +61,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 }
 
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
