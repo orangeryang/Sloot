@@ -9,13 +9,15 @@ import { itemsFromSvg, getImageForLoot } from "@/app/sloot/loot-utils";
 
 const HUB_URL = "nemes.farcaster.xyz:2283";
 const client = getSSLHubRpcClient(HUB_URL);
-const IMG_DIR = `ipfs://${ map.ipfs.character_imgs }`;
+const IMG_DIR = `ipfs://${map.ipfs.character_imgs}`;
 import { init, fetchQuery } from "@airstack/airstack-react";
+
+import puppeteer from "puppeteer";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
         init("117baaa0c425643f699cd5324983903fa");
-        
+
         try {
             let validatedMessage: Message | undefined = undefined;
             // console.log("req:", req);
@@ -26,111 +28,139 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     validatedMessage = result.value.message;
                 }
             } catch (e) {
-                return res.status(400).send(`Failed to validate message: ${ e }`);
+                return res.status(400).send(`Failed to validate message: ${e}`);
             }
-            
+
             const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
             const fid = validatedMessage?.data?.fid || 0;
             // console.log("validatedMessage:" + validatedMessage?.data);
-            // if (buttonId != 1) {
-            //     res.status(500).send("Invalid button");
-            // }
+            if (buttonId != 1) {
+                res.status(500).send("Invalid button");
+            }
             console.log("fid:", fid);
-            // const {data, error} = await fetchQuery("query MyQuery {\n" +
-            //     "  Socials(\n" +
-            //     "    input: {filter: {dappName: {_eq: farcaster}, identity: {_eq: \"fc_fid:" +
-            //     fid.toString(10) +
-            //     "\"}}, blockchain: ethereum}\n" +
-            //     "  ) {\n" +
-            //     "    Social {\n" +
-            //     "      id\n" +
-            //     "      chainId\n" +
-            //     "      blockchain\n" +
-            //     "      dappName\n" +
-            //     "      dappSlug\n" +
-            //     "      dappVersion\n" +
-            //     "      userId\n" +
-            //     "      userAddress\n" +
-            //     "      userCreatedAtBlockTimestamp\n" +
-            //     "      userCreatedAtBlockNumber\n" +
-            //     "      userLastUpdatedAtBlockTimestamp\n" +
-            //     "      userLastUpdatedAtBlockNumber\n" +
-            //     "      userHomeURL\n" +
-            //     "      userRecoveryAddress\n" +
-            //     "      userAssociatedAddresses\n" +
-            //     "      profileName\n" +
-            //     "      profileTokenId\n" +
-            //     "      profileTokenAddress\n" +
-            //     "      profileCreatedAtBlockTimestamp\n" +
-            //     "      profileCreatedAtBlockNumber\n" +
-            //     "      profileLastUpdatedAtBlockTimestamp\n" +
-            //     "      profileLastUpdatedAtBlockNumber\n" +
-            //     "      profileTokenUri\n" +
-            //     "      isDefault\n" +
-            //     "      identity\n" +
-            //     "    }\n" +
-            //     "  }\n" +
-            //     "}");
-            //
-            // console.log("fetch data:", data, error);
-            // if (!data) {
-            //     res.status(500).send("Invalid Fid");
-            // }
-            // const Social = data.Socials.Social;
-            // // console.log("Social:", Social);
-            // let addArrToRemove: string[] = [];
-            // for (let i = 0; i < Social.length; i++) {
-            //     console.log(Social[i].userAddress);
-            //     addArrToRemove.push(Social[i].userAddress);
-            // }
-            // const address: string[] = Social[0].userAssociatedAddresses.filter((add: string) => !addArrToRemove.includes(add));
-            // if (address.length === 0) {
-            //     res.status(500).send("No address");
-            // }
+            const {data, error} = await fetchQuery("query MyQuery {\n" +
+                "  Socials(\n" +
+                "    input: {filter: {dappName: {_eq: farcaster}, identity: {_eq: \"fc_fid:" +
+                fid.toString(10) +
+                "\"}}, blockchain: ethereum}\n" +
+                "  ) {\n" +
+                "    Social {\n" +
+                "      id\n" +
+                "      chainId\n" +
+                "      blockchain\n" +
+                "      dappName\n" +
+                "      dappSlug\n" +
+                "      dappVersion\n" +
+                "      userId\n" +
+                "      userAddress\n" +
+                "      userCreatedAtBlockTimestamp\n" +
+                "      userCreatedAtBlockNumber\n" +
+                "      userLastUpdatedAtBlockTimestamp\n" +
+                "      userLastUpdatedAtBlockNumber\n" +
+                "      userHomeURL\n" +
+                "      userRecoveryAddress\n" +
+                "      userAssociatedAddresses\n" +
+                "      profileName\n" +
+                "      profileTokenId\n" +
+                "      profileTokenAddress\n" +
+                "      profileCreatedAtBlockTimestamp\n" +
+                "      profileCreatedAtBlockNumber\n" +
+                "      profileLastUpdatedAtBlockTimestamp\n" +
+                "      profileLastUpdatedAtBlockNumber\n" +
+                "      profileTokenUri\n" +
+                "      isDefault\n" +
+                "      identity\n" +
+                "    }\n" +
+                "  }\n" +
+                "}");
+
+            console.log("fetch data:", data, error);
+            if (!data) {
+                res.status(500).send("Invalid Fid");
+            }
+            const Social = data.Socials.Social;
+            // console.log("Social:", Social);
+            let addArrToRemove: string[] = [];
+            for (let i = 0; i < Social.length; i++) {
+                console.log(Social[i].userAddress);
+                addArrToRemove.push(Social[i].userAddress);
+            }
+            const address: string[] = Social[0].userAssociatedAddresses.filter((add: string) => !addArrToRemove.includes(add));
+            if (address.length === 0) {
+                res.status(500).send("No address");
+            }
             // console.log("address:", address);
-            const sloot = new Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
-            // console.log("sloot:", sloot);
-            const tokenURIB64 = await sloot.tokenURI(/*address[0]*/"0x8e675b3B721af441E908aB2597C1BC283A0D1C4d");
-            // console.log("tokenUTIB64", tokenURIB64);
-            const tokenURI = JSON.parse(Buffer.from(tokenURIB64.split(",")[1], 'base64').toString("utf8"))
-            // console.log("tokenURI:", tokenURI);
-            const b64svg = tokenURI.image;
-            // console.log("b64svg:", b64svg);
-            const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
-            // console.log("svg:", svg);
-            
-            const items = itemsFromSvg(svg)
-            console.log("items:", items)
-            const img = await getImageForLoot(items)
-            console.log("img:", img)
-            
-            const satoriSvg = await satori(
-                <div className="card" style={ {backgroundColor: "white", marginTop: "15px"} }>
-                    <img alt="character" style={ {borderRadius: "5px", width: "100%"} } src={ img }/>
-                    <ul style={ {marginLeft: "-20px"} }>{ items.map(item => {
-                        return <li key={ item }>{ item }</li>
-                    }) }
-                    </ul>
-                </div>, {width: 600, height: 400, fonts: []});
-            
-            const pngBuffer = await sharp(Buffer.from(satoriSvg))
-                .toFormat('png')
-                .toBuffer();
-            
+
+            const add = address[0];
+
+
+            const browser = await puppeteer.launch(/*{headless: false}*/{args: ['--window-size=1910,1000']});
+            const page = await browser.newPage();
+            await page.goto("https://loot.stephancill.co.za/#/address/" + add, {waitUntil: "load"});
+            await page.waitForSelector("#root > div > div:nth-child(4) > div.TokenCard_tokenCard__2xW3d > div > div:nth-child(2) > div > div > div.Token_token__2gp1y > img", {timeout: 50000});
+            // #root > div > div:nth-child(4) > div.TokenCard_tokenCard__2xW3d > div > div:nth-child(2) > div > div > div.Token_token__2gp1y > img
+            const img = await page.$eval("#root > div > div:nth-child(4) > div.TokenCard_tokenCard__2xW3d > div > div:nth-child(2) > div > div > div.Token_token__2gp1y > img", el => {
+                console.log(el);
+                return el.src;
+            })
+            // console.log(img);
+
+            // const svg = await satori(
+            //     <img src={img} alt={""}/>,
+            //     {width: 1910, height: 1000, fonts: []}
+            // );
+
+            await page.setViewport({width: 1910, height: 1000});
+            await page.goto(img, {waitUntil: "load"});
+
+            const snap = await page.screenshot();
+
+            // const sloot = new Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
+            // // console.log("sloot:", sloot);
+            // const tokenURIB64 = await sloot.tokenURI(/*address[0]*/"0x8e675b3B721af441E908aB2597C1BC283A0D1C4d");
+            // // console.log("tokenUTIB64", tokenURIB64);
+            // const tokenURI = JSON.parse(Buffer.from(tokenURIB64.split(",")[1], 'base64').toString("utf8"))
+            // // console.log("tokenURI:", tokenURI);
+            // const b64svg = tokenURI.image;
+            // // console.log("b64svg:", b64svg);
+            // const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
+            // // console.log("svg:", svg);
+            //
+            // const items = itemsFromSvg(svg)
+            // console.log("items:", items)
+            // const img = await getImageForLoot(items)
+            // console.log("img:", img)
+
+            //
+            // const satoriSvg = await satori(
+            //     <div className="card" style={{backgroundColor: "white", marginTop: "15px"}}>
+            //         <img alt="character" style={{borderRadius: "5px", width: "100%"}} src={img}/>
+            //         <ul style={{marginLeft: "-20px"}}>{items.map(item => {
+            //             return <li key={item}>{item}</li>
+            //         })}
+            //         </ul>
+            //     </div>, {width: 600, height: 400, fonts: []});
+            //
+
+
+            // const png = await sharp(snap)
+            //     .toFormat('png')
+            //     .toBuffer();
+
             // Set the content type to PNG and send the response
             res.setHeader('Content-Type', 'image/png');
             res.setHeader('Cache-Control', 'max-age=10');
-            res.send(pngBuffer);
-            
+            res.send(snap);
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Error generating image');
         }
-        
+
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['GET']);
-        res.status(405).end(`Method ${ req.method } Not Allowed`);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 }
 
