@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-        
+
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(`
       <!DOCTYPE html>
@@ -12,7 +12,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta property="og:title" content="Synthetic Loot">
           <meta property="og:image" content="https://sloot-five.vercel.app/1.png">
           <meta name="fc:frame" content="vNext">
-          <meta name="fc:frame:image" content="https://sloot-five.vercel.app/api/sloot">
+<!--          <meta name="fc:frame:image" content="https://sloot-five.vercel.app/api/sloot">-->
+          <meta name="fc:frame:image" content="https://sloot-five.vercel.app/2.png">
           <meta name="fc:frame:post_url" content="https://sloot-five.vercel.app/api/link">
           <meta name="fc:frame:button:1" content="Loot Foundation">
           <meta name="fc:frame:button:1:action" content="post_redirect">
@@ -29,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         </head>
       </html>
     `);
-    
+
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['POST']);
