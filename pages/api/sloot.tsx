@@ -11,24 +11,20 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 // const IMG_DIR = `ipfs://${map.ipfs.character_imgs}`;
 
 
-// import puppeteer from "puppeteer";
-import chromium from 'chrome-aws-lambda';
+import puppeteer from "puppeteer";
+// import chromium from 'chrome-aws-lambda';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
-
+        
         try {
-
+            
             const add = req.query["address"];
-
-            const browser = await chromium.puppeteer.launch({
-                args: [...chromium.args, "--hide-scrollbars", "--disable-web-security", '--window-size=1910,1000'],
-                defaultViewport: chromium.defaultViewport,
-                executablePath: await chromium.executablePath,
-                headless: true,
-                ignoreHTTPSErrors: true,
+            
+            const browser = await puppeteer.launch({
+                args: ['--window-size=1910,1000'],
             })
-
+            
             // const browser = await puppeteer.launch(/*{headless: false}*/{args: ['--window-size=1910,1000']});
             const page = await browser.newPage();
             await page.goto("https://loot.stephancill.co.za/#/address/" + add, {waitUntil: "load"});
@@ -39,17 +35,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return el.getAttribute("src");
             })
             // console.log(img);
-
+            
             // const svg = await satori(
             //     <img src={img} alt={""}/>,
             //     {width: 1910, height: 1000, fonts: []}
             // );
-
+            
             await page.setViewport({width: 1910, height: 1000});
-            await page.goto(img||"about:blank", {waitUntil: "load"});
-
+            await page.goto(img || "about:blank", {waitUntil: "load"});
+            
             const snap = await page.screenshot();
-
+            
             // const sloot = new Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
             // // console.log("sloot:", sloot);
             // const tokenURIB64 = await sloot.tokenURI(/*address[0]*/"0x8e675b3B721af441E908aB2597C1BC283A0D1C4d");
@@ -65,7 +61,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("items:", items)
             // const img = await getImageForLoot(items)
             // console.log("img:", img)
-
+            
             //
             // const satoriSvg = await satori(
             //     <div className="card" style={{backgroundColor: "white", marginTop: "15px"}}>
@@ -76,27 +72,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             //         </ul>
             //     </div>, {width: 600, height: 400, fonts: []});
             //
-
-
+            
             // const png = await sharp(snap)
             //     .toFormat('png')
             //     .toBuffer();
-
+            
             // Set the content type to PNG and send the response
             res.setHeader('Content-Type', 'image/png');
             res.setHeader('Cache-Control', 'max-age=10');
             res.send(snap);
-
+            
         } catch
             (error) {
             console.error(error);
             res.status(500).send('Error generating image');
         }
-
+        
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['GET']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+        res.status(405).end(`Method ${ req.method } Not Allowed`);
     }
 }
 
