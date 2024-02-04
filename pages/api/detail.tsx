@@ -87,7 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         //     return res.status(400).send(`Failed to validate message: ${e}`);
         // }
 
-        const contentUrl = address[0] == "" ? "https://sloot-five.vercel.app/3.png" : `https://sloot-five.vercel.app/api/sloot?address=${address[0]}`;
+        const contentUrl = address[0] == "" ? "https://lootframe.xyz/3.png" : `https://lootframe.xyz/api/sloot?address=${address[0]}`;
 
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(`
@@ -96,11 +96,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         <head>
           <title> My SLoot </title>
           <meta property="og:title" content="Synthetic Loot">
-          <meta property="og:image" content="https://sloot-five.vercel.app/1.png">
+          <meta property="og:image" content="https://lootframe.xyz/1.png">
           <meta name="fc:frame" content="vNext">
-<!--          <meta name="fc:frame:image" content="https://sloot-five.vercel.app/api/sloot">-->
+<!--          <meta name="fc:frame:image" content="https://lootframe.xyz/api/sloot">-->
           <meta name="fc:frame:image" content="${contentUrl}">
-          <meta name="fc:frame:post_url" content="https://sloot-five.vercel.app/api/link">
+          <meta name="fc:frame:post_url" content="https://lootframe.xyz/api/link">
           <meta name="fc:frame:button:1" content="Loot Foundation">
           <meta name="fc:frame:button:1:action" content="post_redirect">
 <!--          <meta name="fc:frame:button:1:url" content="https://loot.foundation/" />-->
