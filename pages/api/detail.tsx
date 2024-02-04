@@ -80,7 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             address = Social[0].userAssociatedAddresses.filter((add: string) => !addArrToRemove.includes(add));
             if (address.length === 0) {
-                res.status(500).send("No address");
+                address[0]=Social[0].userAddress;
             }
             console.log("address:", address);
         } catch (e) {
