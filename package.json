@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p 80 -H 0.0.0.0"
   },
   "dependencies": {
     "@airstack/airstack-react": "^0.6.2",
