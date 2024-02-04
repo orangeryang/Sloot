@@ -48,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             // const sloot = new Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
             // // console.log("sloot:", sloot);
-            // const tokenURIB64 = await sloot.tokenURI(/*address[0]*/"0x8e675b3B721af441E908aB2597C1BC283A0D1C4d");
+            // const tokenURIB64 = await sloot.tokenURI(/*address[0]*/);
             // // console.log("tokenUTIB64", tokenURIB64);
             // const tokenURI = JSON.parse(Buffer.from(tokenURIB64.split(",")[1], 'base64').toString("utf8"))
             // // console.log("tokenURI:", tokenURI);
