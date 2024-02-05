@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     break;
                 }
             }
-            console.log("fid[" + fid + "]" + hasAccess ? " has liked" : " doesn't have liked");
+            console.log("fid[" + fid + "]", hasAccess ? " has liked" : " doesn't have liked");
             
             if (hasAccess) {
                 hasAccess = false;
@@ -65,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         break;
                     }
                 }
-                console.log("fid[" + fid + "]" + hasAccess ? " has recast" : " doesn't have recast");
+                console.log("fid[" + fid + "]", hasAccess ? " has recast" : " doesn't have recast");
             }
             
             if (hasAccess) {
@@ -78,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         break;
                     }
                 }
-                console.log("fid[" + fid + "]" + hasAccess ? " has followed" : " doesn't have followed");
+                console.log("fid[" + fid + "]", hasAccess ? " has followed" : " doesn't have followed");
             }
             
             if (!hasAccess) {
