@@ -73,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
             
-            await page.setViewport({width: 1910, height: 1000});
+            await page.setViewport({width: 1910, height: 900});
             await page.goto(result || "about:blank", {waitUntil: "load"});
             
             const snap = await page.screenshot();
