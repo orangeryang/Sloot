@@ -101,12 +101,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 //     console.log("fid[" + fid + "]", hasAccess ? " has followed" : " doesn't have followed");
                 // }
                 
-                if (!hasAccess) {
-                    const buttonText = "Something went wrong ... try again";
-                    const imageUrl = `https://lootframe.xyz/2.png`;
-                    
-                    res.setHeader('Content-Type', 'text/html');
-                    res.status(200).send(`
+                // if (!hasAccess) {
+                const buttonText = "Something went wrong ... try again";
+                const imageUrl = `https://lootframe.xyz/2.png`;
+                
+                res.setHeader('Content-Type', 'text/html');
+                res.status(200).send(`
                   <!DOCTYPE html>
                   <html>
                     <head>
@@ -125,7 +125,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     </body>
                   </html>
                 `);
-                }
+                
             }
             
             // user address
