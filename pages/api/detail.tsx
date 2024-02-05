@@ -53,6 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     break;
                 }
             }
+            console.log("fid[" + fid + "]" + hasAccess ? " has liked" : " doesn't have liked");
             
             if (hasAccess) {
                 hasAccess = false;
@@ -64,6 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         break;
                     }
                 }
+                console.log("fid[" + fid + "]" + hasAccess ? " has recast" : " doesn't have recast");
             }
             
             if (hasAccess) {
@@ -76,6 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         break;
                     }
                 }
+                console.log("fid[" + fid + "]" + hasAccess ? " has followed" : " doesn't have followed");
             }
             
             if (!hasAccess) {
@@ -140,7 +143,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 "    }\n" +
                 "  }\n" +
                 "}");
-
+            
             console.log("fetch data:", data, error);
             if (!data) {
                 res.status(500).send("Invalid Fid");
