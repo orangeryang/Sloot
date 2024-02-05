@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { useRouter } from "next/navigation";
 
-const buttonText = "My Loot";
-const imageUrl = `https://lootframe.xyz/1.png`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    
+    let buttonText = "Reveal your sLoot👀";
+    let imageUrl = `https://lootframe.xyz/1.png`;
     
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(`
@@ -20,9 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           <meta name="fc:frame:button:1" content="${ buttonText }">
         </head>
         <body>
-             <h1> My Loot </h1>
+             <h1> My Synthetic Loot </h1>
              <div style={} >
-             <Image src="${ imageUrl }" alt=""/>
              </div>
         </body>
       </html>

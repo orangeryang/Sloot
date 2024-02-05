@@ -8,6 +8,7 @@
   "dependencies": {
     "@airstack/airstack-react": "^0.6.2",
     "@farcaster/hub-nodejs": "^0.10.21",
+    "@neynar/nodejs-sdk": "^1.9.4",
     "@types/node": "20.11.0",
     "@types/react": "18.2.47",
     "@types/react-dom": "18.2.18",

@@ -31,10 +31,8 @@ export default function Page() {
                 <div className="flex justify-center items-center bg-black rounded-full w-16 sm:w-24 h-16 sm:h-24 my-8">
                     <VercelLogo className="h-8 sm:h-16 invert p-3 mb-1"/>
                 </div>
-                <h1 className="text-lg sm:text-2xl font-bold mb-2">
-                    Test
-                </h1>
-                <img src="/2.png" alt=""/>
+                <h1 className="text-lg sm:text-2xl font-bold mb-2"></h1>
+                <img src="/1-1.png" alt=""/>
             </main>
         </div>
     );

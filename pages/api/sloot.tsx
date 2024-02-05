@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import puppeteer from "puppeteer";
 import satori from "satori";
-import sharp from "sharp";
+// import sharp from "sharp";
 // import chromium from 'chrome-aws-lambda';
 import { readFile, writeFile } from "fs";
 
