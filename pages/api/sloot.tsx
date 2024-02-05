@@ -46,7 +46,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             //     {width: 1910, height: 1000, fonts: []}
             // );
             
-            
             const sloot = new Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
             // console.log("sloot:", sloot);
             const tokenURIB64 = await sloot.tokenURI(add);
@@ -57,7 +56,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("b64svg:", b64svg);
             // const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
             // console.log("svg:", svg);
-            
             
             // const items = itemsFromSvg(svg)
             // console.log("items:", items)
@@ -76,6 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             await page.setViewport({width: 1910, height: 1000});
             await page.goto(result || "about:blank", {waitUntil: "load"});
+            await browser.close();
             
             const snap = await page.screenshot();
             // console.log("snap:", snap);
