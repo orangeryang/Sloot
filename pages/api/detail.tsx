@@ -11,7 +11,7 @@ const client = getSSLHubRpcClient(HUB_URL);
 init(process.env.QUERY_KEY);
 // @ts-ignore
 const nClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
-const url = "https://warpcast.com/gink/0x89a753d0";
+const url = "https://warpcast.com/gink/0xf24048ef";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
