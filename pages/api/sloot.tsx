@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             const add = req.query["address"];
             
-            const path = "~/lootframe/sloot/cache/" + add;
+            const path = "/home/ubuntu/lootframe/sloot/cache/" + add;
             console.log("path: ", path);
             readFile(path, "utf8", (err, data) => {
                 if (err) {
