@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const cast = await nClient.lookUpCastByHashOrWarpcastUrl(url, CastParamType.Url);
                 // console.log(cast);
                 const likes = cast.cast.reactions.likes;
-                // console.log("likes:", likes);
+                console.log("likes:", likes.length);
                 for (const like of likes) {
                     if (like.fid === fid) {
                         hasAccess = true;
@@ -58,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (hasAccess) {
                     hasAccess = false;
                     const recasts = cast.cast.reactions.recasts;
-                    // console.log("recasts:", recasts);
+                    console.log("recasts:", recasts.length);
                     for (const recast of recasts) {
                         if (recast.fid === fid) {
                             hasAccess = true;
@@ -71,7 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (hasAccess) {
                     hasAccess = false;
                     const followers = await nClient.fetchUserFollowers(cast.cast.author.fid);
-                    // console.log("followers:", followers.result.users);
+                    console.log("followers:", followers.result.users);
                     for (const follower of followers.result.users) {
                         if (follower.fid === fid) {
                             hasAccess = true;
