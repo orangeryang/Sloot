@@ -48,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const likes = cast.cast.reactions.likes;
             // console.log("likes:", likes);
             for (const like of likes) {
-                if (like.fid == fid) {
+                if (like.fid === fid) {
                     hasAccess = true;
                     break;
                 }
@@ -60,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const recasts = cast.cast.reactions.recasts;
                 // console.log("recasts:", recasts);
                 for (const recast of recasts) {
-                    if (recast.fid == fid) {
+                    if (recast.fid === fid) {
                         hasAccess = true;
                         break;
                     }
@@ -73,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const followers = await nClient.fetchUserFollowers(ginkFid);
                 // console.log("followers:", followers.result.users);
                 for (const follower of followers.result.users) {
-                    if (follower.fid == fid) {
+                    if (follower.fid === fid) {
                         hasAccess = true;
                         break;
                     }
@@ -82,7 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             
             if (!hasAccess) {
-                const buttonText = "Something went wrong ... try again👝";
+                const buttonText = "Something went wrong ... try again \👝";
                 const imageUrl = `https://lootframe.xyz/2.png`;
                 
                 res.setHeader('Content-Type', 'text/html');
