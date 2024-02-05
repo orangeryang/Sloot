@@ -54,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             if (!flag) {
                 console.log("try", req.query['try']);
-                writeFile(path, "", (err) => {
+                writeFile(path, "try", (err) => {
                     if (err) {
                         console.error(err);
                     }
