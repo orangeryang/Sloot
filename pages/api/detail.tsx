@@ -21,11 +21,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             
             let validatedMessage: Message | undefined = undefined;
-            console.log("req:", req);
+            // console.log("req:", req);
             try {
                 const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
                 const result = await client.validateMessage(frameMessage);
-                console.log("result:", result);
+                // console.log("result:", result);
                 if (result.isOk() && result.value.valid) {
                     validatedMessage = result.value.message;
                 }
@@ -62,44 +62,44 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 })
                 
                 // cast data
-                let hasAccess = false;
-                const cast = await nClient.lookUpCastByHashOrWarpcastUrl(url, CastParamType.Url);
-                // console.log(cast);
-                const likes = cast.cast.reactions.likes;
-                console.log("likes:", likes.length);
-                for (const like of likes) {
-                    if (like.fid === fid) {
-                        hasAccess = true;
-                        break;
-                    }
-                }
-                console.log("fid[" + fid + "]", hasAccess ? " has liked" : " doesn't have liked");
-                
-                if (hasAccess) {
-                    hasAccess = false;
-                    const recasts = cast.cast.reactions.recasts;
-                    console.log("recasts:", recasts.length);
-                    for (const recast of recasts) {
-                        if (recast.fid === fid) {
-                            hasAccess = true;
-                            break;
-                        }
-                    }
-                    console.log("fid[" + fid + "]", hasAccess ? " has recast" : " doesn't have recast");
-                }
-                
-                if (hasAccess) {
-                    hasAccess = false;
-                    const followers = await nClient.fetchUserFollowers(cast.cast.author.fid);
-                    console.log("followers:", followers.result.users);
-                    for (const follower of followers.result.users) {
-                        if (follower.fid === fid) {
-                            hasAccess = true;
-                            break;
-                        }
-                    }
-                    console.log("fid[" + fid + "]", hasAccess ? " has followed" : " doesn't have followed");
-                }
+                // let hasAccess = false;
+                // const cast = await nClient.lookUpCastByHashOrWarpcastUrl(url, CastParamType.Url);
+                // // console.log(cast);
+                // const likes = cast.cast.reactions.likes;
+                // console.log("likes:", likes.length);
+                // for (const like of likes) {
+                //     if (like.fid === fid) {
+                //         hasAccess = true;
+                //         break;
+                //     }
+                // }
+                // console.log("fid[" + fid + "]", hasAccess ? " has liked" : " doesn't have liked");
+                //
+                // if (hasAccess) {
+                //     hasAccess = false;
+                //     const recasts = cast.cast.reactions.recasts;
+                //     console.log("recasts:", recasts.length);
+                //     for (const recast of recasts) {
+                //         if (recast.fid === fid) {
+                //             hasAccess = true;
+                //             break;
+                //         }
+                //     }
+                //     console.log("fid[" + fid + "]", hasAccess ? " has recast" : " doesn't have recast");
+                // }
+                //
+                // if (hasAccess) {
+                //     hasAccess = false;
+                //     const followers = await nClient.fetchUserFollowers(cast.cast.author.fid);
+                //     console.log("followers:", followers.result.users);
+                //     for (const follower of followers.result.users) {
+                //         if (follower.fid === fid) {
+                //             hasAccess = true;
+                //             break;
+                //         }
+                //     }
+                //     console.log("fid[" + fid + "]", hasAccess ? " has followed" : " doesn't have followed");
+                // }
                 
                 if (!hasAccess) {
                     const buttonText = "Something went wrong ... try again";
