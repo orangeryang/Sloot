@@ -65,19 +65,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("img:", img)
             
             const satoriSvg = await satori(
-                <div className="card" style={ {backgroundColor: "black", display: "flex"} }>
+                <div className="card" style={ {backgroundColor: "black", display: "flex", width: 1910, height: 1000} }>
                     <img alt="loot" style={ {width: "50%", float: "left"} } src={ b64svg }/>
                     <img alt="character" style={ {width: "50%", float: "right"} } src={ img || "" }/>
                 </div>
                 , {width: 1910, height: 1000, fonts: []});
             
             const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
+            // console.log("storiSvg:", result);
             
-            await page.setViewport({width: 1910, height: 900});
+            await page.setViewport({width: 1910, height: 1000});
             await page.goto(result || "about:blank", {waitUntil: "load"});
             
             const snap = await page.screenshot();
-            console.log("snap:", snap);
+            // console.log("snap:", snap);
             
             writeFile(path, snap.toString("base64"), (err) => {
                 if (err) {
