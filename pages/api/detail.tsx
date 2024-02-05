@@ -48,6 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     console.error(err);
                 }
                 if (data) {
+                    console.log("read fid[" + fid + "]");
                     flag = true;
                 }
             });
