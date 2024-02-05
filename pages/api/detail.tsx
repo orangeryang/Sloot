@@ -42,92 +42,92 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log("fid:", fid);
             let flag = false;
             
-            const path = "/home/ubuntu/lootframe/sloot/cache/" + fid;
-            readFile(path, "utf8", (err, data) => {
-                if (err) {
-                    console.error(err);
-                }
-                if (data) {
-                    console.log("read fid[" + fid + "]");
-                    flag = true;
-                }
-            });
+            // const path = "/home/ubuntu/lootframe/sloot/cache/" + fid;
+            // readFile(path, "utf8", (err, data) => {
+            //     if (err) {
+            //         console.error(err);
+            //     }
+            //     if (data) {
+            //         console.log("read fid[" + fid + "]");
+            //         flag = true;
+            //     }
+            // });
             
-            if (!flag) {
-                console.log("try", req.query['try']);
-                writeFile(path, "try", (err) => {
-                    if (err) {
-                        console.error(err);
-                    }
-                    console.log("saved");
-                })
-                
-                // cast data
-                // let hasAccess = false;
-                // const cast = await nClient.lookUpCastByHashOrWarpcastUrl(url, CastParamType.Url);
-                // // console.log(cast);
-                // const likes = cast.cast.reactions.likes;
-                // console.log("likes:", likes.length);
-                // for (const like of likes) {
-                //     if (like.fid === fid) {
-                //         hasAccess = true;
-                //         break;
-                //     }
-                // }
-                // console.log("fid[" + fid + "]", hasAccess ? " has liked" : " doesn't have liked");
-                //
-                // if (hasAccess) {
-                //     hasAccess = false;
-                //     const recasts = cast.cast.reactions.recasts;
-                //     console.log("recasts:", recasts.length);
-                //     for (const recast of recasts) {
-                //         if (recast.fid === fid) {
-                //             hasAccess = true;
-                //             break;
-                //         }
-                //     }
-                //     console.log("fid[" + fid + "]", hasAccess ? " has recast" : " doesn't have recast");
-                // }
-                //
-                // if (hasAccess) {
-                //     hasAccess = false;
-                //     const followers = await nClient.fetchUserFollowers(cast.cast.author.fid);
-                //     console.log("followers:", followers.result.users);
-                //     for (const follower of followers.result.users) {
-                //         if (follower.fid === fid) {
-                //             hasAccess = true;
-                //             break;
-                //         }
-                //     }
-                //     console.log("fid[" + fid + "]", hasAccess ? " has followed" : " doesn't have followed");
-                // }
-                
-                // if (!hasAccess) {
-                const buttonText = "Something went wrong ... try again";
-                const imageUrl = `https://lootframe.xyz/2.png`;
-                
-                res.setHeader('Content-Type', 'text/html');
-                res.status(200).send(`
-                  <!DOCTYPE html>
-                  <html>
-                    <head>
-                      <title> My SLoot </title>
-                      <meta property="og:title" content="Synthetic Loot">
-                      <meta property="og:image" content="${ imageUrl }">
-                      <meta name="fc:frame" content="vNext">
-                      <meta name="fc:frame:image" content="${ imageUrl }">
-                      <meta name="fc:frame:post_url" content="https://lootframe.xyz/api/detail?try=1">
-                      <meta name="fc:frame:button:1" content="${ buttonText }">
-                    </head>
-                    <body>
-                         <h1> My Synthetic Loot </h1>
-                         <div style={} >
-                         </div>
-                    </body>
-                  </html>
-                `);
-                
-            }
+            // if (!flag) {
+            //     console.log("try", req.query['try']);
+            //     writeFile(path, "try", (err) => {
+            //         if (err) {
+            //             console.error(err);
+            //         }
+            //         console.log("saved");
+            //     })
+            //
+            //     // cast data
+            //     // let hasAccess = false;
+            //     // const cast = await nClient.lookUpCastByHashOrWarpcastUrl(url, CastParamType.Url);
+            //     // // console.log(cast);
+            //     // const likes = cast.cast.reactions.likes;
+            //     // console.log("likes:", likes.length);
+            //     // for (const like of likes) {
+            //     //     if (like.fid === fid) {
+            //     //         hasAccess = true;
+            //     //         break;
+            //     //     }
+            //     // }
+            //     // console.log("fid[" + fid + "]", hasAccess ? " has liked" : " doesn't have liked");
+            //     //
+            //     // if (hasAccess) {
+            //     //     hasAccess = false;
+            //     //     const recasts = cast.cast.reactions.recasts;
+            //     //     console.log("recasts:", recasts.length);
+            //     //     for (const recast of recasts) {
+            //     //         if (recast.fid === fid) {
+            //     //             hasAccess = true;
+            //     //             break;
+            //     //         }
+            //     //     }
+            //     //     console.log("fid[" + fid + "]", hasAccess ? " has recast" : " doesn't have recast");
+            //     // }
+            //     //
+            //     // if (hasAccess) {
+            //     //     hasAccess = false;
+            //     //     const followers = await nClient.fetchUserFollowers(cast.cast.author.fid);
+            //     //     console.log("followers:", followers.result.users);
+            //     //     for (const follower of followers.result.users) {
+            //     //         if (follower.fid === fid) {
+            //     //             hasAccess = true;
+            //     //             break;
+            //     //         }
+            //     //     }
+            //     //     console.log("fid[" + fid + "]", hasAccess ? " has followed" : " doesn't have followed");
+            //     // }
+            //
+            //     // if (!hasAccess) {
+            //     const buttonText = "Something went wrong ... try again";
+            //     const imageUrl = `https://lootframe.xyz/2.png`;
+            //
+            //     res.setHeader('Content-Type', 'text/html');
+            //     res.status(200).send(`
+            //       <!DOCTYPE html>
+            //       <html>
+            //         <head>
+            //           <title> My SLoot </title>
+            //           <meta property="og:title" content="Synthetic Loot">
+            //           <meta property="og:image" content="${ imageUrl }">
+            //           <meta name="fc:frame" content="vNext">
+            //           <meta name="fc:frame:image" content="${ imageUrl }">
+            //           <meta name="fc:frame:post_url" content="https://lootframe.xyz/api/detail?try=1">
+            //           <meta name="fc:frame:button:1" content="${ buttonText }">
+            //         </head>
+            //         <body>
+            //              <h1> My Synthetic Loot </h1>
+            //              <div style={} >
+            //              </div>
+            //         </body>
+            //       </html>
+            //     `);
+            //
+            // }
             
             // user address
             const {data, error} = await fetchQuery("query MyQuery {\n" +
