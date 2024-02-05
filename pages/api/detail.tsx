@@ -40,52 +40,53 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // }
             console.log("fid:", fid);
             
-            // cast data
-            let hasAccess = false;
-            const cast = await nClient.lookUpCastByHashOrWarpcastUrl(url, CastParamType.Url);
-            // console.log(cast);
-            const likes = cast.cast.reactions.likes;
-            // console.log("likes:", likes);
-            for (const like of likes) {
-                if (like.fid === fid) {
-                    hasAccess = true;
-                    break;
-                }
-            }
-            console.log("fid[" + fid + "]", hasAccess ? " has liked" : " doesn't have liked");
-            
-            if (hasAccess) {
-                hasAccess = false;
-                const recasts = cast.cast.reactions.recasts;
-                // console.log("recasts:", recasts);
-                for (const recast of recasts) {
-                    if (recast.fid === fid) {
+            if (req.query['try']) {
+                // cast data
+                let hasAccess = false;
+                const cast = await nClient.lookUpCastByHashOrWarpcastUrl(url, CastParamType.Url);
+                // console.log(cast);
+                const likes = cast.cast.reactions.likes;
+                // console.log("likes:", likes);
+                for (const like of likes) {
+                    if (like.fid === fid) {
                         hasAccess = true;
                         break;
                     }
                 }
-                console.log("fid[" + fid + "]", hasAccess ? " has recast" : " doesn't have recast");
-            }
-            
-            if (hasAccess) {
-                hasAccess = false;
-                const followers = await nClient.fetchUserFollowers(cast.cast.author.fid);
-                // console.log("followers:", followers.result.users);
-                for (const follower of followers.result.users) {
-                    if (follower.fid === fid) {
-                        hasAccess = true;
-                        break;
-                    }
-                }
-                console.log("fid[" + fid + "]", hasAccess ? " has followed" : " doesn't have followed");
-            }
-            
-            if (!hasAccess) {
-                const buttonText = "Something went wrong ... try again";
-                const imageUrl = `https://lootframe.xyz/2.png`;
+                console.log("fid[" + fid + "]", hasAccess ? " has liked" : " doesn't have liked");
                 
-                res.setHeader('Content-Type', 'text/html');
-                res.status(200).send(`
+                if (hasAccess) {
+                    hasAccess = false;
+                    const recasts = cast.cast.reactions.recasts;
+                    // console.log("recasts:", recasts);
+                    for (const recast of recasts) {
+                        if (recast.fid === fid) {
+                            hasAccess = true;
+                            break;
+                        }
+                    }
+                    console.log("fid[" + fid + "]", hasAccess ? " has recast" : " doesn't have recast");
+                }
+                
+                if (hasAccess) {
+                    hasAccess = false;
+                    const followers = await nClient.fetchUserFollowers(cast.cast.author.fid);
+                    // console.log("followers:", followers.result.users);
+                    for (const follower of followers.result.users) {
+                        if (follower.fid === fid) {
+                            hasAccess = true;
+                            break;
+                        }
+                    }
+                    console.log("fid[" + fid + "]", hasAccess ? " has followed" : " doesn't have followed");
+                }
+                
+                if (!hasAccess) {
+                    const buttonText = "Something went wrong ... try again";
+                    const imageUrl = `https://lootframe.xyz/2.png`;
+                    
+                    res.setHeader('Content-Type', 'text/html');
+                    res.status(200).send(`
                   <!DOCTYPE html>
                   <html>
                     <head>
@@ -94,7 +95,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                       <meta property="og:image" content="${ imageUrl }">
                       <meta name="fc:frame" content="vNext">
                       <meta name="fc:frame:image" content="${ imageUrl }">
-                      <meta name="fc:frame:post_url" content="https://lootframe.xyz/api/detail">
+                      <meta name="fc:frame:post_url" content="https://lootframe.xyz/api/detail?try=1">
                       <meta name="fc:frame:button:1" content="${ buttonText }">
                     </head>
                     <body>
@@ -104,6 +105,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     </body>
                   </html>
                 `);
+                }
             }
             
             // user address
