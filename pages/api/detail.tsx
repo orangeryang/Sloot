@@ -12,7 +12,6 @@ init(process.env.QUERY_KEY);
 // @ts-ignore
 const nClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 const url = "https://warpcast.com/gink/0x89a753d0";
-const ginkFid = 81621;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
@@ -70,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             if (hasAccess) {
                 hasAccess = false;
-                const followers = await nClient.fetchUserFollowers(ginkFid);
+                const followers = await nClient.fetchUserFollowers(cast.cast.author.fid);
                 // console.log("followers:", followers.result.users);
                 for (const follower of followers.result.users) {
                     if (follower.fid === fid) {
@@ -82,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             
             if (!hasAccess) {
-                const buttonText = "Something went wrong ... try again \👝";
+                const buttonText = "Something went wrong ... try again";
                 const imageUrl = `https://lootframe.xyz/2.png`;
                 
                 res.setHeader('Content-Type', 'text/html');

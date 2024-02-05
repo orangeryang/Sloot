@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
-    let buttonText = "Reveal your sLoot👀";
+    let buttonText = "Reveal your sLoot";
     let imageUrl = `https://lootframe.xyz/1.png`;
     
     res.setHeader('Content-Type', 'text/html');
