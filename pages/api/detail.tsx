@@ -41,6 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log("fid:", fid);
             
             if (!req.query['try']) {
+                console.log("try", req.query['try']);
                 // cast data
                 let hasAccess = false;
                 const cast = await nClient.lookUpCastByHashOrWarpcastUrl(url, CastParamType.Url);
