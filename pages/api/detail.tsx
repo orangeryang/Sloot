@@ -3,6 +3,7 @@ import { fetchQuery, init } from "@airstack/airstack-react";
 import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
 import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
 import { hasCustomExportOutput } from "next/dist/export/utils";
+import { readFile, writeFile } from "fs";
 
 const HUB_URL = "nemes.farcaster.xyz:2283";
 const client = getSSLHubRpcClient(HUB_URL);
@@ -39,9 +40,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             //     res.status(500).send("Invalid button");
             // }
             console.log("fid:", fid);
+            let flag = false;
             
-            if (!req.query['try']) {
+            const path = "/home/ubuntu/lootframe/sloot/cache/" + fid;
+            readFile(path, "utf8", (err, data) => {
+                if (err) {
+                    console.error(err);
+                }
+                if (data) {
+                    flag = true;
+                }
+            });
+            
+            if (!flag) {
                 console.log("try", req.query['try']);
+                writeFile(path, "", (err) => {
+                    if (err) {
+                        console.error(err);
+                    }
+                    console.log("saved");
+                })
+                
                 // cast data
                 let hasAccess = false;
                 const cast = await nClient.lookUpCastByHashOrWarpcastUrl(url, CastParamType.Url);
