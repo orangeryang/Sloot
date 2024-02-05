@@ -74,9 +74,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             await page.setViewport({width: 1910, height: 1000});
             await page.goto(result || "about:blank", {waitUntil: "load"});
-            await browser.close();
-            
             const snap = await page.screenshot();
+            await browser.close();
             // console.log("snap:", snap);
             
             writeFile(path, snap.toString("base64"), (err) => {
