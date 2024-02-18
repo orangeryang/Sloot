@@ -25,10 +25,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             try {
                 // const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
                 const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
-                console.log("result:", result);
+                // console.log("result:", result);
                 if (result && result.valid) {
                     // validatedMessage = result.value.message;
-                    fid = result.interactor?.fid || 0;
+                    fid = result.action?.interactor?.fid || 0;
                 }
             } catch (e) {
                 return res.status(400).send(`Failed to validate message: ${ e }`);
