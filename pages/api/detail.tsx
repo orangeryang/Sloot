@@ -19,22 +19,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         let address: string[] = [""];
         try {
-            
-            let validatedMessage: Message | undefined = undefined;
-            console.log("req:", req);
+            let fid: number | undefined = 0;
+            // let validatedMessage: Message | undefined = undefined;
+            // console.log("req:", req);
             try {
                 const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
-                const result = await client.validateMessage(frameMessage);
-                // console.log("result:", result);
-                if (result.isOk() && result.value.valid) {
-                    validatedMessage = result.value.message;
+                const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
+                console.log("result:", result);
+                if (result && result.valid) {
+                    // validatedMessage = result.value.message;
+                    fid = result.interactor?.fid;
                 }
             } catch (e) {
                 return res.status(400).send(`Failed to validate message: ${ e }`);
             }
             
             // const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
-            const fid = validatedMessage?.data?.fid || 0;
+            // const fid = validatedMessage?.data?.fid || 0;
             // console.log("validatedMessage:" + validatedMessage?.data);
             // if (buttonId != 1) {
             //     res.status(500).send("Invalid button");
