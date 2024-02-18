@@ -7,6 +7,7 @@ import { readFile, writeFile } from "fs";
 import svg2img from "svg2img";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+
     if (req.method === 'GET') {
 
         // console.log("sloot req:", req);
@@ -37,8 +38,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("img:", img)
 
             const satoriSvg = await satori(
-                <div style={ {backgroundColor: "black", display: "flex", width: 1910, height: 1000} }>
-                    { <img alt="loot" style={ {float: "left"} } src={ lootWithColor }/> }
+                <div style={{backgroundColor: "black", display: "flex", width: 1910, height: 1000}}>
+                    {<img alt="sloot" src={lootWithColor} style={{width: 1910, height: 1000}}/>}
                 </div>
                 , {width: 1910, height: 1000, fonts: []});
             // console.log("satoriSvg:", satoriSvg);
@@ -47,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("satoriSvg:", result);
 
             const pngBuffer = await sharp(Buffer.from(satoriSvg))
-                .toFormat("png")
+                .png()
                 .toBuffer();
 
             res.setHeader('Content-Type', 'image/png');
@@ -63,12 +64,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['GET']);
-        res.status(405).end(`Method ${ req.method } Not Allowed`);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 
 }
 
 function renderWithColors(items: string[]) {
+
     if (!items) {
         return items;
     }
