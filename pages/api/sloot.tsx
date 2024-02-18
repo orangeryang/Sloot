@@ -41,19 +41,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     { <img alt="loot" style={ {float: "left"} } src={ lootWithColor }/> }
                 </div>
                 , {width: 1910, height: 1000, fonts: []});
-            console.log("satoriSvg:", satoriSvg);
+            // console.log("satoriSvg:", satoriSvg);
 
             // const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
             // console.log("satoriSvg:", result);
 
-            // const pngBuffer = await sharp(Buffer.from(satoriSvg))
-            //     .toFormat("png")
-            //     .toBuffer();
+            const pngBuffer = await sharp(Buffer.from(satoriSvg))
+                .toFormat("png")
+                .toBuffer();
 
-            res.setHeader('Content-Type', 'image/svg');
+            res.setHeader('Content-Type', 'image/png');
             res.setHeader('Cache-Control', 'max-age=10');
             // res.send(snap);
-            res.send(Buffer.from(satoriSvg));
+            res.send(pngBuffer);
 
         } catch (error) {
             console.error(error);
