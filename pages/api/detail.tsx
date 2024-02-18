@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             
             let validatedMessage: Message | undefined = undefined;
-            // console.log("req:", req);
+            console.log("req:", req);
             try {
                 const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
                 const result = await client.validateMessage(frameMessage);
