@@ -9,6 +9,7 @@ const client = getSSLHubRpcClient(HUB_URL);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
 
+        // todo untrusted data is fine here
         let validatedMessage: Message | undefined = undefined;
         try {
             const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));

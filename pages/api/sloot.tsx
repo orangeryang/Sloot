@@ -1,11 +1,10 @@
 import { Contract, JsonRpcProvider } from 'ethers';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import puppeteer from "puppeteer";
 import satori from "satori";
-// import sharp from "sharp";
-// import chromium from 'chrome-aws-lambda';
+import sharp from "sharp";
 import { readFile, writeFile } from "fs";
+import svg2img from "svg2img";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
@@ -14,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             const add = req.query["address"];
             
-            const path = "/home/ubuntu/lootframe/sloot/cache/" + add;
+            const path = "./cache/" + add;
             console.log("path: ", path);
             readFile(path, "utf8", (err, data) => {
                 if (err) {
@@ -27,25 +26,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
             })
             
-            const browser = await puppeteer.launch({
-                args: ['--window-size=1910,1000'],
-            })
-            
-            const page = await browser.newPage();
-            await page.goto("https://loot.stephancill.co.za/#/address/" + add, {waitUntil: "load"});
-            await page.waitForSelector("#root > div > div:nth-child(4) > div.TokenCard_tokenCard__2xW3d > div > div:nth-child(2) > div > div > div.Token_token__2gp1y > img", {timeout: 50000});
-            // #root > div > div:nth-child(4) > div.TokenCard_tokenCard__2xW3d > div > div:nth-child(2) > div > div > div.Token_token__2gp1y > img
-            const img = await page.$eval("#root > div > div:nth-child(4) > div.TokenCard_tokenCard__2xW3d > div > div:nth-child(2) > div > div > div.Token_token__2gp1y > img", el => {
-                console.log(el);
-                return el.getAttribute("src");
-            })
-            // console.log(img);
-            
-            // const svg = await satori(
-            //     <img src={img} alt={""}/>,
-            //     {width: 1910, height: 1000, fonts: []}
-            // );
-            
             const sloot = new Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
             // console.log("sloot:", sloot);
             const tokenURIB64 = await sloot.tokenURI(add);
@@ -54,48 +34,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("tokenURI:", tokenURI);
             const b64svg = tokenURI.image;
             // console.log("b64svg:", b64svg);
-            // const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
+            const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
             // console.log("svg:", svg);
             
-            // const items = itemsFromSvg(svg)
+            const items = itemsFromSvg(svg)
             // console.log("items:", items)
+            
+            const tokenURIWithColor = renderWithColors(items);
+            // console.log("lootWithColor:", tokenURIWithColor);
+            const lootWithColor = "data:image/svg+xml;base64," + Buffer.from(tokenURIWithColor).toString('base64');
+            
             // const img = await getImageForLoot(items)
             // console.log("img:", img)
             
             const satoriSvg = await satori(
-                <div className="card" style={ {backgroundColor: "black", display: "flex", width: 1910, height: 1000} }>
-                    <img alt="loot" style={ {width: "50%", float: "left"} } src={ b64svg }/>
-                    <img alt="character" style={ {width: "50%", float: "right"} } src={ img || "" }/>
+                <div style={ {backgroundColor: "black", display: "flex", width: 1910, height: 1000} }>
+                    { <img alt="loot" style={ {float: "left"} } src={ lootWithColor }/> }
                 </div>
                 , {width: 1910, height: 1000, fonts: []});
+            // console.log("satoriSvg:", satoriSvg);
             
             const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
-            // console.log("storiSvg:", result);
+            // console.log("satoriSvg:", result);
             
-            await page.setViewport({width: 1910, height: 1000});
-            await page.goto(result || "about:blank", {waitUntil: "load"});
-            const snap = await page.screenshot();
-            await browser.close();
-            // console.log("snap:", snap);
-            
-            writeFile(path, snap.toString("base64"), (err) => {
-                if (err) {
-                    console.error(err);
-                }
-                console.log("saved");
-            })
-            
-            // const png = await sharp(satoriSvg)
-            //     .toFormat('png')
+            // const pngBuffer = await sharp(Buffer.from(satoriSvg))
+            //     .toFormat("png")
             //     .toBuffer();
             
-            // Set the content type to PNG and send the response
-            res.setHeader('Content-Type', 'image/png');
+            res.setHeader('Content-Type', 'image/svg');
             res.setHeader('Cache-Control', 'max-age=10');
-            res.send(snap);
+            // res.send(snap);
+            res.send(Buffer.from(satoriSvg));
             
-        } catch
-            (error) {
+        } catch (error) {
             console.error(error);
             res.status(500).send('Error generating image');
         }
@@ -105,5 +76,80 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.setHeader('Allow', ['GET']);
         res.status(405).end(`Method ${ req.method } Not Allowed`);
     }
+    
+}
+
+function renderWithColors(items: string[]) {
+    if (!items) {
+        return items;
+    }
+    
+    let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 350 350\">\n" +
+        "  <style>\n" +
+        "    .base {\n" +
+        "      fill: white;\n" +
+        "      font-family: serif;\n" +
+        "      font-size: 14px;\n" +
+        "    }\n" +
+        "\n" +
+        "    .green {\n" +
+        "      fill: green;\n" +
+        "      font-family: serif;\n" +
+        "      font-size: 14px;\n" +
+        "    }\n" +
+        "\n" +
+        "    .orange {\n" +
+        "      fill: orange;\n" +
+        "      font-family: serif;\n" +
+        "      font-size: 14px;\n" +
+        "    }\n" +
+        "  </style>\n" +
+        "  <rect width=\"100%\" height=\"100%\" fill=\"black\" />";
+    
+    for (let i = 0; i < items.length; i++) {
+        result += "<text x=\"10\" y=\"" + (i * 20 + 20).toString(10) + getLevelColor(items[i]);
+    }
+    
+    return result + "</svg>";
+    
+}
+
+function getLevelColor(item: string) {
+    
+    if (item.startsWith("P")) {
+        return "\" class=\"base green\"> " + item + "</text>";
+    }
+    if (item.startsWith("C")) {
+        return "\" class=\"base orange\"> " + item + "</text>";
+    }
+    return "\" class=\"base\"> " + item + "</text>";
+    
+}
+
+// https://github.com/stephancill/synthetic-loot-viewer
+function itemsFromSvg(svg: string) {
+    if (!svg.startsWith("<svg")) {
+        throw new Error("The svg parameter does not seem to be an SVG");
+    }
+    
+    let matches;
+    const items = [];
+    for (let i = 0; i < 8; i++) {
+        // eslint-disable-next-line
+        const matcher = /<text[^>]+\>([^<]+)<\/text>/
+        matches = svg.match(matcher);
+        if (!matches) {
+            if (items.length === 0) {
+                throw new Error(
+                    "Error when parsing the SVG: couldn’t find the next item"
+                );
+            }
+            // Probably a LootLoose image
+            return items;
+        }
+        items.push(matches[1]);
+        svg = svg.slice(svg.indexOf(matches[0]) + matches[0].length);
+    }
+    return items;
 }
 
