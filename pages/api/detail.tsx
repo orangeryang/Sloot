@@ -166,7 +166,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 "  }\n" +
                 "}");
 
-            console.log("fetch data:", data, error);
+            // console.log("fetch data:", data, error);
             if (!data) {
                 res.status(500).send("Invalid Fid");
             }

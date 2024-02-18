@@ -9,6 +9,8 @@ import svg2img from "svg2img";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
 
+        console.log("sloot req:", req);
+
         try {
 
             const add = req.query["address"];
@@ -39,9 +41,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     { <img alt="loot" style={ {float: "left"} } src={ lootWithColor }/> }
                 </div>
                 , {width: 1910, height: 1000, fonts: []});
-            // console.log("satoriSvg:", satoriSvg);
+            console.log("satoriSvg:", satoriSvg);
 
-            const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
+            // const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
             // console.log("satoriSvg:", result);
 
             // const pngBuffer = await sharp(Buffer.from(satoriSvg))
