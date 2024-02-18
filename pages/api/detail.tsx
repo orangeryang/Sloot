@@ -19,16 +19,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         let address: string[] = [""];
         try {
-            let fid: number | undefined = 0;
+            let fid = 0;
             // let validatedMessage: Message | undefined = undefined;
             // console.log("req:", req);
             try {
-                const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
+                // const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
                 const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
                 console.log("result:", result);
                 if (result && result.valid) {
                     // validatedMessage = result.value.message;
-                    fid = result.interactor?.fid;
+                    fid = result.interactor?.fid || 0;
                 }
             } catch (e) {
                 return res.status(400).send(`Failed to validate message: ${ e }`);
