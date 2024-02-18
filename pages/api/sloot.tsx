@@ -8,24 +8,11 @@ import svg2img from "svg2img";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
-        
+
         try {
-            
+
             const add = req.query["address"];
-            
-            const path = "./cache/" + add;
-            console.log("path: ", path);
-            readFile(path, "utf8", (err, data) => {
-                if (err) {
-                    console.error(err);
-                }
-                if (data) {
-                    res.setHeader('Content-Type', 'image/png');
-                    res.setHeader('Cache-Control', 'max-age=10');
-                    res.send(Buffer.from(data, 'base64'));
-                }
-            })
-            
+
             const sloot = new Contract("0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE", ["function tokenURI(address) public view returns (string)",], new JsonRpcProvider("https://rpc.mevblocker.io"));
             // console.log("sloot:", sloot);
             const tokenURIB64 = await sloot.tokenURI(add);
@@ -36,54 +23,54 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("b64svg:", b64svg);
             const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
             // console.log("svg:", svg);
-            
+
             const items = itemsFromSvg(svg)
             // console.log("items:", items)
-            
+
             const tokenURIWithColor = renderWithColors(items);
             // console.log("lootWithColor:", tokenURIWithColor);
             const lootWithColor = "data:image/svg+xml;base64," + Buffer.from(tokenURIWithColor).toString('base64');
-            
+
             // const img = await getImageForLoot(items)
             // console.log("img:", img)
-            
+
             const satoriSvg = await satori(
                 <div style={ {backgroundColor: "black", display: "flex", width: 1910, height: 1000} }>
                     { <img alt="loot" style={ {float: "left"} } src={ lootWithColor }/> }
                 </div>
                 , {width: 1910, height: 1000, fonts: []});
             // console.log("satoriSvg:", satoriSvg);
-            
+
             const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
             // console.log("satoriSvg:", result);
-            
+
             // const pngBuffer = await sharp(Buffer.from(satoriSvg))
             //     .toFormat("png")
             //     .toBuffer();
-            
+
             res.setHeader('Content-Type', 'image/svg');
             res.setHeader('Cache-Control', 'max-age=10');
             // res.send(snap);
             res.send(Buffer.from(satoriSvg));
-            
+
         } catch (error) {
             console.error(error);
             res.status(500).send('Error generating image');
         }
-        
+
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['GET']);
         res.status(405).end(`Method ${ req.method } Not Allowed`);
     }
-    
+
 }
 
 function renderWithColors(items: string[]) {
     if (!items) {
         return items;
     }
-    
+
     let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 350 350\">\n" +
         "  <style>\n" +
         "    .base {\n" +
@@ -105,17 +92,17 @@ function renderWithColors(items: string[]) {
         "    }\n" +
         "  </style>\n" +
         "  <rect width=\"100%\" height=\"100%\" fill=\"black\" />";
-    
+
     for (let i = 0; i < items.length; i++) {
         result += "<text x=\"10\" y=\"" + (i * 20 + 20).toString(10) + getLevelColor(items[i]);
     }
-    
+
     return result + "</svg>";
-    
+
 }
 
 function getLevelColor(item: string) {
-    
+
     if (item.startsWith("P")) {
         return "\" class=\"base green\"> " + item + "</text>";
     }
@@ -123,7 +110,7 @@ function getLevelColor(item: string) {
         return "\" class=\"base orange\"> " + item + "</text>";
     }
     return "\" class=\"base\"> " + item + "</text>";
-    
+
 }
 
 // https://github.com/stephancill/synthetic-loot-viewer
@@ -131,7 +118,7 @@ function itemsFromSvg(svg: string) {
     if (!svg.startsWith("<svg")) {
         throw new Error("The svg parameter does not seem to be an SVG");
     }
-    
+
     let matches;
     const items = [];
     for (let i = 0; i < 8; i++) {
