@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             let fid = 0;
             // let validatedMessage: Message | undefined = undefined;
-            // console.log("req:", req);
+            console.log("detail req:", req);
             try {
                 // const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
                 const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});

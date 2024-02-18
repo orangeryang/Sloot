@@ -9,7 +9,7 @@ import svg2img from "svg2img";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {
 
-        console.log("sloot req:", req);
+        // console.log("sloot req:", req);
 
         try {
 
