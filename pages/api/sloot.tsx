@@ -38,9 +38,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
             // console.log("satoriSvg:", result);
             
+            const character = await sharp(Buffer.from(img.split(",")[1], 'base64'))
+                .resize(1000, 1000)
+                .toBuffer();
+            
             const pngBuffer = await sharp(Buffer.from(tokenURIWithColor))
                 .resize(1910, 1000)
-                .composite([{input: Buffer.from(img.split(",")[1], 'base64'), gravity: "northeast"}])
+                .composite([{input: character, gravity: "northeast"}])
                 .png()
                 .toBuffer();
             

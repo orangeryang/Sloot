@@ -188,10 +188,10 @@ const mergeImages = (sources = [], options = {}) => new Promise(resolve => {
         .then(images => {
             // Set canvas dimensions
             const getSize = dim => options[dim] || Math.max(...images.map(image => image.img[dim]));
-            // canvas.width = getSize('width');
-            // canvas.height = getSize('height');
-            canvas.width = 1000;
-            canvas.height = 1000;
+            canvas.width = getSize('width');
+            canvas.height = getSize('height');
+            // canvas.width = 1000;
+            // canvas.height = 1000;
             
             // Draw images to canvas
             images.forEach(image => {
