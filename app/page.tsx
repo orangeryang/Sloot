@@ -1,3 +1,5 @@
+import React from "react";
+
 export let metadata = {
     title: "Farcaster",
     description: "",

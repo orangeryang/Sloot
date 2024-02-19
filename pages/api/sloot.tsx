@@ -1,7 +1,7 @@
 import { Contract, JsonRpcProvider } from 'ethers';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getImageForLoot, itemsFromSvg } from "@/utils";
-import sharp, { gravity } from "sharp";
+import { getImageForLoot, itemsFromSvg } from "../../utils";
+import sharp from "sharp";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
-import { NextResponse } from "next/server";
 
 const HUB_URL = "nemes.farcaster.xyz:2283";
 const client = getSSLHubRpcClient(HUB_URL);
