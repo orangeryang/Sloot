@@ -1,7 +1,7 @@
 import { Contract, JsonRpcProvider } from 'ethers';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getImageForLoot, itemsFromSvg } from "@/utils";
-import sharp from "sharp";
+import sharp, { gravity } from "sharp";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -32,14 +32,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("lootWithColor:", tokenURIWithColor);
             const lootWithColor = "data:image/svg+xml;base64," + Buffer.from(tokenURIWithColor).toString('base64');
             
-            // const img = await getImageForLoot(items)
+            const img = await getImageForLoot(items)
             // console.log("img:", img)
             
             // const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
             // console.log("satoriSvg:", result);
             
             const pngBuffer = await sharp(Buffer.from(tokenURIWithColor))
-                .resize(1910 / 2, 1000)
+                .resize(1910, 1000)
+                .composite([{input: Buffer.from(img), gravity: "northeast"}])
                 .png()
                 .toBuffer();
             
@@ -67,7 +68,7 @@ function renderWithColors(items: string[]) {
         return items;
     }
     
-    let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 350 350\">\n" +
+    let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 680 350\">\n" +
         "  <style>\n" +
         "    .base {\n" +
         "      fill: white;\n" +
