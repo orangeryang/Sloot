@@ -1,11 +1,8 @@
 import { Contract, JsonRpcProvider } from 'ethers';
 import type { NextApiRequest, NextApiResponse } from 'next';
-
-import satori from "satori";
+import { getImageForLoot, itemsFromSvg } from "@/utils";
 import sharp from "sharp";
-import { readFile, writeFile } from "fs";
-import svg2img from "svg2img";
-import { createElement } from "react";
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
@@ -38,19 +35,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // const img = await getImageForLoot(items)
             // console.log("img:", img)
             
-            const satoriSvg = await satori(
-                <img src={ lootWithColor } alt={ "" }/>
-                ,
-                {
-                    width: 1910, height: 1000, fonts: []
-                }
-            );
-            // console.log("satoriSvg:", satoriSvg);
-            
             // const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
             // console.log("satoriSvg:", result);
             
-            const pngBuffer = await sharp(Buffer.from(satoriSvg))
+            const pngBuffer = await sharp(Buffer.from(tokenURIWithColor))
+                .resize(1910 / 2, 1000)
                 .png()
                 .toBuffer();
             
@@ -120,30 +109,4 @@ function getLevelColor(item: string) {
     
 }
 
-// https://github.com/stephancill/synthetic-loot-viewer
-function itemsFromSvg(svg: string) {
-    if (!svg.startsWith("<svg")) {
-        throw new Error("The svg parameter does not seem to be an SVG");
-    }
-    
-    let matches;
-    const items = [];
-    for (let i = 0; i < 8; i++) {
-        // eslint-disable-next-line
-        const matcher = /<text[^>]+\>([^<]+)<\/text>/
-        matches = svg.match(matcher);
-        if (!matches) {
-            if (items.length === 0) {
-                throw new Error(
-                    "Error when parsing the SVG: couldn’t find the next item"
-                );
-            }
-            // Probably a LootLoose image
-            return items;
-        }
-        items.push(matches[1]);
-        svg = svg.slice(svg.indexOf(matches[0]) + matches[0].length);
-    }
-    return items;
-}
 
