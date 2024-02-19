@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const lootWithColor = "data:image/svg+xml;base64," + Buffer.from(tokenURIWithColor).toString('base64');
             
             const img = await getImageForLoot(items)
-            // console.log("img:", img)
+            console.log("img:", img)
             
             // const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
             // console.log("satoriSvg:", result);

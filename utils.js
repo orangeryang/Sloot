@@ -158,8 +158,10 @@ const mergeImages = (sources = [], options = {}) => new Promise(resolve => {
     options = Object.assign({}, defaultOptions, options);
     
     // Setup browser/Node.js specific variables
-    const canvas = options.Canvas ? new options.Canvas() : window.document.createElement('canvas');
-    const Image = options.Image || window.Image;
+    const canvas = new options.Canvas();
+    // console.log("canvas:", canvas)
+    const Image = options.Image;
+    // console.log("Image:", Image)
     
     // Load sources
     const images = sources.map(source => new Promise((resolve, reject) => {
@@ -178,6 +180,7 @@ const mergeImages = (sources = [], options = {}) => new Promise(resolve => {
     
     // Get canvas context
     const ctx = canvas.getContext('2d');
+    // console.log("ctx:", ctx)
     
     // When sources have loaded
     resolve(Promise.all(images)
@@ -193,21 +196,22 @@ const mergeImages = (sources = [], options = {}) => new Promise(resolve => {
                 return ctx.drawImage(image.img, image.x || 0, image.y || 0);
             });
             
-            if (options.Canvas && options.format === 'image/jpeg') {
-                // Resolve data URI for node-canvas jpeg async
-                return new Promise((resolve, reject) => {
-                    canvas.toDataURL(options.format, {
-                        quality: options.quality,
-                        progressive: false
-                    }, (err, jpeg) => {
-                        if (err) {
-                            reject(err);
-                            return;
-                        }
-                        resolve(jpeg);
-                    });
-                });
-            }
+            // if (options.Canvas && options.format === 'image/jpeg') {
+            //     // Resolve data URI for node-canvas jpeg async
+            //     return new Promise((resolve, reject) => {
+            //         canvas.toDataURL(options.format, {
+            //             quality: options.quality,
+            //             progressive: false
+            //         }, (err, jpeg) => {
+            //             if (err) {
+            //                 console.error(err);
+            //                 reject(err);
+            //                 return;
+            //             }
+            //             resolve(jpeg);
+            //         });
+            //     });
+            // }
             
             // Resolve all other data URIs sync
             return canvas.toDataURL(options.format, options.quality);
