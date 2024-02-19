@@ -33,14 +33,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const lootWithColor = "data:image/svg+xml;base64," + Buffer.from(tokenURIWithColor).toString('base64');
             
             const img = await getImageForLoot(items)
-            console.log("img:", img)
+            // console.log("img:", img)
             
             // const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
             // console.log("satoriSvg:", result);
             
             const pngBuffer = await sharp(Buffer.from(tokenURIWithColor))
                 .resize(1910, 1000)
-                .composite([{input: Buffer.from(img), gravity: "northeast"}])
+                .composite([{input: Buffer.from(img.split(",")[1], 'base64'), gravity: "northeast"}])
                 .png()
                 .toBuffer();
             

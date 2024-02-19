@@ -106,7 +106,8 @@ async function getImageForLoot(loot) {
     
     files = files.map(file => {
         if (file.indexOf("ipfs://") > -1) {
-            file = `https://ipfs.io/ipfs/${file.split("ipfs://")[1]}`
+            // file = `https://ipfs.io/ipfs/${file.split("ipfs://")[1]}`
+            file = `./public/${file.split("ipfs://")[1]}`
         }
         // console.log(file)
         return file
@@ -173,7 +174,7 @@ const mergeImages = (sources = [], options = {}) => new Promise(resolve => {
         // Resolve source and img when loaded
         const img = new Image();
         img.crossOrigin = options.crossOrigin;
-        img.onerror = () => reject(new Error('Couldn\'t load image'));
+        // img.onerror = () => reject(new Error('Couldn\'t load image'));
         img.onload = () => resolve(Object.assign({}, source, {img}));
         img.src = source.src;
     }));
@@ -187,8 +188,10 @@ const mergeImages = (sources = [], options = {}) => new Promise(resolve => {
         .then(images => {
             // Set canvas dimensions
             const getSize = dim => options[dim] || Math.max(...images.map(image => image.img[dim]));
-            canvas.width = getSize('width');
-            canvas.height = getSize('height');
+            // canvas.width = getSize('width');
+            // canvas.height = getSize('height');
+            canvas.width = 1000;
+            canvas.height = 1000;
             
             // Draw images to canvas
             images.forEach(image => {
