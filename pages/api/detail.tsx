@@ -15,12 +15,12 @@ const url = "https://warpcast.com/gink/0xf24048ef";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-
+        
         let address: string[] = [""];
         try {
             let fid = 0;
             // let validatedMessage: Message | undefined = undefined;
-            console.log("detail req:", req);
+            console.log("detail req:", req.body);
             try {
                 // const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
                 const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             } catch (e) {
                 return res.status(400).send(`Failed to validate message: ${ e }`);
             }
-
+            
             // const buttonId = validatedMessage?.data?.frameActionBody?.buttonIndex || 0;
             // const fid = validatedMessage?.data?.fid || 0;
             // console.log("validatedMessage:" + validatedMessage?.data);
@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // }
             console.log("fid:", fid);
             let flag = false;
-
+            
             // const path = "/home/ubuntu/lootframe/sloot/cache/" + fid;
             // readFile(path, "utf8", (err, data) => {
             //     if (err) {
@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             //         flag = true;
             //     }
             // });
-
+            
             // if (!flag) {
             //     console.log("try", req.query['try']);
             //     writeFile(path, "try", (err) => {
@@ -128,7 +128,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             //     `);
             //
             // }
-
+            
             // user address
             const {data, error} = await fetchQuery("query MyQuery {\n" +
                 "  Socials(\n" +
@@ -165,7 +165,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 "    }\n" +
                 "  }\n" +
                 "}");
-
+            
             // console.log("fetch data:", data, error);
             if (!data) {
                 res.status(500).send("Invalid Fid");
@@ -185,9 +185,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         } catch (e) {
             return res.status(400).send(`Failed to validate message: ${ e }`);
         }
-
-        const contentUrl = address[0] == "" ? "${process.env['HOST']}/3.png" : `${process.env['HOST']}/api/sloot?address=${ address[0] }`;
-
+        
+        const contentUrl = address[0] == "" ? "${process.env['HOST']}/3.png" : `${ process.env['HOST'] }/api/sloot?address=${ address[0] }`;
+        
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(`
           <!DOCTYPE html>
@@ -195,10 +195,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             <head>
               <title> My SLoot </title>
               <meta property="og:title" content="Synthetic Loot">
-              <meta property="og:image" content="${process.env['HOST']}/1.png">
+              <meta property="og:image" content="${ process.env['HOST'] }/1.png">
               <meta name="fc:frame" content="vNext">
               <meta name="fc:frame:image" content="${ contentUrl }">
-              <meta name="fc:frame:post_url" content="${process.env['HOST']}/api/link">
+              <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/link">
               <meta name="fc:frame:button:1" content="Loot Foundation">
               <meta name="fc:frame:button:1:action" content="post_redirect">
               <meta name="fc:frame:button:2" content="Loot Discord">
@@ -210,7 +210,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             </head>
           </html>
         `);
-
+        
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['POST']);
