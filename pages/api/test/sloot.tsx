@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("img:", img)
             
             const character = await sharp(Buffer.from(img.split(",")[1], 'base64'))
-                .resize(1000, 1000)
+                .resize(900, 900)
                 .toBuffer();
             
             const pngBuffer = await sharp(Buffer.from(tokenURIWithColor))
