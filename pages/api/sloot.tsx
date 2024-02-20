@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("lootWithColor:", tokenURIWithColor);
             const lootWithColor = "data:image/svg+xml;base64," + Buffer.from(tokenURIWithColor).toString('base64');
             
-            const img = await getImageForLoot(items)
+            // const img = await getImageForLoot(items)
             // console.log("img:", img)
             
             // const character = await sharp(Buffer.from(img.split(",")[1], 'base64'))
