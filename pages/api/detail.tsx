@@ -22,10 +22,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log("user input:", req.body?.untrustedData);
             try {
                 getAddress(inputArr);
+                address = [inputArr];
             } catch (e) {
                 console.warn("Invalid address:", inputArr);
                 let buttonText = "Reveal your sLoot";
-                let imageUrl = `${process.env['HOST']}/1.png`;
+                let imageUrl = `${ process.env['HOST'] }/1.png`;
                 
                 res.setHeader('Content-Type', 'text/html');
                 res.status(200).send(`
@@ -49,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                    </html>
                  `);
             }
-            address = [inputArr];
+            
         } else {
             
             try {
