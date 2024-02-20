@@ -1,6 +1,6 @@
 import { Contract, JsonRpcProvider } from 'ethers';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getImageForLoot, itemsFromSvg } from "../../utils";
+import { getImageForLoot, itemsFromSvg } from "@/utils";
 import sharp from "sharp";
 
 
