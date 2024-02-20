@@ -35,23 +35,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const img = await getImageForLoot(items)
             // console.log("img:", img)
             
-            // const result = "data:image/svg+xml;base64," + Buffer.from(satoriSvg).toString('base64');
-            // console.log("satoriSvg:", result);
+            // const character = await sharp(Buffer.from(img.split(",")[1], 'base64'))
+            //     .resize(1000, 1000)
+            //     .toBuffer();
+            //
+            // const pngBuffer = await sharp(Buffer.from(tokenURIWithColor))
+            //     .resize(1910, 1000)
+            //     .composite([{input: character, gravity: "northeast"}])
+            //     .png()
+            //     .toBuffer();
             
-            const character = await sharp(Buffer.from(img.split(",")[1], 'base64'))
-                .resize(1000, 1000)
-                .toBuffer();
-            
-            const pngBuffer = await sharp(Buffer.from(tokenURIWithColor))
-                .resize(1910, 1000)
-                .composite([{input: character, gravity: "northeast"}])
-                .png()
-                .toBuffer();
-            
-            res.setHeader('Content-Type', 'image/png');
+            res.setHeader('Content-Type', 'image/svg+xml');
             res.setHeader('Cache-Control', 'max-age=10');
-            // res.send(snap);
-            res.send(pngBuffer);
+            res.send(lootWithColor);
+            // res.send(pngBuffer);
             
         } catch (error) {
             console.error(error);
