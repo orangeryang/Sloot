@@ -5,7 +5,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
     let buttonText = "Reveal your sLoot";
     let imageUrl = `${ process.env['HOST'] }/1.png`;
-    let inputText = "Enter address or reveal straightly...";
+    let inputText = "Address here";
     
     res.setHeader('Content-Type', 'text/html');
     res.status(200).send(`
