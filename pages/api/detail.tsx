@@ -200,7 +200,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
         
-        const contentUrl = address[0] == "" ? "${process.env['HOST']}/3.png" : `${ process.env['HOST'] }/test/sloot?address=${ address[0] }`;
+        const contentUrl = address[0] == "" ? `${ process.env['HOST'] }/3.png` : `${ process.env['HOST'] }/test/sloot?address=${ address[0] }`;
         
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(`
