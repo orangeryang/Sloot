@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("img:", img)
             
             const character = await sharp(Buffer.from(img.split(",")[1], 'base64'))
-                .resize(900, 900)
+                .resize(800, 800)
                 .toBuffer();
             
             const pngBuffer = await sharp(Buffer.from(tokenURIWithColor))
@@ -148,7 +148,7 @@ function renderWithColors(items: string[]) {
         return items;
     }
     
-    let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 650 350\">    <style>        .base {            fill: white;            font-family: serif;            font-size: 14px;        }        .green {            fill: green;            font-family: serif;            font-size: 14px;        }        .blue {            fill: blue;            font-family: serif;            font-size: 14px;        }        .purple {            fill: purple;            font-family: serFif;            font-size: 14px;        }        .orange {            fill: orange;            font-family: serif;            font-size: 14px;        }    </style>    <rect width=\"100%\" height=\"100%\" fill=\"black\" />";
+    let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 660 350\">    <style>        .base {            fill: white;            font-family: serif;            font-size: 14px;        }        .green {            fill: green;            font-family: serif;            font-size: 14px;        }        .blue {            fill: blue;            font-family: serif;            font-size: 14px;        }        .purple {            fill: purple;            font-family: serFif;            font-size: 14px;        }        .orange {            fill: orange;            font-family: serif;            font-size: 14px;        }    </style>    <rect width=\"100%\" height=\"100%\" fill=\"black\" />";
     
     for (let i = 0; i < items.length; i++) {
         result += "<text x=\"10\" y=\"" + (i * 20 + 20).toString(10) + getLevelColor(items[i]);
