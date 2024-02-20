@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                        <meta name="fc:frame:image" content="${ imageUrl }">
                        <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/detail">
                        <meta name="fc:frame:button:1" content="${ buttonText }">
-                       <meta name="fc:frame:input" content="Please check your input...">
+                       <meta name="fc:frame:input:text" content="Please check your input...">
                      </head>
                      <body>
                           <h1> My Synthetic Loot </h1>
