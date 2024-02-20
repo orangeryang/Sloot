@@ -1,6 +1,6 @@
 import { Contract, JsonRpcProvider } from 'ethers';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getImageForLoot, itemsFromSvg } from "../../utils";
+// import { getImageForLoot, itemsFromSvg } from "../../utils";
 import sharp from "sharp";
 
 
@@ -25,12 +25,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
             // console.log("svg:", svg);
             
-            const items = itemsFromSvg(svg)
-            // console.log("items:", items)
-            
-            const tokenURIWithColor = renderWithColors(items);
-            // console.log("lootWithColor:", tokenURIWithColor);
-            const lootWithColor = "data:image/svg+xml;base64," + Buffer.from(tokenURIWithColor).toString('base64');
+            // const items = itemsFromSvg(svg)
+            // // console.log("items:", items)
+            //
+            // const tokenURIWithColor = renderWithColors(items);
+            // // console.log("lootWithColor:", tokenURIWithColor);
+            // const lootWithColor = "data:image/svg+xml;base64," + Buffer.from(tokenURIWithColor).toString('base64');
             
             // const img = await getImageForLoot(items)
             // console.log("img:", img)
@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             res.setHeader('Content-Type', 'image/svg+xml');
             res.setHeader('Cache-Control', 'max-age=10');
-            res.send(lootWithColor);
+            res.send(svg);
             // res.send(pngBuffer);
             
         } catch (error) {
