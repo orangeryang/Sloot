@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         // todo untrusted data is fine here
         
-        const buttonId = req.body?.req?.untrustedData?.buttonIndex || 0;
+        const buttonId = req.body?.untrustedData?.buttonIndex || 0;
         console.log("buttonId:", buttonId);
         
         if (buttonId === 1) {
