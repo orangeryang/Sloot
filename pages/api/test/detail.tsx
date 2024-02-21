@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { fetchQuery, init } from "@airstack/airstack-react";
 import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
-import { getAddress } from "ethers";
+import { getAddress, JsonRpcProvider } from "ethers";
 
 // const HUB_URL = "nemes.farcaster.xyz:2283";
 // const client = getSSLHubRpcClient(HUB_URL);
@@ -16,15 +16,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'POST') {
         
         let address = [""];
-        const inputArr = req.body?.untrustedData?.inputText;
+        const inputAddr = req.body?.untrustedData?.inputText;
         
-        if (inputArr) {
+        if (inputAddr) {
             console.log("user input:", req.body?.untrustedData);
             try {
-                getAddress(inputArr);
-                address = [inputArr];
+                
+                if (inputAddr.endsWith("eth")) {
+                    new JsonRpcProvider("https://rpc.mevblocker.io").resolveName(inputAddr).then((addr) => {
+                        if (addr) {
+                            address = [addr];
+                        }
+                    });
+                } else {
+                    getAddress(inputAddr);
+                    address = [inputAddr];
+                }
+                
             } catch (e) {
-                console.warn("Invalid address:", inputArr);
+                console.warn("Invalid address:", inputAddr);
                 return res.status(400).send(`Failed to validate address: ${ e }`);
             }
             
