@@ -154,7 +154,7 @@ function renderWithColors(items: string[]) {
         return items;
     }
     
-    let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 660 350\"> <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 13px;    }    .green {        fill: rgb(30, 255, 0);        font-family: serif;        font-size: 13px;    }    .blue {        fill: rgb(0, 112, 221);        font-family: serif;        font-size: 13px;    }    .purple {        fill: rgb(163, 53, 238);        font-family: serif;        font-size: 13px;    }    .orange {        fill: rgb(255, 128, 0);        font-family: serif;        font-size: 13px;    }</style><rect width=\"100%\" height=\"100%\" fill=\"black\" />";
+    let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 660 350\"> <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 14px;    }    .green {        fill: rgb(30, 255, 0);        font-family: serif;        font-size: 14px;    }    .blue {        fill: rgb(0, 112, 221);        font-family: serif;        font-size: 14px;    }    .purple {        fill: rgb(163, 53, 238);        font-family: serif;        font-size: 14px;    }    .orange {        fill: rgb(255, 128, 0);        font-family: serif;        font-size: 14px;    }</style><rect width=\"100%\" height=\"100%\" fill=\"black\" />";
     
     for (let i = 0; i < items.length; i++) {
         result += "<text x=\"10\" y=\"" + (i * 20 + 20).toString(10) + getLevelColor(items[i]);
