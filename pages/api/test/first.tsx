@@ -3,6 +3,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
+    console.info("req:", req);
+    
     let buttonText = "Reveal your sLoot";
     let imageUrl = `${ process.env['HOST'] }/1.png`;
     let inputText = "Address or ENS here";
