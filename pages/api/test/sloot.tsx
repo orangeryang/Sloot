@@ -36,12 +36,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // console.log("img:", img)
             
             const character = await sharp(Buffer.from(img.split(",")[1], 'base64'))
-                .resize(800, 800)
+                .resize(1000, 1000)
+                .extract({left: 200, top: 100, width: 600, height: 750})
+                // .resize({height: 1000})
+                .toBuffer();
+            
+            const character2 = await sharp(character)
+                .resize({height: 1000})
                 .toBuffer();
             
             const pngBuffer = await sharp(Buffer.from(tokenURIWithColor))
                 .resize(1910, 1000)
-                .composite([{input: character, gravity: "northeast"}])
+                .composite([{input: character2, gravity: "northeast"}])
                 .png()
                 .toBuffer();
             
