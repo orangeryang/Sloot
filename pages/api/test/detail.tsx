@@ -13,10 +13,25 @@ const nClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 const url = "https://warpcast.com/gink/0xf24048ef";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    
     if (req.method === 'POST') {
+        
+        let fid = 0;
+        // console.log("req detail:", req.body);
+        try {
+            const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
+            console.log("result:", result);
+            if (result && result.valid) {
+                fid = result.action?.interactor?.fid || 0;
+            }
+        } catch (e) {
+            return res.status(400).send(`Failed to validate message: ${ e }`);
+        }
+        console.log("fid:", fid);
         
         let address = [""];
         const inputAddr = req.body?.untrustedData?.inputText;
+        
         
         if (inputAddr) {
             console.log("user input:", req.body?.untrustedData);
@@ -42,23 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         } else {
             
             try {
-                let fid = 0;
-                // let validatedMessage: Message | undefined = undefined;
-                console.log("req detail:", req.body);
-                try {
-                    // const frameMessage = Message.decode(Buffer.from(req.body?.trustedData?.messageBytes || '', 'hex'));
-                    const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
-                    // console.log("result:", result);
-                    if (result && result.valid) {
-                        // validatedMessage = result.value.message;
-                        fid = result.action?.interactor?.fid || 0;
-                    }
-                } catch (e) {
-                    return res.status(400).send(`Failed to validate message: ${ e }`);
-                }
-                
-                console.log("fid:", fid);
-                
+
                 // user address
                 const {data, error} = await fetchQuery("query MyQuery {\n" +
                     "  Socials(\n" +
