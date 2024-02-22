@@ -134,3 +134,6 @@ dist
 key.json
 cache
 package-lock.json
+
+queriedAddresses.txt
+requestFids.txt
