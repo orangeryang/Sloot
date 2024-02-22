@@ -4,13 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e7bfb17-dc7b-4935-8050-19b5ace4c4bc" name="Changes" comment="" />
+    <list default="true" id="3e7bfb17-dc7b-4935-8050-19b5ace4c4bc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/pages/api/test/detail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/test/detail.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/api/test/first.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/test/first.tsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="test" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -33,7 +41,7 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "input",
     "last_opened_file_path": "/Users/xolo/WebstormProjects/sloot/pages/api",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -77,7 +85,7 @@
       <updated>1707031459668</updated>
       <workItem from="1707109263877" duration="23238000" />
       <workItem from="1708226357907" duration="2884000" />
-      <workItem from="1708314436078" duration="68901000" />
+      <workItem from="1708314436078" duration="69583000" />
     </task>
     <servers />
   </component>

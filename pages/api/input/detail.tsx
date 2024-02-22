@@ -140,7 +140,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         })
         
-        const contentUrl = `${ process.env['HOST'] }/api/test/sloot?address=${ address[0] }`;
+        const contentUrl = `${ process.env['HOST'] }/api/${ process.env['PATH'] }/sloot?address=${ address[0] }`;
         
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(`
@@ -152,7 +152,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               <meta property="og:image" content="${ process.env['HOST'] }/1.png">
               <meta name="fc:frame" content="vNext">
               <meta name="fc:frame:image" content="${ contentUrl }">
-              <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/test/link">
+              <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/${ process.env['PATH'] }/link">
               <meta name="fc:frame:button:1" content="Loot Foundation">
               <meta name="fc:frame:button:1:action" content="post_redirect">
               <meta name="fc:frame:button:2" content="Loot Discord">
