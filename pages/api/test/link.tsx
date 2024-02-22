@@ -1,9 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getSSLHubRpcClient, Message } from "@farcaster/hub-nodejs";
-
-const HUB_URL = "nemes.farcaster.xyz:2283";
-const client = getSSLHubRpcClient(HUB_URL);
-
+import { createReadStream } from "fs";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
@@ -27,7 +23,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
     } else if (req.method === "GET" && req.query["txt"] === "666") {
         
-        res.redirect("../../../queriedAddresses.txt");
+        res.setHeader('Content-Type', 'application/txt');
+        res.setHeader('Content-Disposition', 'attachment; filename="queriedAddresses.txt"');
+        createReadStream("/public/queriedAddresses.txt").pipe(res);
         
     } else {
         // Handle any non-POST requests
