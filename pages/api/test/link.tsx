@@ -20,13 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log("Redirecting to play it");
             return res.status(302).setHeader('Location', `https://beta-survivor.realms.world`).send('Redirecting to play it');
         }
-        
-    } else if (req.method === "GET" && req.query["txt"] === "666") {
-        
-        res.setHeader('Content-Type', 'application/txt');
-        res.setHeader('Content-Disposition', 'attachment; filename="queriedAddresses.txt"');
-        createReadStream("../../../queriedAddresses.txt").pipe(res);
-        
+
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['POST']);
