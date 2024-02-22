@@ -6,7 +6,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const headers = req.headers["user-agent"] || "";
     console.log("headers:", headers);
     
-    if (headers && headers.includes("FCBot")) {
+    if (headers && (headers.includes("Mozilla") || headers.includes("Chrome") || headers.includes("Safari") || headers.includes("Firefox") || headers.includes("Edg") || headers.includes("OPR")) || headers.includes("AppleWebKit")) {
+        console.log("Browser, redirecting to loot");
+        
+        res.redirect("https://www.lootproject.com/");
+        // redirect("https://google.com")
+        // return NextResponse.redirect("https://www.google.com");
+        
+        // const router = useRouter();
+        // router.push("https://google.com");
+        
+    } else {
         console.log("FC Bot");
         
         let buttonText = "Reveal your sLoot";
@@ -37,16 +47,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             </html>
         `);
-        
-    } else {
-        console.log("Browser, redirecting to loot");
-        
-        res.redirect("https://www.lootproject.com/");
-        // redirect("https://google.com")
-        // return NextResponse.redirect("https://www.google.com");
-        
-        // const router = useRouter();
-        // router.push("https://google.com");
         
     }
 }

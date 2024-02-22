@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e7bfb17-dc7b-4935-8050-19b5ace4c4bc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/pages/api/input/detail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/input/detail.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/api/input/first.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/input/first.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,7 +41,7 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "input",
+    "git-widget-placeholder": "test",
     "last_opened_file_path": "/Users/xolo/WebstormProjects/sloot/pages/api",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
