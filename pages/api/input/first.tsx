@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 <meta property="og:image" content="${ imageUrl }">
                 <meta name="fc:frame" content="vNext">
                 <meta name="fc:frame:image" content="${ imageUrl }">
-                <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/test/detail">
+                <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/detail">
                 <meta name="fc:frame:button:1" content="${ buttonText }">
                 <meta name="fc:frame:input:text" content="${ inputText }">
             </head>
