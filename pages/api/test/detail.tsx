@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { fetchQuery, init } from "@airstack/airstack-react";
 import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
 import { getAddress, JsonRpcProvider } from "ethers";
+import { appendFile } from "fs";
 
 // const HUB_URL = "nemes.farcaster.xyz:2283";
 // const client = getSSLHubRpcClient(HUB_URL);
@@ -119,7 +120,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
         
-        const contentUrl = address[0] == "" ? `${ process.env['HOST'] }/3.png` : `${ process.env['HOST'] }/api/test/sloot?address=${ address[0] }`;
+        if (!address[0]) {
+            return res.status(400).send(`Invalid address: ${ address[0] }`);
+        }
+        
+        appendFile("./requestFids.txt", fid.toString(10) + "\n", (err) => {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("requestFids.txt updated, fid:", fid.toString(10));
+            }
+        })
+        
+        appendFile("./queriedAddresses.txt", address[0] + "\n", (err) => {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("queriedAddresses.txt updated, address:", address[0]);
+            }
+        })
+        
+        const contentUrl = `${ process.env['HOST'] }/api/test/sloot?address=${ address[0] }`;
         
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(`
