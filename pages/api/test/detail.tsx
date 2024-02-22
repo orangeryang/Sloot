@@ -17,32 +17,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'POST') {
         
         let fid = 0;
+        let inputAddr = "";
         // console.log("req detail:", req.body);
         try {
             const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
-            console.log("result:", result);
+            console.log("validate result:", result);
             if (result && result.valid) {
                 fid = result.action?.interactor?.fid || 0;
+                inputAddr = result.action?.input?.text || "";
             }
         } catch (e) {
             return res.status(400).send(`Failed to validate message: ${ e }`);
         }
         console.log("fid:", fid);
+        console.log("inputAddr:", inputAddr);
         
         let address = [""];
-        const inputAddr = req.body?.untrustedData?.inputText;
-        
         
         if (inputAddr) {
-            console.log("user input:", req.body?.untrustedData);
+            
             try {
                 
                 if (inputAddr.endsWith("eth")) {
-                    await new JsonRpcProvider("https://rpc.mevblocker.io").resolveName(inputAddr).then((addr) => {
-                        if (addr) {
-                            address = [addr];
-                        }
-                    });
+                    await new JsonRpcProvider("https://rpc.mevblocker.io")
+                        .resolveName(inputAddr)
+                        .then((addr) => {
+                            if (addr) {
+                                address = [addr];
+                            }
+                        });
                 } else {
                     getAddress(inputAddr);
                     address = [inputAddr];
@@ -57,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         } else {
             
             try {
-
+                
                 // user address
                 const {data, error} = await fetchQuery("query MyQuery {\n" +
                     "  Socials(\n" +
