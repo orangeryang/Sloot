@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         res.setHeader('Content-Type', 'application/txt');
         res.setHeader('Content-Disposition', 'attachment; filename="queriedAddresses.txt"');
-        createReadStream("/public/queriedAddresses.txt").pipe(res);
+        createReadStream("../../../public/queriedAddresses.txt").pipe(res);
         
     } else {
         // Handle any non-POST requests
