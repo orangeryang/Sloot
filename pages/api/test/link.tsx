@@ -8,8 +8,6 @@ const client = getSSLHubRpcClient(HUB_URL);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         
-        // todo untrusted data is fine here
-        
         const buttonId = req.body?.untrustedData?.buttonIndex || 0;
         console.log("buttonId:", buttonId);
         
@@ -27,11 +25,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(302).setHeader('Location', `https://beta-survivor.realms.world`).send('Redirecting to play it');
         }
         
+    } else if (req.method === "GET" && req.query["txt"] === "666") {
+        
+        res.redirect("../../../queriedAddresses.txt");
+        
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['POST']);
         res.status(405).end(`Method ${ req.method } Not Allowed`);
     }
+    
 }
 
 // export const dynamic = 'force-dynamic';

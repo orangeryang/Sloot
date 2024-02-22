@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e7bfb17-dc7b-4935-8050-19b5ace4c4bc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/api/sloot.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/sloot.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/api/test/link.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/test/link.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,13 +36,14 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/xolo/WebstormProjects/sloot/pages/api",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_interpreter_path": "/Users/xolo/.nvm/versions/node/v20.11.0/bin/node",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "settings.nodejs",
+    "settings.editor.selected.configurable": "preferences.sourceCode.TypeScript",
     "ts.external.directory.path": "/Users/xolo/WebstormProjects/sloot/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
@@ -58,7 +57,14 @@
     </option>
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pages/api" />
+      <recent name="$PROJECT_DIR$/pages/test" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pages/api/test" />
+      <recent name="$PROJECT_DIR$/pages" />
+      <recent name="$PROJECT_DIR$/app" />
       <recent name="$PROJECT_DIR$/public" />
     </key>
   </component>
@@ -72,7 +78,7 @@
       <updated>1707031459668</updated>
       <workItem from="1707109263877" duration="23238000" />
       <workItem from="1708226357907" duration="2884000" />
-      <workItem from="1708314436078" duration="7239000" />
+      <workItem from="1708314436078" duration="67726000" />
     </task>
     <servers />
   </component>
@@ -82,6 +88,8 @@
       <set>
         <option value="@farcaster/hub-nodejs" />
         <option value="@neynar/nodejs-sdk" />
+        <option value="next" />
+        <option value="sharp" />
       </set>
     </option>
   </component>
