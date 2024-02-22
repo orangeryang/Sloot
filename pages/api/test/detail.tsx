@@ -124,7 +124,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).send(`Invalid address: ${ address[0] }`);
         }
         
-        appendFile("./requestFids.txt", fid.toString(10) + "\n", (err) => {
+        appendFile("/requestFids.txt", fid.toString(10) + "\n", (err) => {
             if (err) {
                 console.error(err);
             } else {
@@ -132,7 +132,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         })
         
-        appendFile("./queriedAddresses.txt", address[0] + "\n", (err) => {
+        appendFile("/queriedAddresses.txt", address[0] + "\n", (err) => {
             if (err) {
                 console.error(err);
             } else {
