@@ -104,9 +104,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 //     4: ["Long Sword", "Mace", "Wand", "Book"],
 //     5: ["Short Sword", "Club"]
 
-const tier1 = ["Holy Chestplate", "Ancient Helm", "Ornate Belt", "Holy Greaves", "Holy Gauntlets", "Demon Husk", "Demon Crown", "Demonhide Belt", "Demonhide Boots", "Demons Hands", "Divine Robe", "Crown", "Brightsilk Sash", "Divine Slippers", "Divine Gloves", "Katana", "Warhammer", "Ghost Wand", "Grimoire"];
-const tier2 = ["Ornate Chestplate", "Ornate Helm", "War Belt", "Ornate Greaves", "Ornate Gauntlets", "Dragonskin Armor", "Dragons Crown", "Dragonskin Belt", "Dragonskin Boots", "Dragonskin Gloves", "Silk Robe", "Divine Hood", "Silk Hood", "Silk Sash", "Silk Slippers", "Silk Gloves", "Falchion", "Quarterstaff", "Grave Wand", "Chronicle"];
-const tier3 = ["Plate Mail", "Great Helm", "Plated Belt", "Greaves", "Gauntlets", "Studded Leather Armor", "War Cap", "Studded Leather Belt", "Studded Leather Boots", "Studded Leather Gloves", "Linen Robe", "Silk Sash", "Wool Sash", "Wool Shoes", "Wool Gloves", "Scimitar", "Maul", "Bone Wand", "Tome"];
+// BronzeRing T3
+// SilverRing T2
+// GoldRing T1
+// PlatinumRing T1
+// TitaniumRing T1
+// Necklace T1
+// Amulet  T1
+// Pendant T1
+
+const tier1 = ["Holy Chestplate", "Ancient Helm", "Ornate Belt", "Holy Greaves", "Holy Gauntlets", "Demon Husk", "Demon Crown", "Demonhide Belt", "Demonhide Boots", "Demons Hands", "Divine Robe", "Crown", "Brightsilk Sash", "Divine Slippers", "Divine Gloves", "Katana", "Warhammer", "Ghost Wand", "Grimoire", "Pendant", "Amulet", "Necklace", "Titanium Ring", "Platinum Ring", "Gold Ring"];
+const tier2 = ["Ornate Chestplate", "Ornate Helm", "War Belt", "Ornate Greaves", "Ornate Gauntlets", "Dragonskin Armor", "Dragons Crown", "Dragonskin Belt", "Dragonskin Boots", "Dragonskin Gloves", "Silk Robe", "Divine Hood", "Silk Hood", "Silk Sash", "Silk Slippers", "Silk Gloves", "Falchion", "Quarterstaff", "Grave Wand", "Chronicle", "Silver Ring"];
+const tier3 = ["Plate Mail", "Great Helm", "Plated Belt", "Greaves", "Gauntlets", "Studded Leather Armor", "War Cap", "Studded Leather Belt", "Studded Leather Boots", "Studded Leather Gloves", "Linen Robe", "Silk Sash", "Wool Sash", "Wool Shoes", "Wool Gloves", "Scimitar", "Maul", "Bone Wand", "Tome", "Bronze Ring"];
 const tier4 = ["Chain Mail", "Full Helm", "Mesh Belt", "Chain Boots", "Chain Gloves", "Hard Leather Armor", "Leather Cap", "Hard Leather Belt", "Hard Leather Boots", "Hard Leather Gloves", "Robe", "Linen Hood", "Linen Sash", "Linen Shoes", "Linen Gloves", "Long Sword", "Mace", "Wand", "Book"];
 const tier5 = ["Ring Mail", "Helm", "Heavy Belt", "Heavy Boots", "Heavy Gloves", "Leather Armor", "Cap", "Leather Belt", "Leather Boots", "Leather Gloves", "Shirt", "Hood", "Sash", "Shoes", "Gloves", "Short Sword", "Club"];
 
