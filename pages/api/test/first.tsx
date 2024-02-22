@@ -4,6 +4,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
     // console.info("req:", req);
     const headers = req.headers["user-agent"] || "";
+    console.log("headers:", headers);
     
     if (headers && headers.includes("FCBot")) {
         console.log("FC Bot");
