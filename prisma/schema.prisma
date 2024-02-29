@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root@localhost:3306/frame_v3"
+  url      = env("DATABASE_URL")
 }
 
 // model synthetic_loot {
