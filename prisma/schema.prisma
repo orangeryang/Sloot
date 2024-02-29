@@ -13,16 +13,35 @@ datasource db {
   url      = "mysql://root@localhost:3306/frame_v3"
 }
 
-model synthetic_loot {
-  id      Int    @id @default(autoincrement())
-  address String @unique
-  weapon  String
-  chest   String
-  head    String
-  waist   String
-  foot    String
-  hand    String
-  neck    String
-  ring    String
+// model synthetic_loot {
+//   id      Int    @id @default(autoincrement())
+//   address String @unique
+//   weapon  String
+//   chest   String
+//   head    String
+//   waist   String
+//   foot    String
+//   hand    String
+//   neck    String
+//   ring    String
+// }
+
+model Battle {
+  id       Int      @id @default(autoincrement())
+  attacker String
+  defender String
+  winner   Int      @default(-1)
+  createAt DateTime @default(now()) @map("created_at")
+  updateAt DateTime @default(now()) @updatedAt() @map("updated_at")
 }
+
+model BattleDetail {
+  id       Int      @id @default(autoincrement())
+  battleId Int      @map("battle_id")
+  order    Int
+  random   Int
+  createAt DateTime @default(now()) @map("created_at")
+  updateAt DateTime @default(now()) @updatedAt() @map("updated_at")
+}
+
 
