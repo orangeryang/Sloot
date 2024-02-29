@@ -9,6 +9,7 @@
     "@airstack/airstack-react": "^0.6.2",
     "@farcaster/hub-nodejs": "^0.11.0",
     "@neynar/nodejs-sdk": "^1.10.0",
+    "@prisma/client": "^5.10.2",
     "@types/react": "^18.2.56",
     "canvas": "^2.11.2",
     "ethers": "^6.11.1",

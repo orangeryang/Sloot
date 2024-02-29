@@ -1,0 +1,23 @@
+-- CreateTable
+CREATE TABLE `Battle` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `attacker` VARCHAR(191) NOT NULL,
+    `defender` VARCHAR(191) NOT NULL,
+    `winner` INTEGER NOT NULL DEFAULT -1,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `BattleDetail` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `battle_id` INTEGER NOT NULL,
+    `order` INTEGER NOT NULL,
+    `random` INTEGER NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

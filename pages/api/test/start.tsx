@@ -19,9 +19,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else {
         console.log("FC Bot");
         
-        let buttonText = "Reveal your sLoot";
+        let buttonText = "Battle";
         let imageUrl = `${ process.env['HOST'] }/1.png`;
-        let inputText = "Address or ENS here";
+        let inputText = "@Your opponent on farcaster";
         
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(`
