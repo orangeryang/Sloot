@@ -19,6 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else {
         console.log("FC Bot");
         
+        // todo show the CD on the button or input
         let buttonText = "Battle";
         let imageUrl = `${ process.env['HOST'] }/1.png`;
         let inputText = "@Your opponent on farcaster";
@@ -34,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 <meta property="og:image" content="${ imageUrl }">
                 <meta name="fc:frame" content="vNext">
                 <meta name="fc:frame:image" content="${ imageUrl }">
-                <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/detail">
+                <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle">
                 <meta name="fc:frame:button:1" content="${ buttonText }">
                 <meta name="fc:frame:input:text" content="${ inputText }">
             </head>

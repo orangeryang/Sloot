@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
-import { getAddress, JsonRpcProvider } from "ethers";
 import {} from "@prisma/client";
 import { User, UserResponse } from "@neynar/nodejs-sdk/build/neynar-api/v1";
 import { fetchQuery } from "@airstack/airstack-react";
@@ -13,73 +12,136 @@ const nClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
+    // no cache in the first version here
+    // I think it has to be done in the next version
+    
     if (req.method === 'POST') {
         
+        
+        // validate the request and get the user's information
+        
         let user;
-        let opponent = "";
+        let buttonId;
+        let opponentByInput = "";
         // console.log("req detail:", req.body);
         try {
             const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
             console.log("validate result:", result);
             if (result && result.valid) {
                 user = result.action?.interactor;
-                opponent = result.action?.input?.text || "";
+                buttonId = result.action?.button.index;
+                opponentByInput = result.action?.input?.text || "";
             }
         } catch (e) {
             return res.status(400).send(`Failed to validate message: ${ e }`);
         }
         console.log("request info:", user);
-        console.log("request opponent:", opponent);
+        console.log("request opponent:", opponentByInput);
         
-        let opponentAddress = "";
         
-        try {
+        // jump to the page
+        if (buttonId === 3) {
             
-            let opponentFid = 0;
-            if (opponent) {
-                const opponentResponse: UserResponse = await nClient.lookupUserByUsername(opponent);
-                opponentFid = opponentResponse.result.user.fid;
+            console.log("Redirecting to gink");
+            return res.status(302).setHeader('Location', 'https://warpcast.com/gink/0x67c737a3').send('Redirecting to query');
+            
+        }
+        // battle action here
+        else if (buttonId === 1) {
+            
+            const battleId = req.query["id"] || "";
+            if (battleId) {
+                
+                const friend = req.query["fr"] || "";
+                if (friend) {
+                    
+                    // looking for friends' help
+                    // todo
+                    
+                } else {
+                    
+                    // continue the battle
+                    // todo
+                    
+                }
+                
             } else {
-                // todo find the guy he/she didn't beat
-                // @ts-ignore
-                opponentFid = user.fid;
+                
+                // find the opponent to start the battle
+                
+                // 1. find the opponent
+                //   - valid input or not
+                //   - random opponent
+                // 2. render the battle page
+                
+                let opponentAddress = "";
+                let userAddress = "";
+                try {
+                    
+                    let opponentFid = 0;
+                    if (opponentByInput) {
+                        const opponentResponse: UserResponse = await nClient.lookupUserByUsername(opponentByInput);
+                        opponentFid = opponentResponse.result.user.fid;
+                    } else {
+                        // @ts-ignore
+                        opponentFid = user.fid;
+                        // todo find the guy he/she didn't beat
+                    }
+                    userAddress = await getAddressByFid(user?.fid || 0);
+                    opponentAddress = await getAddressByFid(opponentFid);
+                    
+                } catch (e) {
+                    console.warn("Failed to lookup opponent:", opponentByInput);
+                    console.warn("Error:", e);
+                }
+                
+                if (!opponentAddress) {
+                    console.warn("Failed to lookup opponent address:", opponentAddress);
+                    return res.status(400).send("Failed to find opponent");
+                }
+                
+                const imageUrl =
+                    `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ battleId }&address1=${ userAddress }&address2=${ opponentAddress }`;
+                
+                const contentUrl =
+                    `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ battleId }&address1=${ userAddress }&address2=${ opponentAddress }`;
+                
+                res.setHeader('Content-Type', 'text/html');
+                res.status(200).send(`
+                  <!DOCTYPE html>
+                  <html>
+                    <head>
+                      <title> My SLoot </title>
+                      <meta property="og:title" content="Synthetic Loot">
+                      <meta property="og:image" content="${ process.env['HOST'] }/1.png">
+                      <meta name="fc:frame" content="vNext">
+                      <meta name="fc:frame:image" content="${ imageUrl }">
+                      <meta name="fc:frame:post_url" content="${ contentUrl }">
+                      <meta name="fc:frame:button:1" content="Attack">
+                      <meta name="fc:frame:button:2" content="Friends">
+                      <meta name="fc:frame:button:3" content="Query Loot">
+                      <meta name="fc:frame:button:3:action" content="post_redirect">
+                      <meta name="fc:frame:button:4" content="Escape">
+                    </head>
+                  </html>
+                `);
+                
             }
-            opponentAddress = await getAddressByFid(opponentFid);
             
-        } catch (e) {
-            console.warn("Failed to lookup opponent:", opponent);
-            console.warn("Error:", e);
+        }
+        // friends here
+        else if (buttonId === 2) {
+        
+            // todo show the friends
+        
+        }
+        // escape
+        else if (buttonId === 4) {
+        
+            // todo escape from battle
+        
         }
         
-        if (!opponentAddress) {
-            console.warn("Failed to lookup opponent address:", opponentAddress);
-            return res.status(400).send("Failed to find opponent");
-        }
-        
-        const contentUrl = `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?address=${ opponentAddress }`;
-        
-        res.setHeader('Content-Type', 'text/html');
-        res.status(200).send(`
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <title> My SLoot </title>
-              <meta property="og:title" content="Synthetic Loot">
-              <meta property="og:image" content="${ process.env['HOST'] }/1.png">
-              <meta name="fc:frame" content="vNext">
-              <meta name="fc:frame:image" content="${ contentUrl }">
-              <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/link">
-              <meta name="fc:frame:button:1" content="Loot Foundation">
-              <meta name="fc:frame:button:1:action" content="post_redirect">
-              <meta name="fc:frame:button:2" content="Loot Discord">
-              <meta name="fc:frame:button:2:action" content="post_redirect">
-              <meta name="fc:frame:button:3" content="Buy Loot">
-              <meta name="fc:frame:button:3:action" content="post_redirect">
-              <meta name="fc:frame:button:4" content="Play Loot Survivor">
-              <meta name="fc:frame:button:4:action" content="post_redirect">
-            </head>
-          </html>
-        `);
         
     } else {
         // Handle any non-POST requests
