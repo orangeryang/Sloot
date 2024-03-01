@@ -49,6 +49,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // battle action here
         else if (buttonId === 1) {
             
+            let leftAddress = "";
+            let rightAddress = "";
             const battleId = req.query["id"] || "";
             if (battleId) {
                 
@@ -56,14 +58,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (friend) {
                     
                     // looking for friends' help
-                    // todo
+                    let friendAddress;
+                    try {
+                        friendAddress = await getAddressByFid(Number.parseInt(friend.toString()));
+                    } catch (e) {
+                        console.warn("Failed to lookup friend address:", friend);
+                    }
                     
-                } else {
-                    
-                    // continue the battle
-                    // todo
+                    if (friendAddress) {
+                        leftAddress = friendAddress;
+                        
+                    }
                     
                 }
+                
+                // continue the battle
+                // todo
+                
                 
             } else {
                 
@@ -74,8 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 //   - random opponent
                 // 2. render the battle page
                 
-                let opponentAddress = "";
-                let userAddress = "";
+                
                 try {
                     
                     let opponentFid = 0;
@@ -87,59 +97,66 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         opponentFid = user.fid;
                         // todo find the guy he/she didn't beat
                     }
-                    userAddress = await getAddressByFid(user?.fid || 0);
-                    opponentAddress = await getAddressByFid(opponentFid);
+                    leftAddress = await getAddressByFid(user?.fid || 0);
+                    rightAddress = await getAddressByFid(opponentFid);
                     
                 } catch (e) {
                     console.warn("Failed to lookup opponent:", opponentByInput);
                     console.warn("Error:", e);
                 }
                 
-                if (!opponentAddress) {
-                    console.warn("Failed to lookup opponent address:", opponentAddress);
+                if (!rightAddress) {
+                    console.warn("Failed to lookup opponent address:", rightAddress);
                     return res.status(400).send("Failed to find opponent");
                 }
                 
-                const imageUrl =
-                    `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ battleId }&address1=${ userAddress }&address2=${ opponentAddress }`;
-                
-                const contentUrl =
-                    `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ battleId }&address1=${ userAddress }&address2=${ opponentAddress }`;
-                
-                res.setHeader('Content-Type', 'text/html');
-                res.status(200).send(`
-                  <!DOCTYPE html>
-                  <html>
-                    <head>
-                      <title> My SLoot </title>
-                      <meta property="og:title" content="Synthetic Loot">
-                      <meta property="og:image" content="${ process.env['HOST'] }/1.png">
-                      <meta name="fc:frame" content="vNext">
-                      <meta name="fc:frame:image" content="${ imageUrl }">
-                      <meta name="fc:frame:post_url" content="${ contentUrl }">
-                      <meta name="fc:frame:button:1" content="Attack">
-                      <meta name="fc:frame:button:2" content="Friends">
-                      <meta name="fc:frame:button:3" content="Query Loot">
-                      <meta name="fc:frame:button:3:action" content="post_redirect">
-                      <meta name="fc:frame:button:4" content="Escape">
-                    </head>
-                  </html>
-                `);
                 
             }
+            
+            if (end) {
+            
+            } else {
+            
+            }
+            const imageUrl =
+                `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ battleId }&address1=${ leftAddress }&address2=${ rightAddress }`;
+            
+            const contentUrl =
+                `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ battleId }&address1=${ leftAddress }&address2=${ rightAddress }`;
+            
+            res.setHeader('Content-Type', 'text/html');
+            res.status(200).send(`
+              <!DOCTYPE html>
+              <html>
+                <head>
+                  <title> My SLoot </title>
+                  <meta property="og:title" content="Synthetic Loot">
+                  <meta property="og:image" content="${ process.env['HOST'] }/1.png">
+                  <meta name="fc:frame" content="vNext">
+                  <meta name="fc:frame:image" content="${ imageUrl }">
+                  <meta name="fc:frame:post_url" content="${ contentUrl }">
+                  <meta name="fc:frame:button:1" content="Attack">
+                  <meta name="fc:frame:button:2" content="Friends">
+                  <meta name="fc:frame:button:3" content="Query Loot">
+                  <meta name="fc:frame:button:3:action" content="post_redirect">
+                  <meta name="fc:frame:button:4" content="Escape">
+                </head>
+              </html>
+            `);
+            
             
         }
         // friends here
         else if (buttonId === 2) {
-        
+            
             // todo show the friends
-        
+            
         }
         // escape
         else if (buttonId === 4) {
-        
+            
             // todo escape from battle
-        
+            
         }
         
         
