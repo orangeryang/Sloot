@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e7bfb17-dc7b-4935-8050-19b5ace4c4bc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/prisma/migrations/20240303135535_nnn/migration.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prisma/migrations/20240303140536_jjj/migration.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prisma/migrations/20240303144700_kkk/migration.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/api/test/battle.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/test/battle.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/api/test/battleImage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/test/battleImage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +114,7 @@
       <workItem from="1709462945801" duration="22000" />
       <workItem from="1709463124946" duration="43000" />
       <workItem from="1709463200528" duration="1630000" />
-      <workItem from="1709465533357" duration="9803000" />
+      <workItem from="1709465533357" duration="11748000" />
     </task>
     <servers />
   </component>

@@ -39,8 +39,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await prisma.$disconnect();
 
-
-        const leftAddress = req.query["friend"] ? battle.friend : battle.attacker;
+        const len = battleDetails.length;
+        const leftAddress = req.query["address"] || battle.attacker;
         const rightAddress = battle.defender;
 
         const battleLog = generateLog(battleDetails, battle);

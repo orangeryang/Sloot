@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
-import {} from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { User, UserResponse } from "@neynar/nodejs-sdk/build/neynar-api/v1";
 import { fetchQuery } from "@airstack/airstack-react";
 
@@ -51,8 +51,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             let leftAddress = "";
             let rightAddress = "";
-            const battleId = req.query["id"] || "";
-            if (battleId) {
+
+            const id = req.query["id"] || "";
+            if (id) {
+
+                // continue
+
+                const prisma = new PrismaClient();
+
+                const battle = await prisma.battle.findUnique({
+                    where: {
+                        id: Number.parseInt(id.toString()),
+                    }
+                })
+                console.log("find battle:", battle);
+
+                if (!battle) {
+                    console.warn("generate image: battle not found:", id);
+                    return res.status(400).send(`Failed to continue: battle not found`);
+                }
+
+                const battleDetails = await prisma.battleDetail.findMany({
+                    where: {
+                        battleId: Number.parseInt(id.toString()),
+                    }
+                })
+                console.log("find battleDetails:", battleDetails);
+
+                await prisma.$disconnect();
+
 
                 const friend = req.query["fr"] || "";
                 if (friend) {
@@ -61,19 +88,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     let friendAddress;
                     try {
                         friendAddress = await getAddressByFid(Number.parseInt(friend.toString()));
+                        leftAddress = friendAddress;
                     } catch (e) {
                         console.warn("Failed to lookup friend address:", friend);
-                    }
-
-                    if (friendAddress) {
-                        leftAddress = friendAddress;
-
                     }
 
                 }
 
                 // continue the battle
-                // todo
+                leftAddress = await getAddressByFid(user?.fid || 0);
 
 
             } else {
@@ -84,7 +107,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 //   - valid input or not
                 //   - random opponent
                 // 2. render the battle page
-
 
                 try {
 
@@ -119,10 +141,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             //
             // }
             const imageUrl =
-                `${process.env['HOST']}/api/${process.env['APIPATH']}/battleImage?id=${battleId}&address=${leftAddress}`;
+                `${process.env['HOST']}/api/${process.env['APIPATH']}/battleImage?id=${id}&&address=${leftAddress}`;
 
             const contentUrl =
-                `${process.env['HOST']}/api/${process.env['APIPATH']}/battle?id=${battleId}&address1=${leftAddress}&address2=${rightAddress}`;
+                `${process.env['HOST']}/api/${process.env['APIPATH']}/battle?id=${id}&address1=${leftAddress}&address2=${rightAddress}`;
 
             res.setHeader('Content-Type', 'text/html');
             res.status(200).send(`
