@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `Battle` ADD COLUMN `friend` VARCHAR(191) NOT NULL DEFAULT '';
+
+-- AlterTable
+ALTER TABLE `BattleDetail` ADD COLUMN `friend` INTEGER NOT NULL DEFAULT 0;

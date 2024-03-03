@@ -27,21 +27,25 @@ datasource db {
 // }
 
 model Battle {
-  id       Int      @id @default(autoincrement())
-  attacker String
-  defender String
-  winner   Int      @default(-1)
-  createAt DateTime @default(now()) @map("created_at")
-  updateAt DateTime @default(now()) @updatedAt() @map("updated_at")
+  id           Int      @id @default(autoincrement())
+  attacker     String
+  attackerName String   @map("attacker_name")
+  defender     String
+  defenderName String   @map("defender_name")
+  friend       String   @default("")
+  friendName   String   @default("") @map("friend_name")
+  winner       Int      @default(-1)
+  createAt     DateTime @default(now()) @map("created_at")
+  updateAt     DateTime @default(now()) @updatedAt() @map("updated_at")
 }
 
 model BattleDetail {
   id       Int      @id @default(autoincrement())
   battleId Int      @map("battle_id")
   order    Int
-  random   Int
+  random   String
+  damage   Int
+  friend   Int      @default(0)
   createAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @default(now()) @updatedAt() @map("updated_at")
 }
-
-

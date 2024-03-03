@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 opponentByInput = result.action?.input?.text || "";
             }
         } catch (e) {
-            return res.status(400).send(`Failed to validate message: ${ e }`);
+            return res.status(400).send(`Failed to validate message: ${e}`);
         }
         console.log("request info:", user);
         console.log("request opponent:", opponentByInput);
@@ -119,10 +119,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             //
             // }
             const imageUrl =
-                `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ battleId }&address1=${ leftAddress }&address2=${ rightAddress }`;
+                `${process.env['HOST']}/api/${process.env['APIPATH']}/battleImage?id=${battleId}&address=${leftAddress}`;
 
             const contentUrl =
-                `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ battleId }&address1=${ leftAddress }&address2=${ rightAddress }`;
+                `${process.env['HOST']}/api/${process.env['APIPATH']}/battle?id=${battleId}&address1=${leftAddress}&address2=${rightAddress}`;
 
             res.setHeader('Content-Type', 'text/html');
             res.status(200).send(`
@@ -131,10 +131,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 <head>
                   <title> My SLoot </title>
                   <meta property="og:title" content="Synthetic Loot">
-                  <meta property="og:image" content="${ process.env['HOST'] }/1.png">
+                  <meta property="og:image" content="${process.env['HOST']}/1.png">
                   <meta name="fc:frame" content="vNext">
-                  <meta name="fc:frame:image" content="${ imageUrl }">
-                  <meta name="fc:frame:post_url" content="${ contentUrl }">
+                  <meta name="fc:frame:image" content="${imageUrl}">
+                  <meta name="fc:frame:post_url" content="${contentUrl}">
                   <meta name="fc:frame:button:1" content="Attack">
                   <meta name="fc:frame:button:2" content="Friends">
                   <meta name="fc:frame:button:3" content="Query Loot">
@@ -163,7 +163,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Method ${ req.method } Not Allowed`);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 }
 
