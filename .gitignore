@@ -137,3 +137,5 @@ package-lock.json
 
 queriedAddresses.txt
 requestFids.txt
+
+.vscode

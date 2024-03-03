@@ -11,15 +11,15 @@ const nClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    
+
     // no cache in the first version here
     // I think it has to be done in the next version
-    
+
     if (req.method === 'POST') {
-        
-        
+
+
         // validate the request and get the user's information
-        
+
         let user;
         let buttonId;
         let opponentByInput = "";
@@ -37,26 +37,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         console.log("request info:", user);
         console.log("request opponent:", opponentByInput);
-        
-        
+
+
         // jump to the page
         if (buttonId === 3) {
-            
+
             console.log("Redirecting to gink");
             return res.status(302).setHeader('Location', 'https://warpcast.com/gink/0x67c737a3').send('Redirecting to query');
-            
+
         }
         // battle action here
         else if (buttonId === 1) {
-            
+
             let leftAddress = "";
             let rightAddress = "";
             const battleId = req.query["id"] || "";
             if (battleId) {
-                
+
                 const friend = req.query["fr"] || "";
                 if (friend) {
-                    
+
                     // looking for friends' help
                     let friendAddress;
                     try {
@@ -64,30 +64,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     } catch (e) {
                         console.warn("Failed to lookup friend address:", friend);
                     }
-                    
+
                     if (friendAddress) {
                         leftAddress = friendAddress;
-                        
+
                     }
-                    
+
                 }
-                
+
                 // continue the battle
                 // todo
-                
-                
+
+
             } else {
-                
+
                 // find the opponent to start the battle
-                
+
                 // 1. find the opponent
                 //   - valid input or not
                 //   - random opponent
                 // 2. render the battle page
-                
-                
+
+
                 try {
-                    
+
                     let opponentFid = 0;
                     if (opponentByInput) {
                         const opponentResponse: UserResponse = await nClient.lookupUserByUsername(opponentByInput);
@@ -99,31 +99,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
                     leftAddress = await getAddressByFid(user?.fid || 0);
                     rightAddress = await getAddressByFid(opponentFid);
-                    
+
                 } catch (e) {
                     console.warn("Failed to lookup opponent:", opponentByInput);
                     console.warn("Error:", e);
                 }
-                
+
                 if (!rightAddress) {
                     console.warn("Failed to lookup opponent address:", rightAddress);
                     return res.status(400).send("Failed to find opponent");
                 }
-                
-                
+
+
             }
-            
-            if (end) {
-            
-            } else {
-            
-            }
+
+            // if (end) {
+            //
+            // } else {
+            //
+            // }
             const imageUrl =
                 `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ battleId }&address1=${ leftAddress }&address2=${ rightAddress }`;
-            
+
             const contentUrl =
                 `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ battleId }&address1=${ leftAddress }&address2=${ rightAddress }`;
-            
+
             res.setHeader('Content-Type', 'text/html');
             res.status(200).send(`
               <!DOCTYPE html>
@@ -143,23 +143,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 </head>
               </html>
             `);
-            
-            
+
+
         }
         // friends here
         else if (buttonId === 2) {
-            
+
             // todo show the friends
-            
+
         }
         // escape
         else if (buttonId === 4) {
-            
+
             // todo escape from battle
-            
+
         }
-        
-        
+
+
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['POST']);
@@ -204,7 +204,7 @@ async function getAddressByFid(opponentFid: number) {
         "    }\n" +
         "  }\n" +
         "}");
-    
+
     // console.log("fetch data:", data, error);
     if (!data) {
         return "";
@@ -220,7 +220,7 @@ async function getAddressByFid(opponentFid: number) {
     if (address.length === 0) {
         address[0] = Social[0].userAddress;
     }
-    
+
     console.log("address:", address);
     return address[0];
 }
