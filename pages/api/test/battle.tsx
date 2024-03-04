@@ -3,12 +3,66 @@ import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
 import { PrismaClient } from "@prisma/client";
 import { User, UserResponse } from "@neynar/nodejs-sdk/build/neynar-api/v1";
 import { fetchQuery } from "@airstack/airstack-react";
+import { Contract, JsonRpcProvider } from "ethers";
+import { getImageForLoot, itemsFromSvg } from "@/utils";
+import { getCounterRelation, getCriticalThreshold, getItemsByAddress, getPowerBoost, getTier } from "@/lootUtils";
 
 // @ts-ignore
 init(process.env.QUERY_KEY);
 // @ts-ignore
 const nClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 
+
+async function attackOnce(leftAddress: string, rightAddress: string) {
+    const left = await getItemsByAddress(leftAddress)
+    const right = await getItemsByAddress(rightAddress)
+
+    const weapon = left[0];
+    const attackPower = 20 * (6 - getTier(weapon));
+    console.log("weapon:", weapon, " attackPower:", attackPower);
+
+    let random = "";
+    let criticalFlag = 0;
+    let totalDamage = 0;
+
+    // ring buff
+    let criticalThreshold = getCriticalThreshold(left[7]);
+    let powerBoost = getPowerBoost(left[7]);
+
+    for (let i = 1; i < 6; i++) {
+
+        const armor = right[i];
+        const defensePower = 20 * (6 - getTier(armor));
+        console.log("armor:", armor, " defensePower:", defensePower);
+
+        const critical = Math.random();
+        const damage =
+            // basic attack power
+            (attackPower + powerBoost)
+            // counter relation
+            * getCounterRelation(weapon, armor)
+            // critical
+            * (critical > criticalThreshold ? 2 : 1)
+            // defense power
+            - defensePower;
+        console.log("critical:", critical, " damage:", damage);
+
+        if (damage > 0) {
+            totalDamage += damage;
+        }
+        if (critical > criticalThreshold) {
+            criticalFlag = 1;
+        }
+        random += critical + ",";
+
+    }
+
+    return {
+        totalDamage,
+        criticalFlag,
+        random
+    };
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -23,6 +77,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let user;
         let buttonId;
         let opponentByInput = "";
+
+
         // console.log("req detail:", req.body);
         try {
             const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
@@ -50,16 +106,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         else if (buttonId === 1) {
 
             let leftAddress = "";
+            let leftName = "";
             let rightAddress = "";
+            let rightName = "";
+            let friendFlag = 0;
+            let endBattle = 0;
+
+            const prisma = new PrismaClient();
+            let battle;
+            let battleDetails;
 
             const id = req.query["id"] || "";
             if (id) {
 
                 // continue
 
-                const prisma = new PrismaClient();
-
-                const battle = await prisma.battle.findUnique({
+                battle = await prisma.battle.findUnique({
                     where: {
                         id: Number.parseInt(id.toString()),
                     }
@@ -71,17 +133,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     return res.status(400).send(`Failed to continue: battle not found`);
                 }
 
-                const battleDetails = await prisma.battleDetail.findMany({
+                battleDetails = await prisma.battleDetail.findMany({
                     where: {
                         battleId: Number.parseInt(id.toString()),
                     }
                 })
                 console.log("find battleDetails:", battleDetails);
 
-                await prisma.$disconnect();
 
-
-                const friend = req.query["fr"] || "";
+                const friend = req.query["frid"] || "";
+                const friendName = req.query["frna"] || "";
                 if (friend) {
 
                     // looking for friends' help
@@ -89,24 +150,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     try {
                         friendAddress = await getAddressByFid(Number.parseInt(friend.toString()));
                         leftAddress = friendAddress;
+                        leftName = friendName.toString();
+                        friendFlag = 1;
                     } catch (e) {
                         console.warn("Failed to lookup friend address:", friend);
                     }
 
                 }
 
-                // continue the battle
-                leftAddress = await getAddressByFid(user?.fid || 0);
-
-
             } else {
 
                 // find the opponent to start the battle
-
-                // 1. find the opponent
-                //   - valid input or not
-                //   - random opponent
-                // 2. render the battle page
 
                 try {
 
@@ -114,12 +168,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     if (opponentByInput) {
                         const opponentResponse: UserResponse = await nClient.lookupUserByUsername(opponentByInput);
                         opponentFid = opponentResponse.result.user.fid;
+                        rightName = opponentResponse.result.user.displayName;
                     } else {
                         // @ts-ignore
                         opponentFid = user.fid;
                         // todo find the guy he/she didn't beat
                     }
                     leftAddress = await getAddressByFid(user?.fid || 0);
+                    leftName = user?.display_name || "";
                     rightAddress = await getAddressByFid(opponentFid);
 
                 } catch (e) {
@@ -132,21 +188,132 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     return res.status(400).send("Failed to find opponent");
                 }
 
+            }
+
+            // battle detail
+            const attackResult = await attackOnce(leftAddress, rightAddress);
+            const defenceResult = await attackOnce(rightAddress, leftAddress);
+
+            let winner = -1;
+
+            if (!battle) {
+
+                battle = await prisma.battle.create({
+                    data: {
+                        attacker: leftAddress,
+                        attackerName: leftName,
+                        defender: rightAddress,
+                        defenderName: rightName,
+                    }
+                });
+                console.log("create battle:", battle);
+
+                battleDetails = await prisma.battleDetail.createMany({
+                    data: [
+                        {
+                            battleId: battle.id,
+                            order: 0,
+                            random: attackResult.random,
+                            critical: attackResult.criticalFlag,
+                            damage: attackResult.totalDamage,
+                        },
+                        {
+                            battleId: battle.id,
+                            order: 1,
+                            random: defenceResult.random,
+                            critical: defenceResult.criticalFlag,
+                            damage: defenceResult.totalDamage,
+                        }
+                    ],
+                });
+                console.log("create battleDetails:", battleDetails);
+
+            } else {
+
+
+                // @ts-ignore
+                const leftLost = battleDetails
+                        .filter((a) => (a.order % 2 === 0))
+                        .map((a) => a.damage)
+                        .reduce((a, b) => a + b, 0)
+                    + attackResult.totalDamage;
+                // @ts-ignore
+                const rightLost = battleDetails
+                        .filter((a) => !(a.order % 2 === 0))
+                        .map((a) => a.damage)
+                        .reduce((a, b) => a + b, 0)
+                    + defenceResult.totalDamage;
+
+                if (leftLost >= 1000) {
+                    winner = 0;
+                } else if (rightLost >= 1000) {
+                    winner = 1;
+                }
+
+                // @ts-ignore
+                const order = Math.max(battleDetails.map((a) => a.order));
+                battleDetails = await prisma.battleDetail.createMany({
+                    data: [
+                        {
+                            battleId: battle.id,
+                            order: order + 1,
+                            random: attackResult.random,
+                            critical: attackResult.criticalFlag,
+                            damage: attackResult.totalDamage,
+                            friend: friendFlag === 1 ? leftAddress : "",
+                            friendName: friendFlag === 1 ? leftName : ""
+                        },
+                        {
+                            battleId: battle.id,
+                            order: order + 2,
+                            random: defenceResult.random,
+                            critical: defenceResult.criticalFlag,
+                            damage: defenceResult.totalDamage,
+                            friend: friendFlag === 1 ? leftAddress : "",
+                            friendName: friendFlag === 1 ? leftName : ""
+                        }
+                    ],
+                });
+                console.log("create battleDetails:", battleDetails);
+
+                if (winner !== -1) {
+                    await prisma.battle.update({
+                        where: {
+                            id: battle.id
+                        },
+                        data: {
+                            winner: winner
+                        }
+                    });
+                    console.log("update battle:", battle);
+                    endBattle = 1;
+                }
 
             }
 
-            // if (end) {
-            //
-            // } else {
-            //
-            // }
             const imageUrl =
-                `${process.env['HOST']}/api/${process.env['APIPATH']}/battleImage?id=${id}&&address=${leftAddress}`;
+                `${process.env['HOST']}/api/${process.env['APIPATH']}/battleImage?id=${id}`;
 
             const contentUrl =
                 `${process.env['HOST']}/api/${process.env['APIPATH']}/battle?id=${id}&address1=${leftAddress}&address2=${rightAddress}`;
 
             res.setHeader('Content-Type', 'text/html');
+            if (endBattle === 1) {
+                res.status(200).send(`
+                 <!DOCTYPE html>
+                 <html>
+                   <head>
+                     <title> My SLoot </title>
+                     <meta property="og:title" content="Synthetic Loot">
+                     <meta property="og:image" content="${process.env['HOST']}/1.png">
+                     <meta name="fc:frame" content="vNext">
+                     <meta name="fc:frame:image" 
+                     content="${process.env['HOST']}/api/${process.env['APIPATH']}/board?win=${winner}&user=${user?.display_name}">
+                   </head>
+                 </html>
+               `);
+
+            }
             res.status(200).send(`
               <!DOCTYPE html>
               <html>
@@ -231,18 +398,22 @@ async function getAddressByFid(opponentFid: number) {
     if (!data) {
         return "";
     }
-    const Social = data.Socials.Social;
+    const social = data.Socials.Social;
     // console.log("Social:", Social);
     let addArrToRemove: string[] = [];
-    for (let i = 0; i < Social.length; i++) {
+    for (let i = 0; i < social.length; i++) {
         // console.log(Social[i].userAddress);
-        addArrToRemove.push(Social[i].userAddress);
+        addArrToRemove.push(social[i].userAddress);
     }
-    const address = Social[0].userAssociatedAddresses.filter((add: string) => !addArrToRemove.includes(add));
+    const address = social[0].userAssociatedAddresses.filter((add: string) => !addArrToRemove.includes(add));
     if (address.length === 0) {
-        address[0] = Social[0].userAddress;
+        address[0] = social[0].userAddress;
     }
+
 
     console.log("address:", address);
     return address[0];
 }
+
+
+
