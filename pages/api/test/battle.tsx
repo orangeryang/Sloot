@@ -78,7 +78,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let buttonId;
         let opponentByInput = "";
 
-
         // console.log("req detail:", req.body);
         try {
             const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
@@ -230,7 +229,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             } else {
 
-
                 // @ts-ignore
                 const leftLost = battleDetails
                         .filter((a) => (a.order % 2 === 0))
@@ -300,39 +298,38 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.setHeader('Content-Type', 'text/html');
             if (endBattle === 1) {
                 res.status(200).send(`
-                 <!DOCTYPE html>
-                 <html>
-                   <head>
-                     <title> My SLoot </title>
-                     <meta property="og:title" content="Synthetic Loot">
-                     <meta property="og:image" content="${process.env['HOST']}/1.png">
-                     <meta name="fc:frame" content="vNext">
-                     <meta name="fc:frame:image" 
-                     content="${process.env['HOST']}/api/${process.env['APIPATH']}/board?win=${winner}&user=${user?.display_name}">
-                   </head>
-                 </html>
-               `);
-
+                  <!DOCTYPE html>
+                  <html>
+                    <head>
+                      <title> My SLoot </title>
+                      <meta property="og:title" content="Synthetic Loot">
+                      <meta property="og:image" content="${process.env['HOST']}/1.png">
+                      <meta name="fc:frame" content="vNext">
+                      <meta name="fc:frame:image" 
+                      content="${process.env['HOST']}/api/${process.env['APIPATH']}/board?win=${winner}&user=${user?.display_name}">
+                    </head>
+                  </html>
+                `);
+            } else {
+                res.status(200).send(`
+                  <!DOCTYPE html>
+                  <html>
+                    <head>
+                      <title> My SLoot </title>
+                      <meta property="og:title" content="Synthetic Loot">
+                      <meta property="og:image" content="${process.env['HOST']}/1.png">
+                      <meta name="fc:frame" content="vNext">
+                      <meta name="fc:frame:image" content="${imageUrl}">
+                      <meta name="fc:frame:post_url" content="${contentUrl}">
+                      <meta name="fc:frame:button:1" content="Attack">
+                      <meta name="fc:frame:button:2" content="Friends">
+                      <meta name="fc:frame:button:3" content="Query Loot">
+                      <meta name="fc:frame:button:3:action" content="post_redirect">
+                      <meta name="fc:frame:button:4" content="Escape">
+                    </head>
+                  </html>
+                `);
             }
-            res.status(200).send(`
-              <!DOCTYPE html>
-              <html>
-                <head>
-                  <title> My SLoot </title>
-                  <meta property="og:title" content="Synthetic Loot">
-                  <meta property="og:image" content="${process.env['HOST']}/1.png">
-                  <meta name="fc:frame" content="vNext">
-                  <meta name="fc:frame:image" content="${imageUrl}">
-                  <meta name="fc:frame:post_url" content="${contentUrl}">
-                  <meta name="fc:frame:button:1" content="Attack">
-                  <meta name="fc:frame:button:2" content="Friends">
-                  <meta name="fc:frame:button:3" content="Query Loot">
-                  <meta name="fc:frame:button:3:action" content="post_redirect">
-                  <meta name="fc:frame:button:4" content="Escape">
-                </head>
-              </html>
-            `);
-
 
         }
         // friends here
