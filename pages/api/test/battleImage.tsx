@@ -51,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const logImage = await satori(
             <div style={ {display: "flex", justifyContent: "center", alignItems: "center"} }>
                 <div style={ {
-                    display: "absolute",
+                    display: "flex",
                     fontFamily: "serif",
                     fontSize: "13px",
                     width: "600px",
