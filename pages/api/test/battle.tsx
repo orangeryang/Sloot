@@ -12,56 +12,7 @@ init(process.env.QUERY_KEY);
 const nClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 
 
-async function attackOnce(leftAddress: string, rightAddress: string) {
-    const left = await getItemsByAddress(leftAddress)
-    const right = await getItemsByAddress(rightAddress)
-    
-    const weapon = left[0];
-    const attackPower = 20 * (6 - getTier(weapon));
-    console.log("weapon:", weapon, " attackPower:", attackPower);
-    
-    let random = "";
-    let criticalFlag = 0;
-    let totalDamage = 0;
-    
-    // ring buff
-    let criticalThreshold = getCriticalThreshold(left[7]);
-    let powerBoost = getPowerBoost(left[7]);
-    
-    for (let i = 1; i < 6; i++) {
-        
-        const armor = right[i];
-        const defensePower = 20 * (6 - getTier(armor));
-        console.log("armor:", armor, " defensePower:", defensePower);
-        
-        const critical = Math.random();
-        const damage =
-            // basic attack power
-            (attackPower + powerBoost)
-            // counter relation
-            * getCounterRelation(weapon, armor)
-            // critical
-            * (critical > criticalThreshold ? 2 : 1)
-            // defense power
-            - defensePower;
-        console.log("critical:", critical, " damage:", damage);
-        
-        if (damage > 0) {
-            totalDamage += damage;
-        }
-        if (critical > criticalThreshold) {
-            criticalFlag = 1;
-        }
-        random += critical + ",";
-        
-    }
-    
-    return {
-        totalDamage,
-        criticalFlag,
-        random
-    };
-}
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
@@ -94,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log("request info:", user);
         console.log("request opponent:", opponentByInput);
         
-        const id = req.query["id"] || "";
+        let id = req.query["id"] || "";
         
         // jump to the page
         if (buttonId === 3) {
@@ -231,6 +182,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     ],
                 });
                 console.log("create battleDetails:", battleDetails);
+                
+                id = battle.id.toString();
                 
             } else {
                 
@@ -419,6 +372,57 @@ async function getAddressByFid(opponentFid: number) {
     
     console.log("address:", address);
     return address[0];
+}
+
+async function attackOnce(leftAddress: string, rightAddress: string) {
+    const left = await getItemsByAddress(leftAddress)
+    const right = await getItemsByAddress(rightAddress)
+    
+    const weapon = left[0];
+    const attackPower = 20 * (6 - getTier(weapon));
+    console.log("weapon:", weapon, " attackPower:", attackPower);
+    
+    let random = "";
+    let criticalFlag = 0;
+    let totalDamage = 0;
+    
+    // ring buff
+    let criticalThreshold = getCriticalThreshold(left[7]);
+    let powerBoost = getPowerBoost(left[7]);
+    
+    for (let i = 1; i < 6; i++) {
+        
+        const armor = right[i];
+        const defensePower = 20 * (6 - getTier(armor));
+        console.log("armor:", armor, " defensePower:", defensePower);
+        
+        const critical = Math.random();
+        const damage =
+            // basic attack power
+            (attackPower + powerBoost)
+            // counter relation
+            * getCounterRelation(weapon, armor)
+            // critical
+            * (critical > criticalThreshold ? 2 : 1)
+            // defense power
+            - defensePower;
+        console.log("critical:", critical, " damage:", damage);
+        
+        if (damage > 0) {
+            totalDamage += damage;
+        }
+        if (critical > criticalThreshold) {
+            criticalFlag = 1;
+        }
+        random += critical + ",";
+        
+    }
+    
+    return {
+        totalDamage,
+        criticalFlag,
+        random
+    };
 }
 
 
