@@ -133,7 +133,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         rightName = userResponsePromise.result.user.username;
                     }
                     leftAddress = await getAddressByFid(user?.fid || 0);
-                    leftName = user?.display_name || "";
+                    leftName = user?.username || "";
                     rightAddress = await getAddressByFid(opponentFid);
                     
                     console.log("rightName:", rightName);
@@ -276,7 +276,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                       <meta property="og:image" content="${ process.env['HOST'] }/1.png">
                       <meta name="fc:frame" content="vNext">
                       <meta name="fc:frame:image"
-                      content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/board?winner=${ winner }&user=${ user?.display_name }">
+                      content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/board?winner=${ winner }&user=${ user?.username }">
                     </head>
                   </html>
                 `);
