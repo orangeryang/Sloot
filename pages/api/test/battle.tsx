@@ -93,6 +93,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log("request info:", user);
         console.log("request opponent:", opponentByInput);
 
+        const id = req.query["id"] || "";
 
         // jump to the page
         if (buttonId === 3) {
@@ -115,7 +116,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             let battle;
             let battleDetails;
 
-            const id = req.query["id"] || "";
             if (id) {
 
                 // continue
@@ -335,7 +335,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // friends here
         else if (buttonId === 2) {
 
-            // todo show the friends
+            // todo friends
+
 
         }
         // escape
