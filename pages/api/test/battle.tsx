@@ -124,6 +124,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     } else {
                         // @ts-ignore
                         opponentFid = getRandomFid(user.fid);
+                        const userResponsePromise = await nClient.lookupUserByFid(opponentFid);
+                        rightName = userResponsePromise.result.user.displayName;
                     }
                     leftAddress = await getAddressByFid(user?.fid || 0);
                     leftName = user?.display_name || "";
