@@ -296,9 +296,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             const imageUrl =
                 `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
+            console.log("imageUrl:", imageUrl);
             
             const contentUrl =
                 `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }&address1=${ leftAddress }&address2=${ rightAddress }`;
+            console.log("contentUrl:", contentUrl);
             
             res.setHeader('Content-Type', 'text/html');
             if (endBattle === 1) {
