@@ -135,6 +135,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     leftName = user?.display_name || "";
                     rightAddress = await getAddressByFid(opponentFid);
                     
+                    console.log("rightName:", rightName);
+                    console.log("rightAddress:", rightAddress);
+                    
                 } catch (e) {
                     console.warn("Failed to lookup opponent:", opponentByInput);
                     console.warn("Error:", e);
@@ -258,7 +261,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log("imageUrl:", imageUrl);
             
             const contentUrl =
-                `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }&address1=${ leftAddress }&address2=${ rightAddress }`;
+                `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }`;
             console.log("contentUrl:", contentUrl);
             
             res.setHeader('Content-Type', 'text/html');
