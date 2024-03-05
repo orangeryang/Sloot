@@ -155,7 +155,7 @@ function renderLog(logs: string[]) {
         return logs;
     }
     
-    let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 300 400\"> <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 14px;    }    </style><rect width=\"100%\" height=\"100%\" fill=\"black\" />";
+    let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 300 400\"> <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 12px;    }    </style><rect width=\"100%\" height=\"100%\" fill=\"black\" />";
     
     for (let i = 0; i < logs.length; i++) {
         result += "<text x=\"10\" y=\"" + (i * 20 + 20).toString(10) + "\" class=\"base\"> " + logs[i] + "</text>";
