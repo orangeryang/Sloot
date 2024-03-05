@@ -2,9 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
 import { PrismaClient } from "@prisma/client";
 import { User, UserResponse } from "@neynar/nodejs-sdk/build/neynar-api/v1";
-import { fetchQuery } from "@airstack/airstack-react";
-import { Contract, JsonRpcProvider } from "ethers";
-import { getImageForLoot, itemsFromSvg } from "@/utils";
+import { fetchQuery, init } from "@airstack/airstack-react";
 import { getCounterRelation, getCriticalThreshold, getItemsByAddress, getPowerBoost, getTier } from "@/lootUtils";
 
 // @ts-ignore
