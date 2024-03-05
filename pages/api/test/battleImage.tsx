@@ -70,7 +70,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
         
         const leftImage = await getImageByAddress(leftAddress.toString());
+        console.log("leftImage:", leftImage);
         const rightImage = await getImageByAddress(rightAddress);
+        console.log("rightImage:", rightImage);
         
         const leftCharacter = await sharp(Buffer.from(leftImage.split(",")[1], 'base64'))
             .resize(1000, 1000)
