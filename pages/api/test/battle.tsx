@@ -272,7 +272,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                       <meta property="og:image" content="${ process.env['HOST'] }/1.png">
                       <meta name="fc:frame" content="vNext">
                       <meta name="fc:frame:image"
-                      content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/board?win=${ winner }&user=${ user?.display_name }">
+                      content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/board?winner=${ winner }&user=${ user?.display_name }">
                     </head>
                   </html>
                 `);
