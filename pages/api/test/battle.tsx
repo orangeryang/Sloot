@@ -89,6 +89,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 })
                 console.log("find battleDetails:", battleDetails);
                 
+                leftName = battle.attackerName;
+                leftAddress = battle.attacker;
+                rightName = battle.defenderName;
+                rightAddress = battle.defender;
                 
                 const friend = req.query["frid"] || "";
                 const friendName = req.query["frna"] || "";
@@ -246,6 +250,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
                 
             }
+            
+            await prisma.$disconnect();
             
             const imageUrl =
                 `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
