@@ -3,7 +3,10 @@ import { getImageByAddress } from "@/lootUtils";
 import { Battle, BattleDetail, PrismaClient } from "@prisma/client";
 import sharp from "sharp";
 import satori from "satori";
+import { join } from "path";
+import fs from "fs";
 
+let fontData = fs.readFileSync("/PTSerif-Regular.ttf");
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
@@ -54,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     )) }
                 </div>
             </div>,
-            {width: 1910, height: 1000, fonts: [{data: Buffer.from(""), name: "serif"}]},
+            {width: 1910, height: 1000, fonts: [{data: fontData, name: "serif"}]},
         );
         
         const leftImage = await getImageByAddress(leftAddress.toString());
