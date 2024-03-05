@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { User, UserResponse } from "@neynar/nodejs-sdk/build/neynar-api/v1";
 import { fetchQuery, init } from "@airstack/airstack-react";
 import { getCounterRelation, getCriticalThreshold, getItemsByAddress, getPowerBoost, getTier } from "@/lootUtils";
+import { startPage } from "@/pages/api/test/start";
 
 // @ts-ignore
 init(process.env.QUERY_KEY);
@@ -14,25 +15,25 @@ const nClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 async function attackOnce(leftAddress: string, rightAddress: string) {
     const left = await getItemsByAddress(leftAddress)
     const right = await getItemsByAddress(rightAddress)
-
+    
     const weapon = left[0];
     const attackPower = 20 * (6 - getTier(weapon));
     console.log("weapon:", weapon, " attackPower:", attackPower);
-
+    
     let random = "";
     let criticalFlag = 0;
     let totalDamage = 0;
-
+    
     // ring buff
     let criticalThreshold = getCriticalThreshold(left[7]);
     let powerBoost = getPowerBoost(left[7]);
-
+    
     for (let i = 1; i < 6; i++) {
-
+        
         const armor = right[i];
         const defensePower = 20 * (6 - getTier(armor));
         console.log("armor:", armor, " defensePower:", defensePower);
-
+        
         const critical = Math.random();
         const damage =
             // basic attack power
@@ -44,7 +45,7 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
             // defense power
             - defensePower;
         console.log("critical:", critical, " damage:", damage);
-
+        
         if (damage > 0) {
             totalDamage += damage;
         }
@@ -52,9 +53,9 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
             criticalFlag = 1;
         }
         random += critical + ",";
-
+        
     }
-
+    
     return {
         totalDamage,
         criticalFlag,
@@ -63,19 +64,19 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-
+    
     // no cache in the first version here
     // I think it has to be done in the next version
-
+    
     if (req.method === 'POST') {
-
-
+        
+        
         // validate the request and get the user's information
-
+        
         let user;
         let buttonId;
         let opponentByInput = "";
-
+        
         // console.log("req detail:", req.body);
         try {
             const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
@@ -86,62 +87,62 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 opponentByInput = result.action?.input?.text || "";
             }
         } catch (e) {
-            return res.status(400).send(`Failed to validate message: ${e}`);
+            return res.status(400).send(`Failed to validate message: ${ e }`);
         }
         console.log("request info:", user);
         console.log("request opponent:", opponentByInput);
-
+        
         const id = req.query["id"] || "";
-
+        
         // jump to the page
         if (buttonId === 3) {
-
+            
             console.log("Redirecting to gink");
             return res.status(302).setHeader('Location', 'https://warpcast.com/gink/0x67c737a3').send('Redirecting to query');
-
+            
         }
         // battle action here
         else if (buttonId === 1) {
-
+            
             let leftAddress = "";
             let leftName = "";
             let rightAddress = "";
             let rightName = "";
             let friendFlag = 0;
             let endBattle = 0;
-
+            
             const prisma = new PrismaClient();
             let battle;
             let battleDetails;
-
+            
             if (id) {
-
+                
                 // continue
-
+                
                 battle = await prisma.battle.findUnique({
                     where: {
                         id: Number.parseInt(id.toString()),
                     }
                 })
                 console.log("find battle:", battle);
-
+                
                 if (!battle) {
                     console.warn("generate image: battle not found:", id);
                     return res.status(400).send(`Failed to continue: battle not found`);
                 }
-
+                
                 battleDetails = await prisma.battleDetail.findMany({
                     where: {
                         battleId: Number.parseInt(id.toString()),
                     }
                 })
                 console.log("find battleDetails:", battleDetails);
-
-
+                
+                
                 const friend = req.query["frid"] || "";
                 const friendName = req.query["frna"] || "";
                 if (friend) {
-
+                    
                     // looking for friends' help
                     let friendAddress;
                     try {
@@ -152,49 +153,51 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     } catch (e) {
                         console.warn("Failed to lookup friend address:", friend);
                     }
-
+                    
                 }
-
+                
             } else {
-
+                
                 // find the opponent to start the battle
-
+                
                 try {
-
+                    
                     let opponentFid = 0;
                     if (opponentByInput) {
-                        const opponentResponse: UserResponse = await nClient.lookupUserByUsername(opponentByInput);
+                        const opponentResponse: UserResponse =
+                            await nClient.lookupUserByUsername(
+                                opponentByInput.startsWith("@") ?
+                                    opponentByInput.slice(1, opponentByInput.length) : opponentByInput);
                         opponentFid = opponentResponse.result.user.fid;
                         rightName = opponentResponse.result.user.displayName;
                     } else {
                         // @ts-ignore
-                        opponentFid = user.fid;
-                        // todo find the guy he/she didn't beat
+                        opponentFid = getRandomFid(user.fid);
                     }
                     leftAddress = await getAddressByFid(user?.fid || 0);
                     leftName = user?.display_name || "";
                     rightAddress = await getAddressByFid(opponentFid);
-
+                    
                 } catch (e) {
                     console.warn("Failed to lookup opponent:", opponentByInput);
                     console.warn("Error:", e);
                 }
-
+                
                 if (!rightAddress) {
                     console.warn("Failed to lookup opponent address:", rightAddress);
                     return res.status(400).send("Failed to find opponent");
                 }
-
+                
             }
-
+            
             // battle detail
             const attackResult = await attackOnce(leftAddress, rightAddress);
             const defenceResult = await attackOnce(rightAddress, leftAddress);
-
+            
             let winner = -1;
-
+            
             if (!battle) {
-
+                
                 battle = await prisma.battle.create({
                     data: {
                         attacker: leftAddress,
@@ -204,7 +207,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
                 });
                 console.log("create battle:", battle);
-
+                
                 battleDetails = await prisma.battleDetail.createMany({
                     data: [
                         {
@@ -224,9 +227,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     ],
                 });
                 console.log("create battleDetails:", battleDetails);
-
+                
             } else {
-
+                
                 // @ts-ignore
                 const leftLost = battleDetails
                         .filter((a) => (a.order % 2 === 0))
@@ -239,13 +242,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         .map((a) => a.damage)
                         .reduce((a, b) => a + b, 0)
                     + defenceResult.totalDamage;
-
+                
                 if (leftLost >= 1000) {
                     winner = 0;
                 } else if (rightLost >= 1000) {
                     winner = 1;
                 }
-
+                
                 // @ts-ignore
                 const order = Math.max(battleDetails.map((a) => a.order));
                 battleDetails = await prisma.battleDetail.createMany({
@@ -271,7 +274,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     ],
                 });
                 console.log("create battleDetails:", battleDetails);
-
+                
                 if (winner !== -1) {
                     await prisma.battle.update({
                         where: {
@@ -284,15 +287,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     console.log("update battle:", battle);
                     endBattle = 1;
                 }
-
+                
             }
-
+            
             const imageUrl =
-                `${process.env['HOST']}/api/${process.env['APIPATH']}/battleImage?id=${id}`;
-
+                `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
+            
             const contentUrl =
-                `${process.env['HOST']}/api/${process.env['APIPATH']}/battle?id=${id}&address1=${leftAddress}&address2=${rightAddress}`;
-
+                `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }&address1=${ leftAddress }&address2=${ rightAddress }`;
+            
             res.setHeader('Content-Type', 'text/html');
             if (endBattle === 1) {
                 res.status(200).send(`
@@ -301,10 +304,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     <head>
                       <title> My SLoot </title>
                       <meta property="og:title" content="Synthetic Loot">
-                      <meta property="og:image" content="${process.env['HOST']}/1.png">
+                      <meta property="og:image" content="${ process.env['HOST'] }/1.png">
                       <meta name="fc:frame" content="vNext">
-                      <meta name="fc:frame:image" 
-                      content="${process.env['HOST']}/api/${process.env['APIPATH']}/board?win=${winner}&user=${user?.display_name}">
+                      <meta name="fc:frame:image"
+                      content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/board?win=${ winner }&user=${ user?.display_name }">
                     </head>
                   </html>
                 `);
@@ -315,10 +318,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     <head>
                       <title> My SLoot </title>
                       <meta property="og:title" content="Synthetic Loot">
-                      <meta property="og:image" content="${process.env['HOST']}/1.png">
+                      <meta property="og:image" content="${ process.env['HOST'] }/1.png">
                       <meta name="fc:frame" content="vNext">
-                      <meta name="fc:frame:image" content="${imageUrl}">
-                      <meta name="fc:frame:post_url" content="${contentUrl}">
+                      <meta name="fc:frame:image" content="${ imageUrl }">
+                      <meta name="fc:frame:post_url" content="${ contentUrl }">
                       <meta name="fc:frame:button:1" content="Attack">
                       <meta name="fc:frame:button:2" content="Friends">
                       <meta name="fc:frame:button:3" content="Query Loot">
@@ -328,28 +331,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                   </html>
                 `);
             }
-
+            
         }
         // friends here
         else if (buttonId === 2) {
-
+            
             // todo friends
-
-
+            
         }
         // escape
         else if (buttonId === 4) {
-
-            // todo escape from battle
-
+            
+            console.log("escape from battle:", user);
+            res.setHeader('Content-Type', 'text/html');
+            res.status(200).send(startPage());
+            
         }
-
-
+        
     } else {
         // Handle any non-POST requests
         res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+        res.status(405).end(`Method ${ req.method } Not Allowed`);
     }
+    
 }
 
 async function getAddressByFid(opponentFid: number) {
@@ -389,7 +393,7 @@ async function getAddressByFid(opponentFid: number) {
         "    }\n" +
         "  }\n" +
         "}");
-
+    
     // console.log("fetch data:", data, error);
     if (!data) {
         return "";
@@ -405,11 +409,17 @@ async function getAddressByFid(opponentFid: number) {
     if (address.length === 0) {
         address[0] = social[0].userAddress;
     }
-
-
+    
+    
     console.log("address:", address);
     return address[0];
 }
 
 
+function getRandomFid(origin: number) {
+    
+    const current = new Date().getTime();
+    return origin - current % origin;
+    
+}
 

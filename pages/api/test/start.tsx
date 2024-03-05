@@ -20,34 +20,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log("FC Bot");
         
         // todo show the CD on the button or input
-        let buttonText = "Battle";
-        let imageUrl = `${ process.env['HOST'] }/1.png`;
-        let inputText = "@Your opponent on farcaster";
         
         res.setHeader('Content-Type', 'text/html');
-        res.status(200).send(`
-            <!DOCTYPE html>
-            <html>
-            
-            <head>
-                <title> My SLoot </title>
-                <meta property="og:title" content="Synthetic Loot">
-                <meta property="og:image" content="${ imageUrl }">
-                <meta name="fc:frame" content="vNext">
-                <meta name="fc:frame:image" content="${ imageUrl }">
-                <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle">
-                <meta name="fc:frame:button:1" content="${ buttonText }">
-                <meta name="fc:frame:input:text" content="${ inputText }">
-            </head>
-
-            <body>
-                <h1> My Synthetic Loot </h1>
-                <div style={imageUrl}>
-                </div>
-            </body>
-            
-            </html>
-        `);
+        res.status(200).send(startPage());
         
     }
+}
+
+export function startPage() {
+    
+    let buttonText = "Battle";
+    let imageUrl = `${ process.env['HOST'] }/1.png`;
+    let inputText = "@Your opponent on farcaster";
+    
+    return `
+    <!DOCTYPE html>
+    <html>
+    
+    <head>
+    <title> My SLoot </title>
+    <meta property="og:title" content="Synthetic Loot">
+        <meta property="og:image" content="${ imageUrl }">
+            <meta name="fc:frame" content="vNext">
+                <meta name="fc:frame:image" content="${ imageUrl }">
+                    <meta name="fc:frame:post_url" content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle">
+                        <meta name="fc:frame:button:1" content="${ buttonText }">
+                            <meta name="fc:frame:input:text" content="${ inputText }">
+                            </head>
+                            
+                            <body>
+                            <h1> My Synthetic Loot </h1>
+                            <div style={imageUrl}>
+                            </div>
+                            </body>
+                        
+                        </html>
+                        `
+    
 }
