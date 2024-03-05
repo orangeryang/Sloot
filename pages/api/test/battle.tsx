@@ -83,6 +83,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log("validate result:", result);
             if (result && result.valid) {
                 user = result.action?.interactor;
+                // @ts-ignore
                 buttonId = result.action?.tapped_button.index;
                 opponentByInput = result.action?.input?.text || "";
             }
