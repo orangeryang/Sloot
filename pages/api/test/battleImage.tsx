@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getImageByAddress } from "@/lootUtils";
+import { getImageByAddress, getLevelColor } from "@/lootUtils";
 import { Battle, BattleDetail, PrismaClient } from "@prisma/client";
 import sharp from "sharp";
 import satori from "satori";
@@ -46,49 +46,48 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const leftAddress = req.query["address"] || battle.attacker;
         const rightAddress = battle.defender;
         
-        const battleLog = generateLog(battleDetails, battle);
+        const {battleLog, leftHealth, rightHealth} = generateLog(battleDetails, battle);
         
-        const logImage = await satori(
-            <div style={ {display: "flex", justifyContent: "center", alignItems: "center"} }>
-                <div style={ {
-                    display: "flex",
-                    fontFamily: "serif",
-                    fontSize: "13px",
-                    width: "600px",
-                    height: "800px",
-                    color: "white",
-                    margin: "auto"
-                } }>
-                    { battleLog.map((item) => (
-                        <div>
-                            { item }
-                        </div>
-                    )) }
-                </div>
-            </div>,
-            {width: 1910, height: 1000, fonts: [{data: fontData, name: "serif"}]},
-        );
+        const logImage = renderLog(battleLog);
+        // console.log("logImage:", logImage);
         
         const leftImage = await getImageByAddress(leftAddress.toString());
-        console.log("leftImage:", leftImage);
         const rightImage = await getImageByAddress(rightAddress);
-        console.log("rightImage:", rightImage);
         
         const leftCharacter = await sharp(Buffer.from(leftImage.split(",")[1], 'base64'))
             .resize(1000, 1000)
             .extract({left: 200, top: 100, width: 600, height: 750})
+            .composite([{
+                input: {text: {text: leftHealth + "/1000", font: "serif", align: "centre", dpi: 300}},
+                left: 200,
+                top: 0
+            }])
             // .resize({height: 1000})
             .toBuffer();
         
         const rightCharacter = await sharp(Buffer.from(rightImage.split(",")[1], 'base64'))
             .resize(1000, 1000)
             .extract({left: 200, top: 100, width: 600, height: 750})
+            .composite([{
+                input: {text: {text: rightHealth + "/1000", font: "serif", align: "centre", dpi: 300}},
+                left: 200,
+                top: 0
+            }])
             // .resize({height: 1000})
             .toBuffer();
         
-        const result = await sharp(logImage)
+        const logDisplay = await sharp(Buffer.from(logImage))
+            .resize(600, 800)
+            .toBuffer();
+        
+        const result = await sharp(Buffer.from(
+            `<svg width="1910" height="1000" viewBox="0 0 1910 1000" xmlns="http://www.w3.org/2000/svg">
+                   <rect width="100%" height="100%" fill="black" />
+                   </svg>`
+        ))
             .composite([
                 {input: leftCharacter, left: 55, top: 100},
+                {input: logDisplay, left: 655, top: 100},
                 {input: rightCharacter, left: 1255, top: 100},
             ])
             .toBuffer();
@@ -107,10 +106,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 function generateLog(battleDetails: BattleDetail[], battle: Battle) {
     
-    let result: string[] = [];
+    let battleLog: string[] = [];
+    let leftHealth = 1000;
+    let rightHealth = 1000;
     
     if (battleDetails.length === 0) {
-        return result;
+        return {battleLog, leftHealth, rightHealth};
     }
     
     battleDetails.sort((a, b) => a.order - b.order);
@@ -127,16 +128,39 @@ function generateLog(battleDetails: BattleDetail[], battle: Battle) {
             (detail.friend ? detail.friendName : battle.attackerName);
         
         // []攻击了[]，造成了[]伤害 / 暴击造成了[]伤害
-        result [i] = attacker +
+        battleLog [i] = attacker +
             " attacked " +
             defender + "," +
             (detail.critical === 1 ? " critical hit " : " hit ") +
             "caused " +
-            detail.damage;
-        console.log("generate log:", battle.id, result);
+            detail.damage +
+            " damage";
+        console.log("generate log:", battle.id, battleLog);
+        
+        if (isAttack) {
+            rightHealth -= detail.damage;
+        } else {
+            leftHealth -= detail.damage;
+        }
         
     }
     
-    return result;
+    return {battleLog, leftHealth, rightHealth};
+    
+}
+
+function renderLog(logs: string[]) {
+    
+    if (!logs) {
+        return logs;
+    }
+    
+    let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 300 400\"> <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 14px;    }    </style><rect width=\"100%\" height=\"100%\" fill=\"black\" />";
+    
+    for (let i = 0; i < logs.length; i++) {
+        result += "<text x=\"10\" y=\"" + (i * 20 + 20).toString(10) + "\" class=\"base\"> " + logs[i] + "</text>";
+    }
+    
+    return result + "</svg>";
     
 }

@@ -82,27 +82,27 @@ export const Tier4 = ["Chain Mail", "Full Helm", "Mesh Belt", "Chain Boots", "Ch
 export const Tier5 = ["Ring Mail", "Helm", "Heavy Belt", "Heavy Boots", "Heavy Gloves", "Leather Armor", "Cap", "Leather Belt", "Leather Boots", "Leather Gloves", "Shirt", "Hood", "Sash", "Shoes", "Gloves", "Short Sword", "Club"];
 
 export function getCriticalThreshold(item: string) {
-
+    
     if (getWords(item) === "Titanium Ring") {
         return 0.85;
     }
     return 0.95;
-
+    
 }
 
 export function getPowerBoost(item: string) {
-
+    
     if (getWords(item) === "Titanium Ring") {
         return 10;
     }
     return 0;
-
+    
 }
 
 function getWeaponType(weapon: string) {
-
+    
     const words = getWords(weapon);
-
+    
     if (Bludgeons.includes(words)) {
         return "Bludgeons";
     }
@@ -113,13 +113,13 @@ function getWeaponType(weapon: string) {
         return "Magic";
     }
     return "Magic";
-
+    
 }
 
 function getArmorType(armor: string) {
-
+    
     const words = getWords(armor);
-
+    
     if (HideArmor.includes(words)) {
         return "Hides";
     }
@@ -127,14 +127,14 @@ function getArmorType(armor: string) {
         return "Metal";
     }
     return "Cloth";
-
+    
 }
 
 export function getCounterRelation(weapon: string, armor: string) {
-
+    
     const weaponType = getWeaponType(weapon);
     const armorType = getArmorType(armor);
-
+    
     if (weaponType === "Bludgeons") {
         if (armorType === "Hides") {
             return 1.5;
@@ -162,13 +162,13 @@ export function getCounterRelation(weapon: string, armor: string) {
     }
     return 1;
     // }
-
+    
 }
 
 export function getTier(item: string) {
-
+    
     const words = getWords(item);
-
+    
     if (Tier1.includes(words)) {
         return 1;
     }
@@ -182,11 +182,11 @@ export function getTier(item: string) {
         return 4;
     }
     return 5;
-
+    
 }
 
 export function getWords(item: string) {
-
+    
     if (item.startsWith("\"")) {
         item = item.split("\"")[2].slice(1);
     }
@@ -196,16 +196,16 @@ export function getWords(item: string) {
     if (item.endsWith("+1")) {
         item = item.slice(0, -2);
     }
-
+    
     // console.log("item:", item);
     return item;
-
+    
 }
 
 export function getLevelColor(item: string) {
-
+    
     const words = getWords(item);
-
+    
     if (Tier1.includes(words)) {
         return "\" class=\"base orange\"> " + item + "</text>";
     }
@@ -218,44 +218,44 @@ export function getLevelColor(item: string) {
     if (Tier4.includes(words)) {
         return "\" class=\"base green\"> " + item + "</text>";
     }
-
+    
     return "\" class=\"base\"> " + item + "</text>";
-
+    
 }
 
 export function renderWithColors(items: string[]) {
-
+    
     if (!items) {
         return items;
     }
-
+    
     let result = "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 350 350\"> <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 14px;    }    .green {        fill: rgb(30, 255, 0);        font-family: serif;        font-size: 14px;    }    .blue {        fill: rgb(0, 112, 221);        font-family: serif;        font-size: 14px;    }    .purple {        fill: rgb(163, 53, 238);        font-family: serif;        font-size: 14px;    }    .orange {        fill: rgb(255, 128, 0);        font-family: serif;        font-size: 14px;    }</style><rect width=\"100%\" height=\"100%\" fill=\"black\" />";
-
+    
     for (let i = 0; i < items.length; i++) {
         result += "<text x=\"10\" y=\"" + (i * 20 + 20).toString(10) + getLevelColor(items[i]);
     }
-
+    
     return result + "</svg>";
-
+    
 }
 
 export async function getImageByAddress(address: string) {
-
-    const items = getItemsByAddress(address);
-    // console.log("items:", items)
-
+    
+    const items = await getItemsByAddress(address);
+    console.log("items:", items)
+    
     // const tokenURIWithColor = renderWithColors(items);
     // console.log("lootWithColor:", tokenURIWithColor);
     // const lootWithColor = "data:image/svg+xml;base64," + Buffer.from(tokenURIWithColor).toString('base64');
-
+    
     return await getImageForLoot(items);
-
+    
 }
 
 export async function getItemsByAddress(address: string) {
-
+    
     // todo optional: store the query results
-
+    
     const tokenURIB64 = await new Contract(
         "0x869Ad3Dfb0F9ACB9094BA85228008981BE6DBddE",
         ["function tokenURI(address) public view returns (string)",],
@@ -267,7 +267,7 @@ export async function getItemsByAddress(address: string) {
     // console.log("b64svg:", b64svg);
     const svg = Buffer.from(b64svg.split(",")[1], 'base64').toString("utf8")
     // console.log("svg:", svg);
-
+    
     return itemsFromSvg(svg)
-
+    
 }
