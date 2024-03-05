@@ -193,7 +193,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             
             // battle detail
+            console.log("left attack right:");
             const attackResult = await attackOnce(leftAddress, rightAddress);
+            console.log("right attack left");
             const defenceResult = await attackOnce(rightAddress, leftAddress);
             
             let winner = -1;
