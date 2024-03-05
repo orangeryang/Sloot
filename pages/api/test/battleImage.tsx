@@ -49,8 +49,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const battleLog = generateLog(battleDetails, battle);
         
         const logImage = await satori(
-            <div style={ {display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"} }>
-                <div style={ {fontFamily: "serif", fontSize: "13px", width: "600px", height: "800px", color: "white"} }>
+            <div style={ {display: "flex", justifyContent: "center", alignItems: "center"} }>
+                <div style={ {
+                    display: "absolute",
+                    fontFamily: "serif",
+                    fontSize: "13px",
+                    width: "600px",
+                    height: "800px",
+                    color: "white",
+                    margin: "auto"
+                } }>
                     { battleLog.map((item) => (
                         <div>
                             { item }
