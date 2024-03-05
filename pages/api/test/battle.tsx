@@ -307,6 +307,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             // todo friends
             
+            let fr1;
+            let fr2;
+            let fr3;
+            
+            const imageUrl= `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
+            const contentUrl = `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/friend?id=${ id }`;
+            
+            res.setHeader('Content-Type', 'text/html');
+            res.status(200).send(`
+                 <title> My SLoot </title>
+                      <meta property="og:title" content="Synthetic Loot">
+                      <meta property="og:image" content="${ process.env['HOST'] }/1.png">
+                      <meta name="fc:frame" content="vNext">
+                      <meta name="fc:frame:image" content="${ imageUrl }">
+                      <meta name="fc:frame:post_url" content="${ contentUrl }">
+                      <meta name="fc:frame:button:1" content="${ fr1 }">
+                      <meta name="fc:frame:button:2" content="${ fr2 }">
+                      <meta name="fc:frame:button:3" content="${ fr3 }">
+                      <meta name="fc:frame:button:4" content="back">
+            `);
+            
         }
         // escape
         else if (buttonId === 4) {

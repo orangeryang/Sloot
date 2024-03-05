@@ -24,11 +24,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.warn("generate image: battle not found:", id);
             return res.status(400).send(`Failed to generate image: battle not found`);
         }
-       
-        // prisma.$queryRaw``;
+        
+        const globalData = await prisma.$queryRaw`select attacker_name,count(attacker) as record from Battle where winner=1 group by attacker_name order by record desc limit 5;`;
+        console.log("globalData:", globalData);
         
         await prisma.$disconnect();
-        
         
         const battleResult = await sharp(Buffer.from(
             "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 600 800\">\n" +
