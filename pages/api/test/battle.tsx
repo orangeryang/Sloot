@@ -87,6 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 opponentByInput = result.action?.input?.text || "";
             }
         } catch (e) {
+            console.warn("Failed to validate:", e);
             return res.status(400).send(`Failed to validate message: ${ e }`);
         }
         console.log("request info:", user);
