@@ -1,14 +1,34 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import sharp from "sharp";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
     if (req.method === 'GET') {
         
         const winner = Number.parseInt(req.query["win"]?.toString() || "-1");
-        const userName = req.query["user"] || "";
+        const id = Number.parseInt(req.query["id"]?.toString() || "0");
         
         const result = winner === 1 ? "win" : "lose";
+        
+        const prisma = new PrismaClient();
+        
+        const battle = await prisma.battle.findUnique({
+            where: {
+                id: Number.parseInt(id.toString()),
+            }
+        })
+        console.log("find battle:", battle);
+        
+        if (!battle) {
+            console.warn("generate image: battle not found:", id);
+            return res.status(400).send(`Failed to generate image: battle not found`);
+        }
+       
+        // prisma.$queryRaw``;
+        
+        await prisma.$disconnect();
+        
         
         const battleResult = await sharp(Buffer.from(
             "<svg xmlns=\"http://www.w3.org/2000/svg\" preserveAspectRatio=\"xMinYMin meet\" viewBox=\"0 0 600 800\">\n" +

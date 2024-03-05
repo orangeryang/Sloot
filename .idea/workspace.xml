@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3e7bfb17-dc7b-4935-8050-19b5ace4c4bc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/pages/api/test/battle.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/test/battle.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/api/test/board.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/test/board.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
