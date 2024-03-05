@@ -58,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .resize(1000, 1000)
             .extract({left: 200, top: 100, width: 600, height: 750})
             .composite([{
-                input: {text: {text: leftHealth + "/1000", font: "serif", align: "centre", dpi: 300}},
+                input: {text: {text: leftHealth + "/1000", font: "serif", align: "centre", dpi: 250}},
                 left: 200,
                 top: 0
             }])
@@ -69,7 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .resize(1000, 1000)
             .extract({left: 200, top: 100, width: 600, height: 750})
             .composite([{
-                input: {text: {text: rightHealth + "/1000", font: "serif", align: "centre", dpi: 300}},
+                input: {text: {text: rightHealth + "/1000", font: "serif", align: "centre", dpi: 250}},
                 left: 200,
                 top: 0
             }])
