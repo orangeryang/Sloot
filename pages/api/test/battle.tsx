@@ -124,13 +124,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 opponentByInput.startsWith("@") ?
                                     opponentByInput.slice(1, opponentByInput.length) : opponentByInput);
                         opponentFid = opponentResponse.result.user.fid;
-                        rightName = opponentResponse.result.user.displayName;
+                        rightName = opponentResponse.result.user.username;
                     } else {
                         // @ts-ignore
                         opponentFid = getRandomFid(user.fid);
                         const userResponsePromise: UserResponse = await nClient.lookupUserByFid(opponentFid);
                         console.log(userResponsePromise);
-                        rightName = userResponsePromise.result.user.displayName;
+                        rightName = userResponsePromise.result.user.username;
                     }
                     leftAddress = await getAddressByFid(user?.fid || 0);
                     leftName = user?.display_name || "";
