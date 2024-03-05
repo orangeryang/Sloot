@@ -115,7 +115,7 @@ function generateLog(battleDetails: BattleDetail[], battle: Battle) {
     }
     
     battleDetails.sort((a, b) => a.order - b.order);
-    for (let i = 0; i < battleDetails.length; i += 2) {
+    for (let i = 0; i < battleDetails.length; i++) {
         
         const detail = battleDetails[i];
         
