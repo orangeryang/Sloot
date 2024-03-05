@@ -12,8 +12,6 @@ init(process.env.QUERY_KEY);
 const nClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 
 
-
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
     // no cache in the first version here

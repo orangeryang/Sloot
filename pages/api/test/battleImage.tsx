@@ -3,10 +3,11 @@ import { getImageByAddress } from "@/lootUtils";
 import { Battle, BattleDetail, PrismaClient } from "@prisma/client";
 import sharp from "sharp";
 import satori from "satori";
-import { join } from "path";
 import fs from "fs";
+import { join } from "path";
 
-let fontData = fs.readFileSync("/PTSerif-Regular.ttf");
+const fontPath = join(process.cwd(), 'PTSerif-Regular.ttf')
+let fontData = fs.readFileSync(fontPath)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     

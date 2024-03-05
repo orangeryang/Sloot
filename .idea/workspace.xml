@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3e7bfb17-dc7b-4935-8050-19b5ace4c4bc" name="Changes" comment="" />
+    <list default="true" id="3e7bfb17-dc7b-4935-8050-19b5ace4c4bc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/pages/api/test/battle.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/test/battle.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/api/test/battleImage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/api/test/battleImage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/PTSerif-Regular.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/PTSerif-Regular.ttf" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -43,24 +47,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;test__v3&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/xolo/WebstormProjects/sloot/pages/api&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;/Users/xolo/.nvm/versions/node/v20.11.0/bin/node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.tabs&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/xolo/WebstormProjects/sloot/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "test__v3",
+    "last_opened_file_path": "/Users/xolo/WebstormProjects/sloot/public",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "/Users/xolo/.nvm/versions/node/v20.11.0/bin/node",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.tabs",
+    "ts.external.directory.path": "/Users/xolo/WebstormProjects/sloot/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -71,6 +75,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public" />
       <recent name="$PROJECT_DIR$/pages/api" />
       <recent name="$PROJECT_DIR$/pages/test" />
     </key>
@@ -101,7 +106,7 @@
       <workItem from="1709183795212" duration="191000" />
       <workItem from="1709184010834" duration="12486000" />
       <workItem from="1709618403002" duration="1913000" />
-      <workItem from="1709620709657" duration="6354000" />
+      <workItem from="1709620709657" duration="6703000" />
     </task>
     <servers />
   </component>
