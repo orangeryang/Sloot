@@ -211,7 +211,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
                 
                 // @ts-ignore
-                const order = Math.max(battleDetails.map((a) => a.order));
+                const order = Math.max(...(battleDetails.map((a) => a.order)));
                 battleDetails = await prisma.battleDetail.createMany({
                     data: [
                         {
