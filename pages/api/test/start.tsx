@@ -50,7 +50,7 @@ export function startPage() {
                             
                             <body>
                             <h1> My Synthetic Loot </h1>
-                            <div style={imageUrl}>
+                            <div style=${ imageUrl }>
                             </div>
                             </body>
                         
