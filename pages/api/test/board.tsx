@@ -32,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 + " !\n";
         }
         
-        const globalData = await prisma.$queryRaw`select attacker_name as attackerName,count(1) as count from Battle where winner=1 group by attacker_name order by record desc limit 5;`;
+        const globalData = await prisma.$queryRaw`select attacker_name as attackerName,count(1) as count from Battle where winner=1 group by attackerName order by count desc limit 5;`;
         console.log("globalData:", globalData);
         
         const following = battle ?
@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     return value.fid;
                 }) : null;
         console.log("following:", following);
-        const friendData = (following && following.length > 0) ? await prisma.$queryRaw`select attacker_name as attackerName, count(1) as count from Battle where winner = 1 and attacker_fid in (${Prisma.join(following)}) group by attacker_name limit 5` : [];
+        const friendData = (following && following.length > 0) ? await prisma.$queryRaw`select attacker_name as attackerName, count(1) as count from Battle where winner = 1 and attacker_fid in (${Prisma.join(following)}) group by attackerName limit 5` : [];
         console.log("friendData:", friendData);
         
         await prisma.$disconnect();
