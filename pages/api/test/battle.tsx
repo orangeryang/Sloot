@@ -277,7 +277,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                   </html>
                 `);
             } else {
-                res.status(200).send(battlePage(id));
+                
+                // stupid action
+                const randomFlag = Math.floor(10000 * Math.random());
+                
+                const imageUrl =
+                    `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }&pupupu=${ randomFlag }`;
+                console.log("imageUrl:", imageUrl);
+                
+                const contentUrl =
+                    `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }`;
+                console.log("contentUrl:", contentUrl);
+                
+                res.status(200).send(battlePage(id, imageUrl, contentUrl));
             }
             
         }
@@ -321,7 +333,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
 }
 
-async function getAddressByFid(opponentFid: number) {
+export async function getAddressByFid(opponentFid: number) {
     // user address
     const {data, error} = await fetchQuery("query MyQuery {\n" +
         "  Socials(\n" +
@@ -477,18 +489,7 @@ export async function findFriend(fid: number) {
 }
 
 
-export function battlePage(id: string | string[]) {
-    
-    // stupid action
-    const randomFlag = Math.floor(10000 * Math.random());
-    
-    const imageUrl =
-        `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }&pupupu=${ randomFlag }`;
-    console.log("imageUrl:", imageUrl);
-    
-    const contentUrl =
-        `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }`;
-    console.log("contentUrl:", contentUrl);
+export function battlePage(id: string | string[], imageUrl: string, contentUrl: string) {
     
     return `
     <!DOCTYPE html>

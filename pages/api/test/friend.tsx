@@ -1,7 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
-import { battlePage, findFriend } from "@/pages/api/test/battle";
+import { battlePage, findFriend, getAddressByFid } from "@/pages/api/test/battle";
+import { fetchQuery, init } from "@airstack/airstack-react";
 
+// @ts-ignore
+init(process.env.QUERY_KEY);
 // @ts-ignore
 const nClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 
@@ -48,8 +51,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const id = req.query["id"] || "";
         console.log("friend request:", id, friendFid, friendName);
         
+        const address = friendFid ? await getAddressByFid(friendFid) : "";
         const imageUrl =
-            `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
+            `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }&address=${ address }`;
         
         let contentUrl =
             `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }&frid=${ friendFid }&frna=${ friendName }`;
@@ -59,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         
         res.setHeader('Content-Type', 'text/html');
-        res.status(200).send(battlePage(id));
+        res.status(200).send(battlePage(id, imageUrl, contentUrl));
         
     } else {
         // Handle any non-POST requests
