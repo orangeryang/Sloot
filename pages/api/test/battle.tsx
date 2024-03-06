@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // console.log("req detail:", req.body);
         try {
             const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
-            console.log("validate result:", result);
+            // console.log("validate result:", result);
             if (result && result.valid) {
                 user = result.action?.interactor;
                 // @ts-ignore
@@ -65,6 +65,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const prisma = new PrismaClient();
             let battle;
             let battleDetails;
+            
+            let opponentFid = 0;
             
             if (id) {
                 
@@ -117,7 +119,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 
                 try {
                     
-                    let opponentFid = 0;
                     if (opponentByInput) {
                         const opponentResponse: UserResponse =
                             await nClient.lookupUserByUsername(
@@ -164,8 +165,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 battle = await prisma.battle.create({
                     data: {
                         attacker: leftAddress,
+                        attackerFid: user?.fid || 0,
                         attackerName: leftName,
                         defender: rightAddress,
+                        defenderFid: opponentFid,
                         defenderName: rightName,
                     }
                 });
@@ -257,13 +260,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             await prisma.$disconnect();
             
-            const imageUrl =
-                `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
-            console.log("imageUrl:", imageUrl);
-            
-            const contentUrl =
-                `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }`;
-            console.log("contentUrl:", contentUrl);
             
             res.setHeader('Content-Type', 'text/html');
             if (endBattle === 1) {
@@ -281,37 +277,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                   </html>
                 `);
             } else {
-                res.status(200).send(`
-                  <!DOCTYPE html>
-                  <html>
-                    <head>
-                      <title> My SLoot </title>
-                      <meta property="og:title" content="Synthetic Loot">
-                      <meta property="og:image" content="${ process.env['HOST'] }/1.png">
-                      <meta name="fc:frame" content="vNext">
-                      <meta name="fc:frame:image" content="${ imageUrl }">
-                      <meta name="fc:frame:post_url" content="${ contentUrl }">
-                      <meta name="fc:frame:button:1" content="Attack">
-                      <meta name="fc:frame:button:2" content="Friends">
-                      <meta name="fc:frame:button:3" content="Query Loot">
-                      <meta name="fc:frame:button:3:action" content="post_redirect">
-                      <meta name="fc:frame:button:4" content="Escape">
-                    </head>
-                  </html>
-                `);
+                res.status(200).send(battlePage(id));
             }
             
         }
         // friends here
         else if (buttonId === 2) {
+            // @ts-ignore
+            const {fr1, fr2, fr3, frna1, frna2, frna3} = await findFriend(user.fid);
             
-            // todo friends
-            
-            let fr1;
-            let fr2;
-            let fr3;
-            
-            const imageUrl= `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
+            const imageUrl = `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
             const contentUrl = `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/friend?id=${ id }`;
             
             res.setHeader('Content-Type', 'text/html');
@@ -322,9 +297,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                       <meta name="fc:frame" content="vNext">
                       <meta name="fc:frame:image" content="${ imageUrl }">
                       <meta name="fc:frame:post_url" content="${ contentUrl }">
-                      <meta name="fc:frame:button:1" content="${ fr1 }">
-                      <meta name="fc:frame:button:2" content="${ fr2 }">
-                      <meta name="fc:frame:button:3" content="${ fr3 }">
+                      ${ frna1 ? `<meta name="fc:frame:button:1" content="${ frna1 }">` : '' }
+                      ${ frna2 ? `<meta name="fc:frame:button:2" content="${ frna2 }">` : '' }
+                      ${ frna3 ? `<meta name="fc:frame:button:3" content="${ frna3 }">` : '' }
                       <meta name="fc:frame:button:4" content="back">
             `);
             
@@ -464,3 +439,70 @@ function getRandomFid(origin: number) {
     
 }
 
+export async function findFriend(fid: number) {
+    
+    let list: string[] = [];
+    try {
+        
+        let records: number[] = [];
+        // @ts-ignore
+        const feed = await nClient.fetchRepliesAndRecastsForUser(fid, {limit: 10});
+        feed.casts.map(cast => {
+            cast.reactions.likes.forEach(value => {
+                records[value.fid] = (records[value.fid] || 0) + 1;
+            });
+            cast.reactions.recasts.forEach(value => {
+                records[value.fid] = (records[value.fid] || 0) + 1;
+            })
+        })
+        list = Object.keys(records)
+            .sort((a, b) => records[Number(b)] - records[Number(a)])
+            .slice(0, 3);
+        
+    } catch (e) {
+        console.warn("fetch recasts and likes error:", e);
+    }
+    
+    console.log("friend list:", list);
+    const fr1 = Number(list[0]);
+    const fr2 = Number(list[1]);
+    const fr3 = Number(list[2]);
+    
+    const frna1 = fr1 ? (await nClient.lookupUserByFid(fr1)).result.user.username : "";
+    const frna2 = fr2 ? (await nClient.lookupUserByFid(fr2)).result.user.username : "";
+    const frna3 = fr3 ? (await nClient.lookupUserByFid(fr3)).result.user.username : "";
+    
+    return {fr1, fr2, fr3, frna1, frna2, frna3};
+    
+}
+
+
+export function battlePage(id: string | string[]) {
+    
+    const imageUrl =
+        `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
+    console.log("imageUrl:", imageUrl);
+    
+    const contentUrl =
+        `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }`;
+    console.log("contentUrl:", contentUrl);
+    
+    return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title> My SLoot </title>
+    <meta property="og:title" content="Synthetic Loot">
+        <meta property="og:image" content="${ process.env['HOST'] }/1.png">
+            <meta name="fc:frame" content="vNext">
+                <meta name="fc:frame:image" content="${ imageUrl }">
+                    <meta name="fc:frame:post_url" content="${ contentUrl }">
+                        <meta name="fc:frame:button:1" content="Attack">
+                            <meta name="fc:frame:button:2" content="Friends">
+                                <meta name="fc:frame:button:3" content="Query Loot">
+                                    <meta name="fc:frame:button:3:action" content="post_redirect">
+                                        <meta name="fc:frame:button:4" content="Escape">
+                                        </head>
+                                    </html>
+                                    `;
+}

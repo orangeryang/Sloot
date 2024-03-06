@@ -2,12 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getImageByAddress, getLevelColor } from "@/lootUtils";
 import { Battle, BattleDetail, PrismaClient } from "@prisma/client";
 import sharp from "sharp";
-import satori from "satori";
-import fs from "fs";
-import { join } from "path";
 
-const fontPath = join(process.cwd(), 'PTSerif-Regular.ttf')
-let fontData = fs.readFileSync(fontPath)
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
@@ -42,7 +37,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         await prisma.$disconnect();
         
-        const len = battleDetails.length;
         const leftAddress = req.query["address"] || battle.attacker;
         const rightAddress = battle.defender;
         

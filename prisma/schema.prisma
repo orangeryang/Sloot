@@ -29,8 +29,10 @@ datasource db {
 model Battle {
   id           Int      @id @default(autoincrement())
   attacker     String
+  attackerFid  Int      @map("attacker_fid")
   attackerName String   @map("attacker_name")
   defender     String
+  defenderFid  Int      @map("defender_fid")
   defenderName String   @map("defender_name")
   winner       Int      @default(-1)
   createAt     DateTime @default(now()) @map("created_at")
