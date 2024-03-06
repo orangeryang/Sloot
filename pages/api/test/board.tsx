@@ -39,7 +39,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             (await nClient.fetchUserFollowing(battle.attackerFid, {limit: 100}))
                 .result.users
                 .map((value: { fid: number; }) => {
-                    value.fid
+                    console.log(value);
+                    return value.fid;
                 }) : null;
         console.log("following:", following);
         const friendData = (following && following.length > 0) ? await prisma.$queryRaw`select attacker_name, count(1) from Battle where winner = 1 and attacker_fid in (${Prisma.join(following)}) group by attacker_name limit 5` : [];
