@@ -32,18 +32,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 + " !\n";
         }
         
-        const globalData = await prisma.$queryRaw`select attacker_name,count(attacker) as record from Battle where winner=1 group by attacker_name order by record desc limit 5;`;
+        const globalData = await prisma.$queryRaw`select attacker_name as attackerName,count(1) as count from Battle where winner=1 group by attacker_name order by record desc limit 5;`;
         console.log("globalData:", globalData);
         
         const following = battle ?
             (await nClient.fetchUserFollowing(battle.attackerFid, {limit: 100}))
                 .result.users
                 .map((value: { fid: number; }) => {
-                    console.log(value);
+                    // console.log(value);
                     return value.fid;
                 }) : null;
         console.log("following:", following);
-        const friendData = (following && following.length > 0) ? await prisma.$queryRaw`select attacker_name, count(1) from Battle where winner = 1 and attacker_fid in (${Prisma.join(following)}) group by attacker_name limit 5` : [];
+        const friendData = (following && following.length > 0) ? await prisma.$queryRaw`select attacker_name as attackerName, count(1) as count from Battle where winner = 1 and attacker_fid in (${Prisma.join(following)}) group by attacker_name limit 5` : [];
         console.log("friendData:", friendData);
         
         await prisma.$disconnect();
@@ -82,10 +82,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         const global = await sharp(Buffer.from(renderBoard(globalData as { attackerName: string, count: number }[])))
             .resize(1000, 500).toBuffer();
-        // console.log("global:", global);
+        console.log("global:", global);
         const friend = await sharp(Buffer.from(renderBoard(friendData as { attackerName: string, count: number }[])))
             .resize(1000, 500).toBuffer();
-        // console.log("friend:", friend);
+        console.log("friend:", friend);
         
         const final = await sharp(battleResult)
             .composite([
