@@ -479,8 +479,11 @@ export async function findFriend(fid: number) {
 
 export function battlePage(id: string | string[]) {
     
+    // stupid action
+    const randomFlag = Math.floor(10000 * Math.random());
+    
     const imageUrl =
-        `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
+        `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }&pupupu=${ randomFlag }`;
     console.log("imageUrl:", imageUrl);
     
     const contentUrl =
