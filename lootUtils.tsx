@@ -81,6 +81,22 @@ export const Tier3 = ["Plate Mail", "Great Helm", "Plated Belt", "Greaves", "Gau
 export const Tier4 = ["Chain Mail", "Full Helm", "Mesh Belt", "Chain Boots", "Chain Gloves", "Hard Leather Armor", "Leather Cap", "Hard Leather Belt", "Hard Leather Boots", "Hard Leather Gloves", "Robe", "Linen Hood", "Linen Sash", "Linen Shoes", "Linen Gloves", "Long Sword", "Mace", "Wand", "Book"];
 export const Tier5 = ["Ring Mail", "Helm", "Heavy Belt", "Heavy Boots", "Heavy Gloves", "Leather Armor", "Cap", "Leather Belt", "Leather Boots", "Leather Gloves", "Shirt", "Hood", "Sash", "Shoes", "Gloves", "Short Sword", "Club"];
 
+export function getCDBuff(item: string) {
+    
+    const words = getWords(item);
+    
+    if (words === "GoldRing") {
+        return 80;
+    } else if (words === "SilverRing") {
+        return 90;
+    } else if (words === "BronzeRing") {
+        return 95
+    }
+    
+    return 100;
+    
+}
+
 export function getCriticalThreshold(item: string) {
     
     if (getWords(item) === "Titanium Ring") {

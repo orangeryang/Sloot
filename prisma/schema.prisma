@@ -35,6 +35,7 @@ model Battle {
   defenderFid  Int      @map("defender_fid")
   defenderName String   @map("defender_name")
   winner       Int      @default(-1)
+  buff         Int      @default(100)
   createAt     DateTime @default(now()) @map("created_at")
   updateAt     DateTime @default(now()) @updatedAt() @map("updated_at")
 }

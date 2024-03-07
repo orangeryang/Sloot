@@ -3,7 +3,14 @@ import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
 import { PrismaClient } from "@prisma/client";
 import { FollowResponse, User, UserResponse } from "@neynar/nodejs-sdk/build/neynar-api/v1";
 import { fetchQuery, init } from "@airstack/airstack-react";
-import { getCounterRelation, getCriticalThreshold, getItemsByAddress, getPowerBoost, getTier } from "@/lootUtils";
+import {
+    getCDBuff,
+    getCounterRelation,
+    getCriticalThreshold,
+    getItemsByAddress,
+    getPowerBoost,
+    getTier
+} from "@/lootUtils";
 import { startPage } from "@/pages/api/test/start";
 import { FeedResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
@@ -68,25 +75,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             let opponentFid = 0;
             
             const lastDefeat: {
-                update: string
-            }[] = await prisma.$queryRaw`select updated_at as update from Battle where attacker_fid=${user?.fid||0} and winner=1 order by update desc limit 1`;
+                update: string,
+                buff: string
+            }[] = await prisma.$queryRaw`select buff, updated_at as update from Battle where attacker_fid=${user?.fid||0} and winner=1 order by update desc limit 1`;
             if (lastDefeat[0]) {
                 const last = lastDefeat[0].update;
+                const buff = lastDefeat[0].buff;
                 const diff = (new Date().getTime() - new Date(last).getTime()) / 1000 / 60;
-                res.setHeader('Content-Type', 'text/html');
-                res.status(200).send(`
-                  <!DOCTYPE html>
-                  <html>
-                    <head>
-                      <title> My SLoot </title>
-                      <meta property="og:title" content="Synthetic Loot">
-                      <meta property="og:image" content="${ process.env['HOST'] }/1.png">
-                      <meta name="fc:frame" content="vNext">
-                      <meta name="fc:frame:image"
-                      content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?bcd=${ diff }">
-                    </head>
-                  </html>
-                `);
+                const bcd = 15 * Number(buff) / 100 - diff;
+                if (15 * Number(buff) / 100 > diff) {
+                    res.setHeader('Content-Type', 'text/html');
+                    res.status(200).send(`
+                      <!DOCTYPE html>
+                      <html>
+                        <head>
+                          <title> My SLoot </title>
+                          <meta property="og:title" content="Synthetic Loot">
+                          <meta property="og:image" content="${ process.env['HOST'] }/1.png">
+                          <meta name="fc:frame" content="vNext">
+                          <meta name="fc:frame:image"
+                          content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?bcd=${ bcd }">
+                        </head>
+                      </html>
+                    `);
+                }
             }
             
             if (id) {
@@ -191,6 +203,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         defender: rightAddress,
                         defenderFid: opponentFid,
                         defenderName: rightName,
+                        buff: attackResult.cdBuff
                     }
                 });
                 console.log("create battle:", battle);
@@ -428,6 +441,7 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
     // ring buff
     let criticalThreshold = getCriticalThreshold(left[7]);
     let powerBoost = getPowerBoost(left[7]);
+    let cdBuff = getCDBuff(left[7]);
     
     for (let i = 1; i < 6; i++) {
         
@@ -460,7 +474,8 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
     return {
         totalDamage,
         criticalFlag,
-        random
+        random,
+        cdBuff
     };
     
 }
@@ -517,7 +532,7 @@ export async function findFriend(fid: number) {
         console.log("oldestSupport:", oldestSupport);
         diff = (new Date().getTime() - new Date(oldestSupport).getTime()) / 1000 / 60;
         if (diff < 180) {
-            return {};
+            return {diff: diff};
         }
     }
     console.log("friend list:", list);

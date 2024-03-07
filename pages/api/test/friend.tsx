@@ -52,8 +52,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log("friend request:", id, friendFid, friendName);
         
         const address = friendFid ? await getAddressByFid(friendFid) : "";
+        const cd = diff ? 180 - diff : -1;
         const imageUrl =
-            `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }&address=${ address }&cd=${ diff }`;
+            `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }&address=${ address }&cd=${ cd }`;
         
         let contentUrl =
             `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }&frid=${ friendFid }&frna=${ friendName }`;
