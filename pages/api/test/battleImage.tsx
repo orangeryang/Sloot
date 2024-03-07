@@ -165,7 +165,7 @@ function generateLog(battleDetails: BattleDetail[], battle: Battle) {
         
         if (isAttack) {
             rightHealth -= detail.damage;
-        } else {
+        } else if (detail.friend === "") {
             leftHealth -= detail.damage;
         }
         
