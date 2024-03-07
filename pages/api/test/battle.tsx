@@ -1,10 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
 import { PrismaClient } from "@prisma/client";
-import { User, UserResponse } from "@neynar/nodejs-sdk/build/neynar-api/v1";
+import { FollowResponse, User, UserResponse } from "@neynar/nodejs-sdk/build/neynar-api/v1";
 import { fetchQuery, init } from "@airstack/airstack-react";
 import { getCounterRelation, getCriticalThreshold, getItemsByAddress, getPowerBoost, getTier } from "@/lootUtils";
 import { startPage } from "@/pages/api/test/start";
+import { FeedResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 // @ts-ignore
 init(process.env.QUERY_KEY);
@@ -200,7 +201,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 
                 // @ts-ignore
                 const leftLost = battleDetails
-                        .filter((a) => (a.order % 2 === 0))
+                        .filter((a) => (a.order % 2 === 0 && a.friend === ""))
                         .map((a) => a.damage)
                         .reduce((a, b) => a + b, 0)
                     + attackResult.totalDamage;
@@ -333,6 +334,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
 }
 
+
 export async function getAddressByFid(opponentFid: number) {
     // user address
     const {data, error} = await fetchQuery("query MyQuery {\n" +
@@ -387,10 +389,10 @@ export async function getAddressByFid(opponentFid: number) {
         address[0] = social[0].userAddress;
     }
     
-    
     console.log("address:", address);
     return address[0];
 }
+
 
 async function attackOnce(leftAddress: string, rightAddress: string) {
     const left = await getItemsByAddress(leftAddress)
@@ -451,14 +453,14 @@ function getRandomFid(origin: number) {
     
 }
 
+
 export async function findFriend(fid: number) {
     
     let list: string[] = [];
     try {
         
-        let records: number[] = [];
-        // @ts-ignore
-        const feed = await nClient.fetchRepliesAndRecastsForUser(fid, {limit: 10});
+        let records: { [key: number]: number } = {};
+        const feed: FeedResponse = await nClient.fetchRepliesAndRecastsForUser(fid, {limit: 10});
         feed.casts.map(cast => {
             cast.reactions.likes.forEach(value => {
                 records[value.fid] = (records[value.fid] || 0) + 1;
@@ -466,8 +468,14 @@ export async function findFriend(fid: number) {
             cast.reactions.recasts.forEach(value => {
                 records[value.fid] = (records[value.fid] || 0) + 1;
             })
-        })
+        });
+        const following: FollowResponse = await nClient.fetchUserFollowing(fid, {limit: 150});
+        const followingFid = following.result.users.map(user => {
+            return user.fid;
+        });
+        const followingFidSet = new Set(followingFid);
         list = Object.keys(records)
+            .filter(key => followingFidSet.has(Number(key)))
             .sort((a, b) => records[Number(b)] - records[Number(a)])
             .slice(0, 3);
         
