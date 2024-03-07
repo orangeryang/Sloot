@@ -59,6 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let contentUrl =
             `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }&frid=${ friendFid }&frna=${ friendName }`;
         console.log("buttttttttttttttttt:", frna3 ? 4 : frna2 ? 3 : frna1 ? 2 : 1);
+        console.log("buttonId:", buttonId);
         if (buttonId === frna3 ? 4 : frna2 ? 3 : frna1 ? 2 : 1) {
             contentUrl =
                 `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }`;
