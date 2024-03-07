@@ -75,11 +75,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             let opponentFid = 0;
             
             const lastDefeat: {
-                update: string,
+                updated: string,
                 buff: string
-            }[] = await prisma.$queryRaw`select buff, updated_at as update from Battle where attacker_fid=${user?.fid||0} and winner=1 order by update desc limit 1`;
+            }[] = await prisma.$queryRaw`select buff, updated_at as updated from Battle where attacker_fid=${user?.fid||0} and winner=1 order by updated desc limit 1`;
             if (lastDefeat[0]) {
-                const last = lastDefeat[0].update;
+                const last = lastDefeat[0].updated;
                 const buff = lastDefeat[0].buff;
                 const diff = (new Date().getTime() - new Date(last).getTime()) / 1000 / 60;
                 const bcd = 15 * Number(buff) / 100 - diff;
@@ -525,10 +525,10 @@ export async function findFriend(fid: number) {
     let fr3;
     let diff;
     const result: {
-        update: string
-    }[] = await prisma.$queryRaw`select BattleDetail.updated_at as update from BattleDetail left join Battle on BattleDetail.battle_id = Battle.id where Battle.attacker_fid = ${fid} and BattleDetail.friend != "" order by BattleDetail.updated_at limit 3;`;
+        updated: string
+    }[] = await prisma.$queryRaw`select BattleDetail.updated_at as updated from BattleDetail left join Battle on BattleDetail.battle_id = Battle.id where Battle.attacker_fid = ${fid} and BattleDetail.friend != "" order by BattleDetail.updated_at limit 3;`;
     if (result.length === 3) {
-        const oldestSupport = result[0].update;
+        const oldestSupport = result[0].updated;
         console.log("oldestSupport:", oldestSupport);
         diff = (new Date().getTime() - new Date(oldestSupport).getTime()) / 1000 / 60;
         if (diff < 180) {
