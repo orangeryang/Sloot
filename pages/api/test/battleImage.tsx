@@ -18,10 +18,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 {
                     input: {
                         text: {
-                            text: `Friend support points has run out, please wait ${ diff } minutes`,
+                            text: `Friend support points has run out, please wait ${ 180 - diff } minutes`,
                             font: "serif",
                             align: "centre",
-                            dpi: 500
+                            dpi: 400
                         }
                     }
                 }
