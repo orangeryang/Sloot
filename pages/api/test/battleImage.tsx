@@ -22,8 +22,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             font: "serif",
                             align: "centre",
                             dpi: 400
-                        }
-                    }
+                        },
+                    },
+                    left: 200,
+                    top: 450
                 }
             ]).toBuffer();
             
