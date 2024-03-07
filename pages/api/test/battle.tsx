@@ -297,7 +297,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // friends here
         else if (buttonId === 2) {
             // @ts-ignore
-            const {fr1, fr2, fr3, frna1, frna2, frna3} = await findFriend(user.fid);
+            const {fr1, fr2, fr3, frna1, frna2, frna3, diff} = await findFriend(user.fid);
             
             const imageUrl = `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
             const contentUrl = `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/friend?id=${ id }`;
@@ -443,6 +443,7 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
         criticalFlag,
         random
     };
+    
 }
 
 
@@ -483,16 +484,33 @@ export async function findFriend(fid: number) {
         console.warn("fetch recasts and likes error:", e);
     }
     
+    const prisma = new PrismaClient();
+    
+    let fr1;
+    let fr2;
+    let fr3;
+    let diff;
+    const result: {
+        update: string
+    }[] = await prisma.$queryRaw`select BattleDetail.updated_at as update from BattleDetail left join Battle on BattleDetail.battle_id = Battle.id where Battle.attacker_fid = ${fid} and BattleDetail.friend != "" order by BattleDetail.updated_at limit 3;`;
+    if (result.length === 3) {
+        const oldestSupport = result[0].update;
+        console.log("oldestSupport:", oldestSupport);
+        diff = (new Date().getTime() - new Date(oldestSupport).getTime()) / 1000 / 60;
+        if (diff < 180) {
+            return {};
+        }
+    }
     console.log("friend list:", list);
-    const fr1 = Number(list[0]);
-    const fr2 = Number(list[1]);
-    const fr3 = Number(list[2]);
+    fr1 = Number(list[0]);
+    fr2 = Number(list[1]);
+    fr3 = Number(list[2]);
     
     const frna1 = fr1 ? (await nClient.lookupUserByFid(fr1)).result.user.username : "";
     const frna2 = fr2 ? (await nClient.lookupUserByFid(fr2)).result.user.username : "";
     const frna3 = fr3 ? (await nClient.lookupUserByFid(fr3)).result.user.username : "";
     
-    return {fr1, fr2, fr3, frna1, frna2, frna3};
+    return {fr1, fr2, fr3, frna1, frna2, frna3, diff};
     
 }
 

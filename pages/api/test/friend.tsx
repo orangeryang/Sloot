@@ -32,18 +32,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log("request info:", user);
         
         // @ts-ignore
-        const {fr1, fr2, fr3, frna1, frna2, frna3} = await findFriend(user.fid);
+        const {fr1, fr2, fr3, frna1, frna2, frna3, diff} = await findFriend(user.fid);
         
         let friendFid;
         let friendName;
         
-        if (buttonId === 1) {
+        if (buttonId === 1 && fr1) {
             friendFid = fr1;
             friendName = frna1;
-        } else if (buttonId === 2) {
+        } else if (buttonId === 2 && fr2) {
             friendFid = fr2;
             friendName = frna2;
-        } else if (buttonId === 3) {
+        } else if (buttonId === 3 && fr3) {
             friendFid = fr3;
             friendName = frna3;
         }
@@ -53,11 +53,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         const address = friendFid ? await getAddressByFid(friendFid) : "";
         const imageUrl =
-            `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }&address=${ address }`;
+            `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }&address=${ address }&cd=${ diff }`;
         
         let contentUrl =
             `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }&frid=${ friendFid }&frna=${ friendName }`;
-        if (buttonId === 4) {
+        if (buttonId === frna3 ? 4 : frna2 ? 3 : frna1 ? 2 : 1) {
             contentUrl =
                 `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }`;
         }

@@ -8,6 +8,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
     if (req.method === 'GET') {
         
+        const diff = Number(req.query["cd"] || 180);
+        if (diff < 180) {
+            const result = await sharp(Buffer.from(
+                `<svg width="1910" height="1000" viewBox="0 0 1910 1000" xmlns="http://www.w3.org/2000/svg">
+                   <rect width="100%" height="100%" fill="black" />
+                   </svg>`
+            )).composite([
+                {
+                    input: {
+                        text: {
+                            text: `Friend support points has run out, please wait ${ diff } minutes`,
+                            font: "serif",
+                            align: "centre",
+                            dpi: 500
+                        }
+                    }
+                }
+            ]).toBuffer();
+            
+            res.setHeader('Content-Type', 'image/png');
+            res.send(result);
+            
+        }
+        
+        
         const id = req.query["id"];
         if (!id) {
             return res.status(400).send(`Failed to generate image: id not found`);
