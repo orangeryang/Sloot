@@ -532,8 +532,8 @@ export async function findFriend(fid: number) {
         const oldestSupport = result[2].updated;
         console.log("oldestSupport:", oldestSupport);
         diff = (new Date().getTime() - new Date(oldestSupport).getTime()) / 1000 / 60;
+        console.log("diff:", diff);
         if (diff < 180) {
-            console.log("cd:", diff);
             return {diff: diff};
         }
     }
