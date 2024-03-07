@@ -62,6 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             contentUrl =
                 `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }`;
         }
+        console.log("contentUtl:", contentUrl);
         
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(battlePage(id, imageUrl, contentUrl));

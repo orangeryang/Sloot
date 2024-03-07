@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!id) {
             return res.status(400).send(`Failed to generate image: id not found`);
         }
-        console.log("battle id:", id);
+        // console.log("battle id:", id);
         
         const prisma = new PrismaClient();
         
@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 id: Number.parseInt(id.toString()),
             }
         })
-        console.log("find battle:", battle);
+        // console.log("find battle:", battle);
         
         if (!battle) {
             console.warn("generate image: battle not found:", id);
@@ -65,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 battleId: Number.parseInt(id.toString()),
             }
         })
-        console.log("find battleDetails:", battleDetails);
+        // console.log("find battleDetails:", battleDetails);
         
         await prisma.$disconnect();
         
