@@ -234,16 +234,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 
                 // @ts-ignore
                 const leftLost = battleDetails
-                        .filter((a) => (a.order % 2 === 0 && a.friend === ""))
-                        .map((a) => a.damage)
-                        .reduce((a, b) => a + b, 0)
-                    + attackResult.totalDamage;
-                // @ts-ignore
-                const rightLost = battleDetails
-                        .filter((a) => !(a.order % 2 === 0))
+                        .filter((a) => !(a.order % 2 === 0 && a.friend === ""))
                         .map((a) => a.damage)
                         .reduce((a, b) => a + b, 0)
                     + defenceResult.totalDamage;
+                // @ts-ignore
+                const rightLost = battleDetails
+                        .filter((a) => (a.order % 2 === 0))
+                        .map((a) => a.damage)
+                        .reduce((a, b) => a + b, 0)
+                    + attackResult.totalDamage;
                 
                 if (leftLost >= 1000) {
                     winner = 0;
