@@ -335,7 +335,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const imageUrl = `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }&cd=${ cd }`;
             const contentUrl = `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/friend?id=${ id }`;
             
-            
             res.setHeader('Content-Type', 'text/html');
             res.status(200).send(`
                  <title> My SLoot </title>
@@ -534,6 +533,7 @@ export async function findFriend(fid: number) {
         console.log("oldestSupport:", oldestSupport);
         diff = (new Date().getTime() - new Date(oldestSupport).getTime()) / 1000 / 60;
         if (diff < 180) {
+            console.log("cd:", diff);
             return {diff: diff};
         }
     }
