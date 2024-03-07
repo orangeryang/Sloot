@@ -331,8 +331,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // @ts-ignore
             const {fr1, fr2, fr3, frna1, frna2, frna3, diff} = await findFriend(user.fid);
             
-            const imageUrl = `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }`;
+            const cd = diff ? 180 - diff : -1;
+            const imageUrl = `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }&cd=${ cd }`;
             const contentUrl = `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/friend?id=${ id }`;
+            
             
             res.setHeader('Content-Type', 'text/html');
             res.status(200).send(`
