@@ -528,7 +528,7 @@ export async function findFriend(fid: number) {
     let diff;
     const result: {
         updated: string
-    }[] = await prisma.$queryRaw`select BattleDetail.updated_at as updated from BattleDetail left join Battle on BattleDetail.battle_id = Battle.id where Battle.attacker_fid = ${fid} and BattleDetail.friend != "" order by BattleDetail.updated_at desc limit 3;`;
+    }[] = await prisma.$queryRaw`select BattleDetail.updated_at as updated from BattleDetail left join Battle on BattleDetail.battle_id = Battle.id where Battle.attacker_fid = ${fid} and BattleDetail.friend != '' order by BattleDetail.updated_at desc limit 3;`;
     if (result.length === 3) {
         const oldestSupport = result[2].updated;
         console.log("oldestSupport:", oldestSupport);
