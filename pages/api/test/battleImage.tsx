@@ -10,30 +10,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         const diff = Number(req.query["cd"] || 180);
         if (diff < 180) {
+            
             const result = await sharp(Buffer.from(
                 `<svg width="1910" height="1000" viewBox="0 0 1910 1000" xmlns="http://www.w3.org/2000/svg">
+                   <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 70px;    }    </style>
                    <rect width="100%" height="100%" fill="black" />
+                   <text x="100" y="500" class="base">Friend support points has run out, please wait ${ 180 - diff } minutes</text>
                    </svg>`
-            )).composite([
-                {
-                    input: {
-                        text: {
-                            text: `Friend support points has run out, please wait ${ 180 - diff } minutes`,
-                            font: "serif",
-                            align: "centre",
-                            dpi: 400
-                        },
-                    },
-                    left: 200,
-                    top: 450
-                }
-            ]).toBuffer();
+            )).toBuffer();
             
             res.setHeader('Content-Type', 'image/png');
             res.send(result);
             
         }
-        
         
         const id = req.query["id"];
         if (!id) {
