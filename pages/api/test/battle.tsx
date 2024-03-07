@@ -313,7 +313,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                       ${ frna1 ? `<meta name="fc:frame:button:1" content="${ frna1 }">` : '' }
                       ${ frna2 ? `<meta name="fc:frame:button:2" content="${ frna2 }">` : '' }
                       ${ frna3 ? `<meta name="fc:frame:button:3" content="${ frna3 }">` : '' }
-                      <meta name="fc:frame:button:4" content="back">
+                      <meta name="fc:frame:button:${ frna3 ? 4 : frna2 ? 3 : frna1 ? 2 : 1 }" content="back">
             `);
             
         }
