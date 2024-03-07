@@ -13,9 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             const result = await sharp(Buffer.from(
                 `<svg width="1910" height="1000" viewBox="0 0 1910 1000" xmlns="http://www.w3.org/2000/svg">
-                   <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 70px;    }    </style>
+                   <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 60px;    }    </style>
                    <rect width="100%" height="100%" fill="black" />
-                   <text x="100" y="500" class="base">Friend support points has run out, please wait ${ diff } minutes</text>
+                   <text x="100" y="500" class="base">Friend support points has run out, please wait ${ Math.floor(diff) } minutes</text>
                    </svg>`
             )).toBuffer();
             
@@ -29,9 +29,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
             const result = await sharp(Buffer.from(
                 `<svg width="1910" height="1000" viewBox="0 0 1910 1000" xmlns="http://www.w3.org/2000/svg">
-                   <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 70px;    }    </style>
+                   <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 60px;    }    </style>
                    <rect width="100%" height="100%" fill="black" />
-                   <text x="100" y="500" class="base">You have defeated a guy, please wait for ${ battleCD } minutes</text>
+                   <text x="100" y="500" class="base">You have defeated a guy, please wait for ${ Math.floor(battleCD) } minutes</text>
                    </svg>`
             )).toBuffer();
             
