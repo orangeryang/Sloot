@@ -24,6 +24,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             
         }
         
+        const battleCD = Number(req.query["bcd"] || 15);
+        if (battleCD < 15) {
+            
+            const result = await sharp(Buffer.from(
+                `<svg width="1910" height="1000" viewBox="0 0 1910 1000" xmlns="http://www.w3.org/2000/svg">
+                   <style>    .base {        fill: rgb(255, 255, 255);        font-family: serif;        font-size: 70px;    }    </style>
+                   <rect width="100%" height="100%" fill="black" />
+                   <text x="100" y="500" class="base">You have defeated a guy, please wait for ${ 15 - battleCD } minutes</text>
+                   </svg>`
+            )).toBuffer();
+            
+            res.setHeader('Content-Type', 'image/png');
+            res.send(result);
+            
+        }
+        
         const id = req.query["id"];
         if (!id) {
             return res.status(400).send(`Failed to generate image: id not found`);

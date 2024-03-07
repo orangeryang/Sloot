@@ -12,14 +12,12 @@ init(process.env.QUERY_KEY);
 // @ts-ignore
 const nClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     
     // no cache in the first version here
     // I think it has to be done in the next version
     
     if (req.method === 'POST') {
-        
         
         // validate the request and get the user's information
         
@@ -68,6 +66,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             let battleDetails;
             
             let opponentFid = 0;
+            
+            const lastDefeat: {
+                update: string
+            }[] = await prisma.$queryRaw`select updated_at as update from Battle where attacker_fid=${user?.fid||0} and winner=1 order by update desc limit 1`;
+            if (lastDefeat[0]) {
+                const last = lastDefeat[0].update;
+                const diff = (new Date().getTime() - new Date(last).getTime()) / 1000 / 60;
+                res.setHeader('Content-Type', 'text/html');
+                res.status(200).send(`
+                  <!DOCTYPE html>
+                  <html>
+                    <head>
+                      <title> My SLoot </title>
+                      <meta property="og:title" content="Synthetic Loot">
+                      <meta property="og:image" content="${ process.env['HOST'] }/1.png">
+                      <meta name="fc:frame" content="vNext">
+                      <meta name="fc:frame:image"
+                      content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?bcd=${ diff }">
+                    </head>
+                  </html>
+                `);
+            }
             
             if (id) {
                 
@@ -260,7 +280,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             
             await prisma.$disconnect();
-            
             
             res.setHeader('Content-Type', 'text/html');
             if (endBattle === 1) {
