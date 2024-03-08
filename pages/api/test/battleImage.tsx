@@ -92,7 +92,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 {
                     input: {text: {text: battle.attackerName, font: "serif", align: "centre", dpi: 250}},
                     left: 200,
-                    top: 750
+                    top: 700
                 },
             ])
             // .resize({height: 1000})
@@ -110,7 +110,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 {
                     input: {text: {text: battle.defenderName, font: "serif", align: "centre", dpi: 250}},
                     left: 200,
-                    top: 750
+                    top: 700
                 }
             ])
             // .resize({height: 1000})
