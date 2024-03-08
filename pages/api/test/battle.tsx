@@ -46,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.warn("Failed to validate:", e);
             return res.status(400).send(`Failed to validate message: ${ e }`);
         }
-        console.log("request info:", user);
+        // console.log("request info:", user);
         console.log("request opponent:", opponentByInput);
         
         let id = req.query["id"] || "";
@@ -104,6 +104,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (id) {
                 
                 // continue
+                console.log("continue battle:", id);
                 
                 battle = await prisma.battle.findUnique({
                     where: {
@@ -149,6 +150,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             } else {
                 
                 // find the opponent to start the battle
+                console.log("create a battle:");
                 
                 try {
                     
@@ -170,8 +172,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     leftName = user?.username || "";
                     rightAddress = await getAddressByFid(opponentFid);
                     
-                    console.log("rightName:", rightName);
-                    console.log("rightAddress:", rightAddress);
+                    console.log("-- rightName:", rightName);
+                    console.log("-- rightAddress:", rightAddress);
                     
                 } catch (e) {
                     console.warn("Failed to lookup opponent:", opponentByInput);
@@ -206,7 +208,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         buff: attackResult.cdBuff
                     }
                 });
-                console.log("create battle:", battle);
+                console.log("create battle record:", battle);
                 
                 battleDetails = await prisma.battleDetail.createMany({
                     data: [
@@ -278,7 +280,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 // console.log("create battleDetails:", battleDetails);
                 
                 if (winner !== -1) {
-                    await prisma.battle.update({
+                    const updated = await prisma.battle.update({
                         where: {
                             id: battle.id
                         },
@@ -286,7 +288,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             winner: winner
                         }
                     });
-                    console.log("update battle:", battle);
+                    console.log("update battle:", updated);
                     endBattle = 1;
                 }
                 
