@@ -11,7 +11,7 @@ import {
     getPowerBoost,
     getTier
 } from "@/lootUtils";
-import { startPage } from "@/pages/api/test/start";
+import { startPage } from "@/pages/api/battle/start";
 import { FeedResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 // @ts-ignore

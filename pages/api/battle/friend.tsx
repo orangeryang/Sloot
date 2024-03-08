@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
-import { battlePage, findFriend, getAddressByFid } from "@/pages/api/test/battle";
+import { battlePage, findFriend, getAddressByFid } from "@/pages/api/battle/battle";
 import { fetchQuery, init } from "@airstack/airstack-react";
 
 // @ts-ignore
