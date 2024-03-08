@@ -522,15 +522,17 @@ export async function findFriend(fid: number) {
         console.warn("fetch recasts and likes error:", e);
     }
     
-    const prisma = new PrismaClient();
-    
     let fr1;
     let fr2;
     let fr3;
     let diff;
+    
+    const prisma = new PrismaClient();
     const result: {
         updated: string
     }[] = await prisma.$queryRaw`select BattleDetail.updated_at as updated from BattleDetail left join Battle on BattleDetail.battle_id = Battle.id where Battle.attacker_fid = ${fid} and BattleDetail.friend != '' order by BattleDetail.updated_at desc limit 3;`;
+    await prisma.$disconnect();
+    
     if (result.length === 3) {
         const oldestSupport = result[2].updated;
         console.log("oldestSupport:", oldestSupport);
