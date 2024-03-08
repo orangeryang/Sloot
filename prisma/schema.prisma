@@ -40,7 +40,7 @@ model Battle {
   updateAt     DateTime @default(now()) @updatedAt() @map("updated_at")
 }
 
-model BattleDetail {
+model ttleDetail {
   id         Int      @id @default(autoincrement())
   battleId   Int      @map("battle_id")
   order      Int
