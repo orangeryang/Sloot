@@ -413,7 +413,7 @@ export async function getAddressByFid(opponentFid: number) {
         return "";
     }
     const social = data.Socials.Social;
-    // console.log("Social:", Social);
+    console.log("Social:", social);
     let addArrToRemove: string[] = [];
     for (let i = 0; i < social.length; i++) {
         // console.log(Social[i].userAddress);
