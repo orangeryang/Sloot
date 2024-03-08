@@ -288,7 +288,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             winner: winner
                         }
                     });
-                    console.log("update battle:", updated);
+                    console.log("update battle:", battle.id, " winner:", winner);
                     endBattle = 1;
                 }
                 
