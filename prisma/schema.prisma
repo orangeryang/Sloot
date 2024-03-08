@@ -51,6 +51,7 @@ model BattleDetail {
   critical   Int      @default(0)
   damage     Int
   friend     String   @default("")
+  friendFid  Int      @default(0) @map("friend_fid")
   friendName String   @default("") @map("friend_name")
   createAt   DateTime @default(now()) @map("created_at")
   updateAt   DateTime @default(now()) @updatedAt() @map("updated_at")

@@ -130,19 +130,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 rightName = battle.defenderName;
                 rightAddress = battle.defender;
                 
-                const friend = req.query["frid"] || "";
+                const friendFid = req.query["frid"] || "";
                 const friendName = req.query["frna"] || "";
-                if (friend) {
+                if (friendFid) {
                     
                     // looking for friends' help
                     let friendAddress;
                     try {
-                        friendAddress = await getAddressByFid(Number.parseInt(friend.toString()));
+                        friendFlag = Number.parseInt(friendFid.toString());
+                        friendAddress = await getAddressByFid(friendFlag);
                         leftAddress = friendAddress;
                         leftName = friendName.toString();
-                        friendFlag = 1;
                     } catch (e) {
-                        console.warn("Failed to lookup friend address:", friend);
+                        console.warn("Failed to lookup friend address:", friendFid);
                     }
                     
                 }
@@ -263,8 +263,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             random: attackResult.random,
                             critical: attackResult.criticalFlag,
                             damage: attackResult.totalDamage,
-                            friend: friendFlag === 1 ? leftAddress : "",
-                            friendName: friendFlag === 1 ? leftName : ""
+                            friend: friendFlag > 0 ? leftAddress : "",
+                            friendFid: friendFlag,
+                            friendName: friendFlag > 0 ? leftName : ""
                         },
                         {
                             battleId: battle.id,
@@ -272,8 +273,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             random: defenceResult.random,
                             critical: defenceResult.criticalFlag,
                             damage: defenceResult.totalDamage,
-                            friend: friendFlag === 1 ? leftAddress : "",
-                            friendName: friendFlag === 1 ? leftName : ""
+                            friend: friendFlag > 0 ? leftAddress : "",
+                            friendFid: friendFlag,
+                            friendName: friendFlag > 0 ? leftName : ""
                         }
                     ],
                 });
