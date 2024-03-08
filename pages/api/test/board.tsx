@@ -92,7 +92,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 {input: global, gravity: "northeast"},
                 {input: friend, gravity: "southeast"}
             ])
-            .resize(2000, 1000)
             .png().toBuffer();
         
         res.setHeader('Content-Type', 'image/png');
