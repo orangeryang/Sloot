@@ -38,6 +38,9 @@ model Battle {
   buff         Int      @default(100)
   createAt     DateTime @default(now()) @map("created_at")
   updateAt     DateTime @default(now()) @updatedAt() @map("updated_at")
+
+  @@index([attackerFid])
+  @@index([winner])
 }
 
 model BattleDetail {
@@ -51,4 +54,7 @@ model BattleDetail {
   friendName String   @default("") @map("friend_name")
   createAt   DateTime @default(now()) @map("created_at")
   updateAt   DateTime @default(now()) @updatedAt() @map("updated_at")
+
+  @@index([battleId])
+  @@index([friend])
 }
