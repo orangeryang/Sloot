@@ -258,7 +258,7 @@ export function renderWithColors(items: string[]) {
 export async function getImageByAddress(address: string) {
     
     const items = await getItemsByAddress(address);
-    console.log("items:", items)
+    // console.log("items:", items)
     
     // const tokenURIWithColor = renderWithColors(items);
     // console.log("lootWithColor:", tokenURIWithColor);

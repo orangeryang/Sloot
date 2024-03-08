@@ -110,7 +110,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         id: Number.parseInt(id.toString()),
                     }
                 })
-                console.log("find battle:", battle);
+                // console.log("find battle:", battle);
                 
                 if (!battle) {
                     console.warn("generate image: battle not found:", id);
@@ -122,7 +122,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         battleId: Number.parseInt(id.toString()),
                     }
                 })
-                console.log("find battleDetails:", battleDetails);
+                // console.log("find battleDetails:", battleDetails);
                 
                 leftName = battle.attackerName;
                 leftAddress = battle.attacker;
@@ -226,7 +226,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         }
                     ],
                 });
-                console.log("create battleDetails:", battleDetails);
+                // console.log("create battleDetails:", battleDetails);
                 
                 id = battle.id.toString();
                 
@@ -275,7 +275,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         }
                     ],
                 });
-                console.log("create battleDetails:", battleDetails);
+                // console.log("create battleDetails:", battleDetails);
                 
                 if (winner !== -1) {
                     await prisma.battle.update({
@@ -316,11 +316,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 
                 const imageUrl =
                     `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?id=${ id }&pupupu=${ randomFlag }`;
-                console.log("imageUrl:", imageUrl);
+                // console.log("imageUrl:", imageUrl);
                 
                 const contentUrl =
                     `${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battle?id=${ id }`;
-                console.log("contentUrl:", contentUrl);
+                // console.log("contentUrl:", contentUrl);
                 
                 res.status(200).send(battlePage(id, imageUrl, contentUrl));
             }
@@ -433,7 +433,7 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
     
     const weapon = left[0];
     const attackPower = 20 * (6 - getTier(weapon));
-    console.log("weapon:", weapon, " attackPower:", attackPower);
+    console.log("-- weapon:", weapon, " attackPower:", attackPower);
     
     let random = "";
     let criticalFlag = 0;
@@ -448,7 +448,7 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
         
         const armor = right[i];
         const defensePower = 20 * (6 - getTier(armor));
-        console.log("armor:", armor, " defensePower:", defensePower);
+        console.log("-- -- armor:", armor, " defensePower:", defensePower);
         
         const critical = Math.random();
         const damage =
@@ -460,7 +460,7 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
             * (critical > criticalThreshold ? 2 : 1)
             // defense power
             - defensePower;
-        console.log("critical:", critical, " damage:", damage);
+        console.log("-- -- critical:", critical, " damage:", damage);
         
         if (damage > 0) {
             totalDamage += damage;

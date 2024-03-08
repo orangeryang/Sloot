@@ -177,7 +177,6 @@ function generateLog(battleDetails: BattleDetail[], battle: Battle) {
             "caused " +
             detail.damage +
             " damage";
-        console.log("generate log:", battle.id, battleLog);
         
         if (isAttack) {
             rightHealth -= detail.damage;
@@ -187,6 +186,7 @@ function generateLog(battleDetails: BattleDetail[], battle: Battle) {
         
     }
     
+    console.log("generate log:", battle.id, battleLog);
     return {battleLog, leftHealth, rightHealth};
     
 }
