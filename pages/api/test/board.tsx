@@ -82,16 +82,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         const global = await sharp(Buffer.from(renderBoard(globalData as { attackerName: string, count: number }[])))
             .resize(1000, 500).toBuffer();
-        console.log("global:", global);
+        // console.log("global:", global);
         const friend = await sharp(Buffer.from(renderBoard(friendData as { attackerName: string, count: number }[])))
             .resize(1000, 500).toBuffer();
-        console.log("friend:", friend);
+        // console.log("friend:", friend);
         
         const final = await sharp(battleResult)
             .composite([
                 {input: global, gravity: "northeast"},
                 {input: friend, gravity: "southeast"}
-            ]).png().toBuffer();
+            ])
+            .resize(1910, 1000)
+            .png().toBuffer();
         
         res.setHeader('Content-Type', 'image/png');
         res.send(final);
