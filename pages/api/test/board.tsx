@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 id: Number.parseInt(id.toString()),
             }
         })
-        console.log("find battle:", battle);
+        // console.log("find battle:", battle);
         
         let result = "";
         if (!battle) {
@@ -92,7 +92,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 {input: global, gravity: "northeast"},
                 {input: friend, gravity: "southeast"}
             ])
-            .resize(1910, 1000)
+            .resize(2000, 1000)
             .png().toBuffer();
         
         res.setHeader('Content-Type', 'image/png');
