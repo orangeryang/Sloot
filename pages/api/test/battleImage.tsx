@@ -161,11 +161,13 @@ function generateLog(battleDetails: BattleDetail[], battle: Battle) {
         
         const isAttack = i % 2 === 0;
         const attacker = isAttack ?
-            (detail.friend ? detail.friendName : battle.attackerName) :
+            // (detail.friend ? detail.friendName : battle.attackerName) :
+            (detail.friend ? detail.friendName : "you") :
             battle.defenderName;
         const defender = isAttack ?
             battle.defenderName :
-            (detail.friend ? detail.friendName : battle.attackerName);
+            // (detail.friend ? detail.friendName : battle.attackerName);
+            (detail.friend ? detail.friendName : "you");
         
         // []攻击了[]，造成了[]伤害 / 暴击造成了[]伤害
         battleLog [i] = attacker +
