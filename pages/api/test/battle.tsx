@@ -450,6 +450,7 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
         
         const armor = right[i];
         const defensePower = 20 * (6 - getTier(armor));
+        const counterRelation = getCounterRelation(weapon, armor);
         console.log("-- -- armor:", armor, " defensePower:", defensePower);
         
         const critical = Math.random();
@@ -457,12 +458,12 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
             // basic attack power
             (attackPower + powerBoost)
             // counter relation
-            * getCounterRelation(weapon, armor)
+            * counterRelation
             // critical
             * (critical > criticalThreshold ? 2 : 1)
             // defense power
             - defensePower;
-        console.log("-- -- critical:", critical, " damage:", damage);
+        console.log("-- -- critical:", critical, "counterRelation:", counterRelation, " damage:", damage);
         
         if (damage > 0) {
             totalDamage += damage;
