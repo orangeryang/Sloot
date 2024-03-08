@@ -484,7 +484,7 @@ async function attackOnce(leftAddress: string, rightAddress: string) {
 
 function getRandomFid(origin: number) {
     
-    const current = new Date().getTime() / 1000;
+    const current = Math.ceil(new Date().getTime() / 1000);
     return origin - current % origin;
     
 }
