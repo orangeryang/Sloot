@@ -83,22 +83,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const leftCharacter = await sharp(Buffer.from(leftImage.split(",")[1], 'base64'))
             .resize(1000, 1000)
             .extract({left: 200, top: 100, width: 600, height: 750})
-            .composite([{
-                input: {text: {text: leftHealth + "/1000", font: "serif", align: "centre", dpi: 250}},
-                left: 200,
-                top: 0
-            }])
+            .composite([
+                {
+                    input: {text: {text: leftHealth + "/1000", font: "serif", align: "centre", dpi: 250}},
+                    left: 200,
+                    top: 0
+                },
+                {
+                    input: {text: {text: battle.attackerName, font: "serif", align: "centre", dpi: 250}},
+                    left: 200,
+                    top: 500
+                },
+            ])
             // .resize({height: 1000})
             .toBuffer();
         
         const rightCharacter = await sharp(Buffer.from(rightImage.split(",")[1], 'base64'))
             .resize(1000, 1000)
             .extract({left: 200, top: 100, width: 600, height: 750})
-            .composite([{
-                input: {text: {text: rightHealth + "/1000", font: "serif", align: "centre", dpi: 250}},
-                left: 200,
-                top: 0
-            }])
+            .composite([
+                {
+                    input: {text: {text: rightHealth + "/1000", font: "serif", align: "centre", dpi: 250}},
+                    left: 200,
+                    top: 0
+                },
+                {
+                    input: {text: {text: battle.defenderName, font: "serif", align: "centre", dpi: 250}},
+                    left: 200,
+                    top: 500
+                }
+            ])
             // .resize({height: 1000})
             .toBuffer();
         
