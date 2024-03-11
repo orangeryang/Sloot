@@ -32,10 +32,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let buttonId;
         let opponentByInput = "";
         
-        // console.log("req detail:", req.body);
+        console.log("req detail:", req.body);
         try {
             const result = await nClient.validateFrameAction(req.body?.trustedData?.messageBytes.toString(), {});
-            // console.log("validate result:", result);
+            console.log("validate result:", result);
             if (result && result.valid) {
                 user = result.action?.interactor;
                 // @ts-ignore
