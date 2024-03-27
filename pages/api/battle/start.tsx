@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 export function startPage() {
 
     let buttonText = "Battle";
-    let imageUrl = `${ process.env['HOST'] }/1.jpg`;
+    let imageUrl = `${ process.env['HOST'] }/1.png`;
     let inputText = "@Your opponent on farcaster";
 
     return `

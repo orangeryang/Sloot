@@ -91,7 +91,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         <head>
                           <title> My SLoot </title>
                           <meta property="og:title" content="Synthetic Loot">
-                          <meta property="og:image" content="${ process.env['HOST'] }/1.jpg">
+                          <meta property="og:image" content="${ process.env['HOST'] }/1.png">
                           <meta name="fc:frame" content="vNext">
                           <meta name="fc:frame:image"
                           content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/battleImage?bcd=${ bcd }">
@@ -306,7 +306,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     <head>
                       <title> My SLoot </title>
                       <meta property="og:title" content="Synthetic Loot">
-                      <meta property="og:image" content="${ process.env['HOST'] }/1.jpg">
+                      <meta property="og:image" content="${ process.env['HOST'] }/1.png">
                       <meta name="fc:frame" content="vNext">
                       <meta name="fc:frame:image"
                       content="${ process.env['HOST'] }/api/${ process.env['APIPATH'] }/board?winner=${ winner }&id=${ id }">
@@ -343,7 +343,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.status(200).send(`
                  <title> My SLoot </title>
                       <meta property="og:title" content="Synthetic Loot">
-                      <meta property="og:image" content="${ process.env['HOST'] }/1.jpg">
+                      <meta property="og:image" content="${ process.env['HOST'] }/1.png">
                       <meta name="fc:frame" content="vNext">
                       <meta name="fc:frame:image" content="${ imageUrl }">
                       <meta name="fc:frame:post_url" content="${ contentUrl }">
@@ -566,7 +566,7 @@ export function battlePage(id: string | string[], imageUrl: string, contentUrl: 
     <head>
     <title> My SLoot </title>
     <meta property="og:title" content="Synthetic Loot">
-        <meta property="og:image" content="${ process.env['HOST'] }/1.jpg">
+        <meta property="og:image" content="${ process.env['HOST'] }/1.png">
             <meta name="fc:frame" content="vNext">
                 <meta name="fc:frame:image" content="${ imageUrl }">
                     <meta name="fc:frame:post_url" content="${ contentUrl }">
