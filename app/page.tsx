@@ -34,7 +34,7 @@ export default function Page() {
                     {/*<VercelLogo className="h-8 sm:h-16 invert p-3 mb-1"/>*/}
                 </div>
                 <h1 className="text-lg sm:text-2xl font-bold mb-2"></h1>
-                <img src="/1-1.png" alt=""/>
+                <img src="/1.jpg" alt=""/>
             </main>
         </div>
     );

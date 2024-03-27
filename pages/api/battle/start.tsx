@@ -1,38 +1,38 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    
+
     // console.info("req:", req);
     const headers = req.headers["user-agent"] || "";
     console.log("headers:", headers);
-    
+
     if (headers && (headers.includes("Mozilla") || headers.includes("Chrome") || headers.includes("Safari") || headers.includes("Firefox") || headers.includes("Edg") || headers.includes("OPR")) || headers.includes("AppleWebKit")) {
         console.log("Browser, redirecting to loot");
-        
+
         res.redirect("https://www.lootproject.com/");
         // redirect("https://google.com")
         // return NextResponse.redirect("https://www.google.com");
-        
+
         // const router = useRouter();
         // router.push("https://google.com");
-        
+
     } else {
         console.log("FC Bot");
-        
+
         // todo show the CD on the button or input
-        
+
         res.setHeader('Content-Type', 'text/html');
         res.status(200).send(startPage());
-        
+
     }
 }
 
 export function startPage() {
-    
+
     let buttonText = "Battle";
-    let imageUrl = `${ process.env['HOST'] }/1.png`;
+    let imageUrl = `${ process.env['HOST'] }/1.jpg`;
     let inputText = "@Your opponent on farcaster";
-    
+
     return `
     <!DOCTYPE html>
     <html>
@@ -56,5 +56,5 @@ export function startPage() {
                         
                         </html>
                         `
-    
+
 }
